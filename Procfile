@@ -1,0 +1,1 @@
+bot: java -jar build/libs/d6shooters-1.0-all.jar
