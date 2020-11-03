@@ -9,8 +9,8 @@ public class Game {
     Squad squad = new Squad();
     DicesCup dicesCup = new DicesCup();
     Period period = new Period();
-    Road road = new Road();
-    TurnMessage turnMessage = new TurnMessageConsole();
+    public Road road = new Road(this);
+    public static TurnMessage turnMessage = new TurnMessageConsole();
 
     public void nextTurn() {
         turnMessage.out(dicesCup.getFirstTurnDices().toString());
@@ -42,6 +42,10 @@ public class Game {
 
         turnMessage.out("Actions: " + squad.actionList);
 
+
+    }
+
+    public void endGame() {
 
     }
 

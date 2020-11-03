@@ -5,14 +5,14 @@ public class NodeList {
     Node last;
 
     public NodeList() {
-        Node node1 = new Node(NodeType.ROAD);
-        Node node2 = new Node(NodeType.ROAD);
-        Node node3 = new Node(NodeType.TOWN);
-        Node node4 = new Node(NodeType.ROAD);
-        Node node5 = new Node(NodeType.EVENT);
-        Node node6 = new Node(NodeType.ROAD);
-        Node node7 = new Node(NodeType.ROAD);
-        Node node8 = new Node(NodeType.RINO);
+        Node node1 = new Node(Node.NodeType.ROAD);
+        Node node2 = new Node(Node.NodeType.ROAD);
+        Node node3 = new Node(Node.NodeType.TOWN);
+        Node node4 = new Node(Node.NodeType.ROAD);
+        Node node5 = new Node(Node.NodeType.EVENT);
+        Node node6 = new Node(Node.NodeType.ROAD);
+        Node node7 = new Node(Node.NodeType.ROAD);
+        Node node8 = new Node(Node.NodeType.RINO);
         Town town1 = new Town("Kaliko", node3);
 
         node1.setNext1(node2);
@@ -28,12 +28,4 @@ public class NodeList {
         last = node8;
     }
 
-//    public static void main(String[] args) {
-//        NodeList nodeList = new NodeList();
-//        Node node = nodeList.first;
-//        while (node.getNext1() != null || node.getNext2() != null) {
-//            System.out.println(node);
-//            node = node.getNext1();
-//        }
-//    }
 }

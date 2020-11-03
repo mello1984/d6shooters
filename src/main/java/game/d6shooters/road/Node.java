@@ -7,6 +7,7 @@ public class Node {
     private Node next2;
     private NodeType nodeType;
     private Town town;
+    private String description;
 
     public Node(NodeType nodeType) {
         this.nodeType = nodeType;
@@ -66,5 +67,9 @@ public class Node {
                 "nodeType=" + nodeType +
                 ", town=" + town +
                 '}';
+    }
+
+    public enum NodeType {
+        ROAD, TOWN, EVENT, RINO
     }
 }

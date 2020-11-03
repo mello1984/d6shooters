@@ -8,6 +8,7 @@ public class Dice {
     private int value;
     private boolean canReroll;
 
+
     public Dice(DiceType type) {
         this.type = type;
     }
