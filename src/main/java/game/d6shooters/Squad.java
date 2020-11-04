@@ -10,16 +10,29 @@ public class Squad {
     private int shooters = 12;
     private int food = 6; // max 12
     public List<SquadAction> actionList;
-
-    private int roadLength = 0;
+    public Road road;
+    private int period = 0;
+    private int path = 0;
     SquadAmmunition squadAmmunition = new SquadAmmunition();
 
-    public int getRoadLength() {
-        return roadLength;
+    public Squad(Road road) {
+        this.road = road;
     }
 
-    public void setRoadLength(int roadLength) {
-        this.roadLength = roadLength;
+    public int getPath() {
+        return path;
+    }
+
+    public void setPath(int path) {
+        this.path = path;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(int period) {
+        this.period = period;
     }
 
     public int getGold() {
@@ -52,6 +65,19 @@ public class Squad {
 
     public void setFood(int food) {
         this.food = food;
+    }
+
+    @Override
+    public String toString() {
+        return "Squad{" +
+                "gold=" + gold +
+                ", ammo=" + ammo +
+                ", shooters=" + shooters +
+                ", food=" + food +
+                ", period=" + period +
+                ", path=" + path +
+                ", squadAmmunition=" + squadAmmunition +
+                '}';
     }
 
     public enum SquadAction {

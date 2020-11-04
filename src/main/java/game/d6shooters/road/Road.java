@@ -15,6 +15,7 @@ public class Road {
     }
 
     public Road(Game game) {
+        this.game = game;
     }
 
     public void next() {

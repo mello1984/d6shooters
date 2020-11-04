@@ -13,7 +13,13 @@ public class ActionDice6 implements Action {
     @Override
     public void action(Squad squad, DicesCup dicesCup) {
         int dice6 = dicesCup.getNumberDiceCurrentValue(6);
-        if (dice6 == 0) return;
+        int squadHide = (int) squad.actionList.stream().filter(a -> a == Squad.SquadAction.HIDE).count();
+        if (squadHide > 0) {
+            dice6 -= squadHide * 2;
+            squad.setPeriod(squad.getPeriod() + squadHide);
+        }
+
+        if (dice6 <= 0) return;
 
         int squadGunfight = (int) squad.actionList.stream().filter(a -> a == Squad.SquadAction.GUNFIGHT).count();
         if (squadGunfight == 0) {

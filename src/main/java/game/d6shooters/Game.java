@@ -1,15 +1,14 @@
 package game.d6shooters;
 
+import game.d6shooters.actions.ActionManager;
 import game.d6shooters.road.Road;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class Game {
-    Squad squad = new Squad();
-    DicesCup dicesCup = new DicesCup();
+    public DicesCup dicesCup = new DicesCup();
     Period period = new Period();
     public Road road = new Road(this);
+    public Squad squad = new Squad(road);
+    public ActionManager actionManager = new ActionManager(squad, dicesCup);
     public static TurnMessage turnMessage = new TurnMessageConsole();
 
     public void nextTurn() {
@@ -28,20 +27,7 @@ public class Game {
         }
         turnMessage.out(dicesCup.getRerollDices(str).toString());
 
-
-        squad.actionList = new ArrayList<>();
-        int dice4count = dicesCup.getNumberDiceCurrentValue(4);
-        if (dice4count > 0) {
-            turnMessage.out("Необходимо распределить " + dice4count + " '4'");
-            for (int i = 0; i < dice4count; i++) {
-                turnMessage.out(Arrays.toString(Squad.SquadAction.values()));
-                int num = Integer.parseInt(turnMessage.get());
-                squad.actionList.add(Squad.SquadAction.values()[num]);
-            }
-        }
-
-        turnMessage.out("Actions: " + squad.actionList);
-
+        actionManager.doActions();
 
     }
 

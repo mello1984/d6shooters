@@ -19,6 +19,10 @@ public class DicesCup {
         diceList.add(new Dice(Dice.DiceType.RED));
     }
 
+    public DicesCup(List<Dice> diceList) {
+        this.diceList = diceList;
+    }
+
     public static int getD6Int() {
         return random.nextInt(6) + 1;
     }
@@ -52,4 +56,6 @@ public class DicesCup {
     public String toString() {
         return "DicesCup{" + diceList + '}';
     }
+
+
 }

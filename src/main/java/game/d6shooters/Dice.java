@@ -13,6 +13,12 @@ public class Dice {
         this.type = type;
     }
 
+
+    public Dice(DiceType type, int value) {
+        this.type = type;
+        this.value = value;
+    }
+
     public void nextD6(boolean isFirstTry) {
         if (isFirstTry) {
             clean();
