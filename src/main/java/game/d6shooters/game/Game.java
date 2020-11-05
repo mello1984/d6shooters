@@ -1,13 +1,16 @@
-package game.d6shooters;
+package game.d6shooters.game;
 
+import game.d6shooters.bot.TurnMessage;
+import game.d6shooters.bot.TurnMessageConsole;
 import game.d6shooters.actions.ActionManager;
 import game.d6shooters.road.Road;
 
 public class Game {
     public DicesCup dicesCup = new DicesCup();
     Period period = new Period();
-    public Road road = new Road(this);
-    public Squad squad = new Squad(road);
+//    public Road road = new Road();
+//    public Squad squad = new Squad(road);
+    public Squad squad = new Squad();
     public ActionManager actionManager = new ActionManager(squad, dicesCup);
     public static TurnMessage turnMessage = new TurnMessageConsole();
 

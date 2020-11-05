@@ -1,6 +1,9 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.*;
+import game.d6shooters.bot.TurnMessage;
+import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.Game;
+import game.d6shooters.game.Squad;
 
 import java.util.ArrayList;
 import java.util.Arrays;

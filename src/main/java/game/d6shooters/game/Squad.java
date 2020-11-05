@@ -1,4 +1,4 @@
-package game.d6shooters;
+package game.d6shooters.game;
 
 import game.d6shooters.road.Road;
 
@@ -9,15 +9,45 @@ public class Squad {
     private int ammo = 5; // max 5
     private int shooters = 12;
     private int food = 6; // max 12
-    public List<SquadAction> actionList;
-    public Road road;
     private int period = 0;
     private int path = 0;
+    public List<SquadAction> actionList;
+    public Road road = new Road();
     SquadAmmunition squadAmmunition = new SquadAmmunition();
 
-    public Squad(Road road) {
-        this.road = road;
+    public int addGold(int value) {
+        gold += value;
+        return gold;
     }
+
+    public int addAmmo(int value) {
+        ammo += value;
+        return ammo;
+    }
+
+    public int addShooters(int value) {
+        shooters += value;
+        return shooters;
+    }
+
+    public int addFood(int value) {
+        food += value;
+        return food;
+    }
+
+    public int addPeriod(int value) {
+        period += value;
+        return period;
+    }
+
+    public int addPath(int value) {
+        path += value;
+        return path;
+    }
+
+//    public Squad(Road road) {
+//        this.road = road;
+//    }
 
     public int getPath() {
         return path;

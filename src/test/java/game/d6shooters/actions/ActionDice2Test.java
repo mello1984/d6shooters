@@ -1,8 +1,8 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.Dice;
-import game.d6shooters.DicesCup;
-import game.d6shooters.Game;
+import game.d6shooters.game.Dice;
+import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

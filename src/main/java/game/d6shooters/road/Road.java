@@ -1,22 +1,18 @@
 package game.d6shooters.road;
 
-import game.d6shooters.Game;
-import game.d6shooters.TurnMessage;
+import game.d6shooters.game.Game;
+import game.d6shooters.bot.TurnMessage;
 
 public class Road {
     int length;
     private NodeList nodeList = new NodeList();
     private Node currentNode = nodeList.first;
     private TurnMessage turnMessage = Game.turnMessage;
-    private Game game;
 
     public NodeList getNodeList() {
         return nodeList;
     }
 
-    public Road(Game game) {
-        this.game = game;
-    }
 
     public void next() {
         if (currentNode.getNext1() != null && currentNode.getNext2() != null) {
@@ -34,7 +30,7 @@ public class Road {
 
         //check current node type
         if (currentNode.getNodeType() == Node.NodeType.RINO) {
-            game.endGame();
+            //END GAME
         } else if (currentNode.getNodeType() == Node.NodeType.EVENT) {
             //EVENT
         } else if (currentNode.getNodeType() == Node.NodeType.TOWN) {

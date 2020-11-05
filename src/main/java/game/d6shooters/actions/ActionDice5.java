@@ -1,9 +1,9 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.DicesCup;
-import game.d6shooters.Game;
-import game.d6shooters.Squad;
-import game.d6shooters.TurnMessage;
+import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.Game;
+import game.d6shooters.game.Squad;
+import game.d6shooters.bot.TurnMessage;
 
 public class ActionDice5 implements Action {
     TurnMessage turnMessage = Game.turnMessage;

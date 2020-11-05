@@ -1,4 +1,4 @@
-package game.d6shooters;
+package game.d6shooters.game;
 
 public class SquadAmmunition {
     boolean compass = false;

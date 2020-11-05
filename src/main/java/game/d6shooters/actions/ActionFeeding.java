@@ -1,7 +1,7 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.DicesCup;
-import game.d6shooters.Squad;
+import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.Squad;
 
 public class ActionFeeding implements Action {
     @Override

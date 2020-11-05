@@ -1,4 +1,4 @@
-package game.d6shooters;
+package game.d6shooters.game;
 
 import java.util.ArrayList;
 import java.util.List;
