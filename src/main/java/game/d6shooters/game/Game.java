@@ -1,34 +1,34 @@
 package game.d6shooters.game;
 
-import game.d6shooters.bot.TurnMessage;
-import game.d6shooters.bot.TurnMessageConsole;
+import game.d6shooters.bot.ReceiverMessage;
+import game.d6shooters.bot.ReceiverMessageConsole;
+import game.d6shooters.users.User;
+import game.d6shooters.bot.SenderMessage;
+import game.d6shooters.bot.SenderMessageConsole;
 import game.d6shooters.actions.ActionManager;
-import game.d6shooters.road.Road;
 
 public class Game {
     public DicesCup dicesCup = new DicesCup();
-    Period period = new Period();
-//    public Road road = new Road();
-//    public Squad squad = new Squad(road);
     public Squad squad = new Squad();
     public ActionManager actionManager = new ActionManager(squad, dicesCup);
-    public static TurnMessage turnMessage = new TurnMessageConsole();
+    public static SenderMessage senderMessage = new SenderMessageConsole();
+    public static ReceiverMessage receiverMessage = new ReceiverMessageConsole();
 
-    public void nextTurn() {
-        turnMessage.out(dicesCup.getFirstTurnDices().toString());
-        turnMessage.out("Введите номера кубиков для переброски или exit");
-        String str = turnMessage.get();
+    public void nextTurn(User user) {
+        senderMessage.sendText(0L, dicesCup.getFirstTurnDices().toString());
+        senderMessage.sendText(0L,"Введите номера кубиков для переброски или exit");
+        String str = receiverMessage.get();
         while (!dicesCup.checkString(str)) {
-            turnMessage.out("Некорректные данные, введите номера кубиков для переброски или exit");
-            str = turnMessage.get();
+            senderMessage.sendText(0L,"Некорректные данные, введите номера кубиков для переброски или exit");
+            str = receiverMessage.get();
         }
-        turnMessage.out(dicesCup.getRerollDices(str).toString());
-        str = turnMessage.get();
+        senderMessage.sendText(0L,dicesCup.getRerolledDices(str).toString());
+        str = receiverMessage.get();
         while (!dicesCup.checkString(str)) {
-            turnMessage.out("Некорректные данные, введите номера кубиков для переброски или exit");
-            str = turnMessage.get();
+            senderMessage.sendText(0L,"Некорректные данные, введите номера кубиков для переброски или exit");
+            str = receiverMessage.get();
         }
-        turnMessage.out(dicesCup.getRerollDices(str).toString());
+        senderMessage.sendText(0L,dicesCup.getRerolledDices(str).toString());
 
         actionManager.doActions();
 
@@ -37,12 +37,5 @@ public class Game {
     public void endGame() {
 
     }
-
-    public static void main(String[] args) {
-        Game game = new Game();
-        game.nextTurn();
-
-    }
-
 
 }

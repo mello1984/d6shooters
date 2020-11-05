@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class TurnMessageConsole implements TurnMessage {
+public class ReceiverMessageConsole implements ReceiverMessage {
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     @Override
@@ -18,8 +18,4 @@ public class TurnMessageConsole implements TurnMessage {
         return out;
     }
 
-    @Override
-    public void out(String message) {
-        System.out.println(message);
-    }
 }

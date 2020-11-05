@@ -4,3 +4,7 @@
 .gradle/
 
 build/
+
+src/main/java/game/d6shooters/Test.java
+
+src/main/java/game/d6shooters/test/

@@ -33,7 +33,7 @@ public class DicesCup {
         return diceList;
     }
 
-    public List<Dice> getRerollDices(String rerollString) {
+    public List<Dice> getRerolledDices(String rerollString) {
         rerollString = rerollString.replaceAll("[/D]*", "");
         rerollString.chars().map(i -> Character.digit(i, 10)).distinct().forEach(i -> diceList.get(i - 1).nextD6(false));
         return diceList;

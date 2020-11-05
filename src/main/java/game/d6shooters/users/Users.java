@@ -1,4 +1,4 @@
-package game.d6shooters;
+package game.d6shooters.users;
 
 import java.util.HashMap;
 import java.util.Map;

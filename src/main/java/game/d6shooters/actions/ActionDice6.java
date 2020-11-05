@@ -3,12 +3,12 @@ package game.d6shooters.actions;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Game;
 import game.d6shooters.game.Squad;
-import game.d6shooters.bot.TurnMessage;
+import game.d6shooters.bot.SenderMessage;
 
 import java.util.stream.IntStream;
 
 public class ActionDice6 implements Action {
-    TurnMessage turnMessage = Game.turnMessage;
+    SenderMessage senderMessage = Game.senderMessage;
 
     @Override
     public void action(Squad squad, DicesCup dicesCup) {

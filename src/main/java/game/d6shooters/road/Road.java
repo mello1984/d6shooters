@@ -1,13 +1,16 @@
 package game.d6shooters.road;
 
+import game.d6shooters.bot.ReceiverMessage;
 import game.d6shooters.game.Game;
-import game.d6shooters.bot.TurnMessage;
+import game.d6shooters.bot.SenderMessage;
 
 public class Road {
     int length;
     private NodeList nodeList = new NodeList();
     private Node currentNode = nodeList.first;
-    private TurnMessage turnMessage = Game.turnMessage;
+    private SenderMessage senderMessage = Game.senderMessage;
+    private ReceiverMessage receiverMessage = Game.receiverMessage;
+
 
     public NodeList getNodeList() {
         return nodeList;
@@ -17,10 +20,10 @@ public class Road {
     public void next() {
         if (currentNode.getNext1() != null && currentNode.getNext2() != null) {
             // need choose next node
-            turnMessage.out("Выберите, куда свернуть:\n" +
+            senderMessage.sendText(0L, "Выберите, куда свернуть:\n" +
                     "1: налево\n" +
                     "2: направо");
-            int j = Integer.parseInt(turnMessage.get());
+            int j = Integer.parseInt(receiverMessage.get());
             currentNode = j == 1 ? currentNode.getNext1() : currentNode.getNext2();
         } else if (currentNode.getNext1() != null) {
             currentNode = currentNode.getNext1();
