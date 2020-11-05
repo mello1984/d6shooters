@@ -14,7 +14,7 @@ public class Squad {
     public List<SquadAction> actionList;
     public Road road = new Road();
     SquadAmmunition squadAmmunition = new SquadAmmunition();
-    public SquadState squadState = SquadState.REGULAR;
+    public SquadState squadState;
 
     public int addGold(int value) {
         gold += value;

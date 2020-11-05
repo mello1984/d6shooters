@@ -28,9 +28,9 @@ public class SenderMessageTelegram implements SenderMessage {
     private synchronized void send(SendMessage message) {
         try {
             bot.execute(message);
-            logger.log(Level.INFO, String.format("Message %s sent to: %s", message.getChatId()));
+            logger.log(Level.INFO, String.format("Message sent to: %s", message.getChatId()));
         } catch (TelegramApiException e) {
-            logger.log(Level.SEVERE, String.format("Exception of sending message %s to: %s", message.getChatId()), e);
+            logger.log(Level.SEVERE, String.format("Exception of sending message to: %s", message.getChatId()), e);
         }
     }
 }
