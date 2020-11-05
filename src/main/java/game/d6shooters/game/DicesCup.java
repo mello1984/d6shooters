@@ -42,7 +42,7 @@ public class DicesCup {
     public boolean checkString(String string) {
         String str = string.replaceAll("[/D]*", "");
         if (str.length() > 8 || str.length() == 0) return false;
-        return str.chars()
+        return string.equals("0") || str.chars()
                 .map(c -> Character.digit(c, 10))
                 .distinct()
                 .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanReroll());

@@ -45,9 +45,9 @@ public class SendMessageTemplate {
     public SendMessage dicesString(Long chatId, DicesCup dicesCup) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(Icon.WHITESQUARE.get()).append(" (1-5): ");
-        dicesCup.diceList.stream().filter(d -> d.getType() == Dice.DiceType.WHITE).forEach(d -> stringBuilder.append(dices.get(d.getValue())));
+        dicesCup.diceList.stream().filter(d -> d.getType() == Dice.DiceType.WHITE && !d.isUsed()).forEach(d -> stringBuilder.append(dices.get(d.getValue())));
         stringBuilder.append("\n").append(Icon.REDSQUARE.get()).append(" (6-8): ");
-        dicesCup.diceList.stream().filter(d -> d.getType() == Dice.DiceType.RED).forEach(d -> stringBuilder.append(dices.get(d.getValue())));
+        dicesCup.diceList.stream().filter(d -> d.getType() == Dice.DiceType.RED && !d.isUsed()).forEach(d -> stringBuilder.append(dices.get(d.getValue())));
         SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
                 .setText(stringBuilder.toString());
         return sendMessage;

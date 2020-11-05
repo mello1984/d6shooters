@@ -7,7 +7,15 @@ public class Dice {
     DiceType type;
     private int value;
     private boolean canReroll;
+    private boolean used;
 
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
 
     public Dice(DiceType type) {
         this.type = type;
@@ -30,6 +38,7 @@ public class Dice {
     private void clean() {
         canReroll = true;
         value = 0;
+        used = false;
     }
 
     public DiceType getType() {

@@ -4,6 +4,7 @@ import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Game;
 import game.d6shooters.game.Squad;
 import game.d6shooters.bot.SenderMessage;
+import game.d6shooters.users.User;
 
 import java.util.stream.IntStream;
 
@@ -11,7 +12,9 @@ public class ActionDice6 implements Action {
     SenderMessage senderMessage = Game.senderMessage;
 
     @Override
-    public void action(Squad squad, DicesCup dicesCup) {
+    public void action(User user) {
+        DicesCup dicesCup = user.getDicesCup();
+        Squad squad = user.getSquad();
         int dice6 = dicesCup.getNumberDiceCurrentValue(6);
         int squadHide = (int) squad.actionList.stream().filter(a -> a == Squad.SquadAction.HIDE).count();
         if (squadHide > 0) {
