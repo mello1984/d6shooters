@@ -7,6 +7,7 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 
 public class Main {
+    public static final long testChatId = 534122061;
     public static final Users users = new Users();
     public static final Game game = new Game();
     public static D6ShootersBot bot;

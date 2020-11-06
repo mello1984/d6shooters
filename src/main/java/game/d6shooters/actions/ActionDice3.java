@@ -1,25 +1,20 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.bot.D6ShootersBot;
-import game.d6shooters.game.DicesCup;
-import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 
-public class ActionDice3 implements Action {
+public class ActionDice3 extends AbstractAction {
     @Override
     public void action(User user) {
-        DicesCup dicesCup = user.getDicesCup();
-        Squad squad = user.getSquad();
-        if (squad.squadState != SquadState.OTHER) return;
-
-        int findedGold = dicesCup.getNumberDiceCurrentValue(3) / 3;
-        if (findedGold > 0) {
-            squad.addGold(findedGold);
-            D6ShootersBot.senderMessage.sendText(user.getChatId(), "На рудниках добыли " + findedGold + " золота");
+        int foundGold = user.getDicesCup().getCountActiveDiceCurrentValue(3) / 3;
+        if (foundGold > 0) {
+            user.getSquad().addGold(foundGold);
+            senderMessage.sendText(user.getChatId(), "На рудниках добыли " + foundGold + " золота");
         }
-        dicesCup.diceList.stream().filter(dice -> dice.getValue() == 3).forEach(dice -> dice.setUsed(true));
-        squad.squadState = SquadState.CHECKHEAT;
+        user.getDicesCup().setUsedDiceCurrentValue(3);
+
+        user.getSquad().squadState = SquadState.CHECKHEAT;
         System.out.println(SquadState.OTHER + "->" + SquadState.CHECKHEAT);
+        user.getActionManager().doActions();
     }
 }

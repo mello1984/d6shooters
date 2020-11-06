@@ -1,10 +1,9 @@
 package game.d6shooters.road;
 
 public class Node {
-    private Node previous1;
-    private Node previous2;
-    private Node next1;
-    private Node next2;
+    private Node previous;
+    private Node branch;
+    private Node next;
     private NodeType nodeType;
     private Town town;
     private String description;
@@ -13,39 +12,30 @@ public class Node {
         this.nodeType = nodeType;
     }
 
-    public Node getPrevious1() {
-        return previous1;
+    public Node getPrevious() {
+        return previous;
     }
 
-    public Node setPrevious1(Node previous1) {
-        this.previous1 = previous1;
+    public Node setPrevious(Node previous1) {
+        this.previous = previous1;
         return this;
     }
 
-    public Node getPrevious2() {
-        return previous2;
+    public Node getBranch() {
+        return branch;
     }
 
-    public Node setPrevious2(Node previous2) {
-        this.previous2 = previous2;
+    public Node setBranch(Node branch) {
+        this.branch = branch;
         return this;
     }
 
-    public Node getNext1() {
-        return next1;
+    public Node getNext() {
+        return next;
     }
 
-    public Node setNext1(Node next1) {
-        this.next1 = next1;
-        return this;
-    }
-
-    public Node getNext2() {
-        return next2;
-    }
-
-    public Node setNext2(Node next2) {
-        this.next2 = next2;
+    public Node setNext(Node next1) {
+        this.next = next1;
         return this;
     }
 
@@ -70,6 +60,6 @@ public class Node {
     }
 
     public enum NodeType {
-        ROAD, TOWN, EVENT, RINO
+        ROAD, BRANCHHEAD, BRANCHEND, TOWN, EVENT, RINO
     }
 }

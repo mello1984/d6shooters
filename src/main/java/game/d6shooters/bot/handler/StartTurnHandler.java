@@ -9,6 +9,8 @@ import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.ArrayList;
+
 public class StartTurnHandler extends AbstractHandler {
     @Override
     public void handle(Message message) {
@@ -17,6 +19,7 @@ public class StartTurnHandler extends AbstractHandler {
         Squad squad = user.getSquad();
         DicesCup dicesCup = Main.users.userMap.get(chatId).getDicesCup();
         SendMessageTemplate template = new SendMessageTemplate();
+        squad.actionList = new ArrayList<>();
 
         if (squad.squadState == SquadState.REGULAR) {
             dicesCup.getFirstTurnDices();

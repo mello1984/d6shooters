@@ -3,6 +3,8 @@ package game.d6shooters.road;
 public class NodeList {
     Node first;
     Node last;
+    Node branch;
+
 
     public NodeList() {
         Node node1 = new Node(Node.NodeType.ROAD);
@@ -15,17 +17,51 @@ public class NodeList {
         Node node8 = new Node(Node.NodeType.RINO);
         Town town1 = new Town("Kaliko", node3);
 
-        node1.setNext1(node2);
-        node2.setPrevious1(node1).setNext1(node3);
-        node3.setPrevious1(node2).setNext1(node4).setTown(town1);
-        node4.setPrevious1(node3).setNext1(node5);
-        node5.setPrevious1(node4).setNext1(node6);
-        node6.setPrevious1(node5).setNext1(node7);
-        node7.setPrevious1(node6).setNext1(node8);
-        node8.setPrevious1(node7);
+        node1.setNext(node2);
+        node2.setPrevious(node1).setNext(node3);
+        node3.setPrevious(node2).setNext(node4).setTown(town1);
+        node4.setPrevious(node3).setNext(node5);
+        node5.setPrevious(node4).setNext(node6);
+        node6.setPrevious(node5).setNext(node7);
+        node7.setPrevious(node6).setNext(node8);
+        node8.setPrevious(node7);
 
         first = node1;
         last = node8;
+    }
+
+    private void addRoad(Node node) {
+        if (first==null) {
+            first = node;
+        }
+        node.setPrevious(last);
+        last.setNext(node);
+        last = node;
+    }
+
+    private void addBranchHead(Node node) {
+        node.setPrevious(last);
+        last.setBranch(node);
+        branch = node;
+    }
+
+    private void addBranchRoad(Node node) {
+        node.setPrevious(branch);
+        branch.setNext(node);
+        branch = node;
+    }
+
+    private void addBranchEnd(Node node) {
+        node.setPrevious(last);
+        node.setBranch(branch);
+        branch.setNext(node);
+        last.setNext(node);
+        last = node;
+        branch = null;
+    }
+
+    public Node getNode() {
+        return null;
     }
 
 }
