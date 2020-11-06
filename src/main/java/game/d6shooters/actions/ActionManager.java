@@ -10,8 +10,8 @@ public class ActionManager {
     Action actionDice2 = new ActionDice2();
     Action actionDice3 = new ActionDice3();
     ActionDice4 actionDice4 = new ActionDice4();
-    Action actionDice5 = new ActionDice5();
-    Action actionDice6 = new ActionDice6();
+    ActionDice5 actionDice5 = new ActionDice5();
+    ActionDice6 actionDice6 = new ActionDice6();
     Action actionFeeding = new ActionFeeding();
     User user;
 
@@ -23,28 +23,26 @@ public class ActionManager {
     public void doActions() {
         Squad squad = user.getSquad();
         if (squad.squadState == SquadState.ALLOCATE) actionDice4.action(user);
-        else {
+        if (squad.squadState == SquadState.OTHER) {
             actionFeeding.action(user);
             actionDice2.action(user);
             actionDice3.action(user);
-            actionDice5.action(user);
-            actionDice6.action(user);
-            actionDice1.action(user);
-            squad.setPeriod(squad.getPeriod() + 1);
         }
+        if (squad.squadState == SquadState.CHECKHEAT) {
+            actionDice5.action(user);
+        }
+        if (squad.squadState == SquadState.GUNFIGHT) {
+            actionDice6.action(user);
+        }
+        if (squad.squadState == SquadState.MOVE) {
+            actionDice1.action(user);
+        }
+        squad.setPeriod(squad.getPeriod() + 1);
     }
 
     public void doActions(Message message) {
         Squad squad = user.getSquad();
         if (squad.squadState == SquadState.ALLOCATE) actionDice4.processMessage(user, message);
-        else {
-            actionFeeding.action(user);
-            actionDice2.action(user);
-            actionDice3.action(user);
-            actionDice5.action(user);
-            actionDice6.action(user);
-            actionDice1.action(user);
-            squad.setPeriod(squad.getPeriod() + 1);
-        }
+        else if (squad.squadState == SquadState.CHECKHEAT) actionDice5.processMessage(user, message);
     }
 }

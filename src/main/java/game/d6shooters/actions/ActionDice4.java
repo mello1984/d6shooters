@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActionDice4 implements Action {
+public class ActionDice4 extends AbstractAction {
 
     @Override
     public void action(User user) {
@@ -48,8 +48,8 @@ public class ActionDice4 implements Action {
         }
 
         if (buttons.size() <= 1) {
-            user.getSquad().squadState = SquadState.CHECKHEAT;
-            System.out.println(SquadState.CHECKHEAT);
+            user.getSquad().squadState = SquadState.OTHER;
+            System.out.println(SquadState.ALLOCATE + "->" + SquadState.OTHER);
         }
     }
 
@@ -84,10 +84,5 @@ public class ActionDice4 implements Action {
         user.getActionManager().doActions();
     }
 
-    private void useDice(User user, int value) {
-        user.getDicesCup().diceList.stream()
-                .filter(dice -> dice.getValue() == value && !dice.isUsed())
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("No '" + value + "' in stream allocation"))
-                .setUsed(true);
-    }
+
 }

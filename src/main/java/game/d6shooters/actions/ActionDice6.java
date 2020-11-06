@@ -1,44 +1,58 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Game;
 import game.d6shooters.game.Squad;
 import game.d6shooters.bot.SenderMessage;
+import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.stream.IntStream;
 
-public class ActionDice6 implements Action {
-    SenderMessage senderMessage = Game.senderMessage;
+public class ActionDice6 extends AbstractAction {
 
     @Override
     public void action(User user) {
         DicesCup dicesCup = user.getDicesCup();
         Squad squad = user.getSquad();
-        int dice6 = dicesCup.getNumberDiceCurrentValue(6);
-        int squadHide = (int) squad.actionList.stream().filter(a -> a == Squad.SquadAction.HIDE).count();
-        if (squadHide > 0) {
-            dice6 -= squadHide * 2;
-            squad.setPeriod(squad.getPeriod() + squadHide);
+        int dice6count = (int) dicesCup.diceList.stream().filter(dice -> dice.getValue() == 6 && !dice.isUsed()).count();
+        if (dice6count <= 0) {
+            squad.squadState = SquadState.MOVE;
+            System.out.println(SquadState.GUNFIGHT + "->" + SquadState.MOVE);
+            return;
         }
 
-        if (dice6 <= 0) return;
-
+        int mod = 0;
         int squadGunfight = (int) squad.actionList.stream().filter(a -> a == Squad.SquadAction.GUNFIGHT).count();
         if (squadGunfight == 0) {
-            for (int i = 0; i < dice6; i++) {
-                if (DicesCup.getD6Int() >= 3) {
-                    squad.setShooters(squad.getShooters() - 1);
+            mod = (int) IntStream.range(1, dice6count).map(i -> DicesCup.getD6Int()).filter(d -> d >= 3).count();
+        } else {
+            while (dice6count > 0 && squadGunfight > 0) {
+                if (isSquadWinner(squad, dice6count, squadGunfight)) {
+                    dice6count--;
+                    useDice(user, 6);
+                } else {
+                    squadGunfight--;
+                    mod++;
                 }
             }
-        } else {
-            while (dice6 > 0 && squadGunfight > 0) {
-                if (isSquadWinner(squad, dice6, squadGunfight)) dice6--;
-                else squadGunfight--;
-            }
-            squad.setShooters(squad.getShooters() - dice6);
-            squad.setAmmo(squad.getAmmo() - 1);
+            squad.addAmmo(-1);
         }
+        mod = Math.min(mod, squad.getShooters());
+        if (mod > 0) {
+            SendMessage sendMessage = template.getSendMessageOneLineButtons(user.getChatId(),
+                    "В перестрелке потеряли " + mod + " стрелков.");
+            senderMessage.sendMessage(sendMessage);
+            squad.addShooters(-mod);
+        } else {
+            SendMessage sendMessage = template.getSendMessageOneLineButtons(user.getChatId(),
+                    "В перестрелке никого не потеряли .");
+            senderMessage.sendMessage(sendMessage);
+        }
+        squad.squadState = SquadState.MOVE;
+        System.out.println(SquadState.GUNFIGHT + "->" + SquadState.MOVE);
     }
 
     private boolean isSquadWinner(Squad squad, int dice6, int squadGunfight) {
@@ -52,4 +66,7 @@ public class ActionDice6 implements Action {
         } while (griggStrength == squadStrength);
         return out;
     }
+
+
+
 }

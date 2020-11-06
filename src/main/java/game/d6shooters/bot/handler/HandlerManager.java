@@ -23,10 +23,13 @@ public class HandlerManager {
             return new StartTurnHandler();
         }
 
-        if (squad.squadState == SquadState.ALLOCATE
-                || squad.squadState == SquadState.CHECKHEAT) {
+        if (squad.squadState == SquadState.ALLOCATE) {
             System.out.println("Choose StartTurnHandler " + squad.squadState);
             return new AllocationCubesHandler();
+        }
+        if (squad.squadState == SquadState.CHECKHEAT) {
+            System.out.println("Choose StartTurnHandler " + squad.squadState);
+            return new CheckHeatHandler();
         }
 
 //        Handler handler = switch (squad.squadState) {
