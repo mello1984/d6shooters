@@ -9,7 +9,9 @@ public class ActionDice2 extends AbstractAction {
         int foundFood = user.getDicesCup().getCountActiveDiceCurrentValue(2) / 2;
         if (foundFood > 0) {
             user.getSquad().addFood(foundFood);
-            senderMessage.sendText(user.getChatId(), "На охоте добыли " + foundFood + " провизии");
+            senderMessage.sendMessage(
+                    template.getSendMessageOneLineButtons(user.getChatId(),
+                            "На охоте добыли " + foundFood + " провизии"));
         }
         user.getDicesCup().setUsedDiceCurrentValue(2);
     }

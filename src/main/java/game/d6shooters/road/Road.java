@@ -1,15 +1,10 @@
 package game.d6shooters.road;
 
-import game.d6shooters.bot.ReceiverMessage;
-import game.d6shooters.game.Game;
-import game.d6shooters.bot.SenderMessage;
 
 public class Road {
     int length;
     private NodeList nodeList = new NodeList();
     private Node currentNode = nodeList.first;
-    private SenderMessage senderMessage = Game.senderMessage;
-    private ReceiverMessage receiverMessage = Game.receiverMessage;
     private Node.NodeType nodeType;
 
     public Node.NodeType getNodeType() {

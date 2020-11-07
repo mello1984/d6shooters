@@ -9,7 +9,10 @@ public class ActionDice3 extends AbstractAction {
         int foundGold = user.getDicesCup().getCountActiveDiceCurrentValue(3) / 3;
         if (foundGold > 0) {
             user.getSquad().addGold(foundGold);
-            senderMessage.sendText(user.getChatId(), "На рудниках добыли " + foundGold + " золота");
+            senderMessage.sendMessage(
+                    template.getSendMessageOneLineButtons(user.getChatId(),
+                            "На рудниках добыли " + foundGold + " золота"));
+
         }
         user.getDicesCup().setUsedDiceCurrentValue(3);
 

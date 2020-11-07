@@ -5,6 +5,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class DefaultHandler extends AbstractHandler {
     @Override
     public void handle(Message message) {
-        senderMessage.sendText(message.getChatId(), "Команда не распознана, просьба повторить");
+        senderMessage.sendMessage(
+                template.getSendMessageOneLineButtons(message.getChatId(),
+                        "Команда не распознана, просьба повторить"));
     }
 }
