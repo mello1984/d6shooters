@@ -2,13 +2,15 @@ package game.d6shooters.actions;
 
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.SendMessageTemplate;
-import game.d6shooters.bot.SenderMessage;
 import game.d6shooters.users.User;
 
 public abstract class AbstractAction implements Action {
-    SenderMessage senderMessage = Bot.senderMessage;
     SendMessageTemplate template = new SendMessageTemplate();
+    Bot bot;
 
+    public AbstractAction(Bot bot) {
+        this.bot = bot;
+    }
 
     void useDice(User user, int value) {
         user.getDicesCup().diceList.stream()

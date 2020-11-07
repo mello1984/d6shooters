@@ -18,19 +18,19 @@ public class Bot extends TelegramLongPollingBot {
     public static final Logger log = LogManager.getLogger(Bot.class);
     private static final int PAUSE = 1000;
 
-    public static SenderMessage senderMessage;
-
-    public Bot() {
-        senderMessage = new SenderMessageTelegram(this);
-    }
-
-
     @Override
     public void onUpdateReceived(Update update) {
-        HandlerManager handlerManager = new HandlerManager();
+        HandlerManager handlerManager = new HandlerManager(this);
         Handler handler = handlerManager.chooseHandler(update.getMessage());
         handler.handle(update.getMessage());
 
+    }
+    public void send(SendMessage sendMessage){
+        try {
+            sendQueue.put(sendMessage);
+        } catch (InterruptedException e) {
+            log.error(e);
+        }
     }
 
     public void botConnect() {

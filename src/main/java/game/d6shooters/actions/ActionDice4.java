@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.bot.Bot;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
@@ -15,11 +16,15 @@ public class ActionDice4 extends AbstractAction {
     private static final String SHELTER = "Укрываться от жары";
     private static final String PATHFINDING = "Искать путь";
 
+    public ActionDice4(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void action(User user) {
         List<String> buttons = getListButtons(user);
         if (buttons.size() > 0) {
-            senderMessage.sendMessage(
+            bot.send(
                     template.getSendMessageOneLineButtons(user.getChatId(),
                             "Необходимо распределить " + user.getDicesCup().getCountActiveDiceCurrentValue(4) + " '4', будьте внимательны",
                             buttons.toArray(new String[0])));
@@ -27,6 +32,7 @@ public class ActionDice4 extends AbstractAction {
         if (buttons.size() == 0) {
             user.getSquad().squadState = SquadState.OTHER;
             System.out.println(SquadState.ALLOCATE + "->" + SquadState.OTHER);
+            user.getActionManager().doActions();
         }
     }
 
@@ -74,7 +80,7 @@ public class ActionDice4 extends AbstractAction {
                 break;
         }
 
-        senderMessage.sendMessage(template.dicesString(user.getChatId(), user.getDicesCup()));
+        bot.send(template.dicesString(user.getChatId(), user.getDicesCup()));
         user.getActionManager().doActions();
     }
 

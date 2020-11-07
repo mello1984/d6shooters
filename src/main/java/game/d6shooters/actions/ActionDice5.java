@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.bot.Bot;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
@@ -10,6 +11,10 @@ public class ActionDice5 extends AbstractAction {
     private static final String LOSE2FOOD = "Lose 2 food";
     private static final String LOSE1GUNFIGHTER = "lose 1 gunfighter";
 
+    public ActionDice5(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void action(User user) {
         DicesCup dicesCup = user.getDicesCup();
@@ -17,7 +22,7 @@ public class ActionDice5 extends AbstractAction {
         int dice5count = dicesCup.getCountActiveDiceCurrentValue(5);
         if (dice5count > 0) {
             int roll = DicesCup.getD6Int();
-            senderMessage.sendMessage(template.getSendMessageOneLineButtons(user.getChatId(),
+            bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
                     "Экстремальная жара, roll '" + roll + "' из 6.",
                     LOSE2FOOD, LOSE1GUNFIGHTER));
             if (roll < 3) {
@@ -28,6 +33,7 @@ public class ActionDice5 extends AbstractAction {
         if (dice5count == 0) {
             System.out.println(SquadState.CHECKHEAT + "->" + SquadState.GUNFIGHT);
             squad.squadState = SquadState.GUNFIGHT;
+            user.getActionManager().doActions();
         }
     }
 

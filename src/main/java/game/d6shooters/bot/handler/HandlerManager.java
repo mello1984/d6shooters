@@ -1,43 +1,34 @@
 package game.d6shooters.bot.handler;
 
 import game.d6shooters.Main;
-import game.d6shooters.game.Squad;
+import game.d6shooters.bot.Bot;
 import game.d6shooters.game.SquadState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 public class HandlerManager {
+    private static final Logger log = LogManager.getLogger(HandlerManager.class);
+    private Bot bot;
+
+    public HandlerManager(Bot bot) {
+        this.bot = bot;
+    }
+
     public Handler chooseHandler(Message message) {
         long chatId = message.getChatId();
-        if (!Main.users.userMap.containsKey(chatId)) {
-            System.out.println("Choose StartTurnHandler");
-            return new StartGameHandler();
-        }
 
-        if (message.getText().equals("band")) return new TeamStateHandler();
+        if (!Main.users.userMap.containsKey(chatId)) return new StartGameHandler(bot);
+        if (message.getText().equals("band")) return new TeamStateHandler(bot);
 
-        Squad squad = Main.users.userMap.get(chatId).getSquad();
-        if (squad.squadState == SquadState.REGULAR
-                || squad.squadState == SquadState.REROLL1
-                || squad.squadState == SquadState.REROLL2) {
-            System.out.println("Choose StartTurnHandler " + squad.squadState);
-            return new StartTurnHandler();
-        }
-
-        if (squad.squadState == SquadState.ALLOCATE) {
-            System.out.println("Choose StartTurnHandler " + squad.squadState);
-            return new AllocationCubesHandler();
-        }
-        if (squad.squadState == SquadState.CHECKHEAT) {
-            System.out.println("Choose StartTurnHandler " + squad.squadState);
-            return new CheckHeatHandler();
-        }
-
-//        Handler handler = switch (squad.squadState) {
-//            case REGULAR -> new StartTurnHandler();
-//            default -> new DefaultHandler();
-//        };
-
-        System.out.println("Choose DefaultHandler");
-        return new DefaultHandler();
+        SquadState squadState = Main.users.userMap.get(chatId).getSquad().squadState;
+        Handler handler = switch (squadState) {
+            case REGULAR, REROLL1, REROLL2 -> new StartTurnHandler(bot);
+            case ALLOCATE -> new AllocationCubesHandler(bot);
+            case CHECKHEAT -> new CheckHeatHandler(bot);
+            default -> new DefaultHandler(bot);
+        };
+        log.info("Choose handler: " + handler.getClass().getSimpleName());
+        return handler;
     }
 }

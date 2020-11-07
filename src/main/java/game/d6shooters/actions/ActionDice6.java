@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.bot.Bot;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
@@ -8,6 +9,10 @@ import game.d6shooters.users.User;
 import java.util.stream.IntStream;
 
 public class ActionDice6 extends AbstractAction {
+
+    public ActionDice6(Bot bot) {
+        super(bot);
+    }
 
     @Override
     public void action(User user) {
@@ -23,11 +28,11 @@ public class ActionDice6 extends AbstractAction {
         killedShooters = Math.min(killedShooters, squad.getShooters());
 
         if (killedShooters > 0) {
-            senderMessage.sendMessage(template.getSendMessageOneLineButtons(user.getChatId(),
+            bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
                     "В перестрелке потеряли " + killedShooters + " стрелков."));
             squad.addShooters(-killedShooters);
         } else  if (dice6count > 0) {
-            senderMessage.sendMessage(template.getSendMessageOneLineButtons(user.getChatId(),
+            bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
                     "В перестрелке никого не потеряли ."));
         }
 

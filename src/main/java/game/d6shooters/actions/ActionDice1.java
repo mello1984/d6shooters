@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.bot.Bot;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.road.Node;
@@ -8,10 +9,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public class ActionDice1 extends AbstractAction {
 
+    public ActionDice1(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void action(User user) {
         SendMessage sendMessage = template.getSendMessageOneLineButtons(user.getChatId(), "Начинаем движение");
-        senderMessage.sendMessage(sendMessage);
+        bot.send(sendMessage);
 
         Squad squad = user.getSquad();
         int dice1count = user.getDicesCup().getCountActiveDiceCurrentValue(1);
