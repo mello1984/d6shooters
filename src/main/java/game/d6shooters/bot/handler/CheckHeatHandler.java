@@ -5,8 +5,8 @@ import game.d6shooters.bot.Bot;
 import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-public class AllocationCubesHandler extends AbstractHandler {
-    public AllocationCubesHandler(Bot bot) {
+public class CheckHeatHandler extends AbstractHandler {
+    public CheckHeatHandler(Bot bot) {
         super(bot);
     }
 

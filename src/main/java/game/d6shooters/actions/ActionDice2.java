@@ -1,22 +1,23 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.bot.D6ShootersBot;
-import game.d6shooters.game.Dice;
-import game.d6shooters.game.DicesCup;
-import game.d6shooters.game.Squad;
+import game.d6shooters.bot.Bot;
 import game.d6shooters.users.User;
 
 public class ActionDice2 extends AbstractAction {
 
+    public ActionDice2(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void action(User user) {
-        DicesCup dicesCup = user.getDicesCup();
-        Squad squad = user.getSquad();
-        int findedFood = dicesCup.getNumberDiceCurrentValue(2) / 2;
-        if (findedFood > 0) {
-            squad.addFood(findedFood);
-            D6ShootersBot.senderMessage.sendText(user.getChatId(), "На охоте добыли " + findedFood + " провизии");
+        int foundFood = user.getDicesCup().getCountActiveDiceCurrentValue(2) / 2;
+        if (foundFood > 0) {
+            user.getSquad().addFood(foundFood);
+            bot.send(
+                    template.getSendMessageOneLineButtons(user.getChatId(),
+                            "На охоте добыли " + foundFood + " провизии"));
         }
-        dicesCup.diceList.stream().filter(dice -> dice.getValue() == 2).forEach(dice -> dice.setUsed(true));
+        user.getDicesCup().setUsedDiceCurrentValue(2);
     }
 }

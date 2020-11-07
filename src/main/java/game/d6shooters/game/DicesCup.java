@@ -19,9 +19,6 @@ public class DicesCup {
         diceList.add(new Dice(Dice.DiceType.RED));
     }
 
-    public DicesCup(List<Dice> diceList) {
-        this.diceList = diceList;
-    }
 
     public static int getD6Int() {
         return random.nextInt(6) + 1;
@@ -48,8 +45,16 @@ public class DicesCup {
                 .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanReroll());
     }
 
-    public int getNumberDiceCurrentValue(int value) {
-        return (int) diceList.stream().filter(d -> d.getValue() == value).count();
+    public int getCountActiveDiceCurrentValue(int value) {
+        return (int) diceList.stream()
+                .filter(dice -> dice.getValue() == value && !dice.isUsed())
+                .count();
+    }
+
+    public void setUsedDiceCurrentValue(int value) {
+        diceList.stream()
+                .filter(dice -> dice.getValue() == value)
+                .forEach(dice -> dice.setUsed(true));
     }
 
     @Override
