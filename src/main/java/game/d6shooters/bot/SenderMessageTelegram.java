@@ -7,11 +7,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SenderMessageTelegram implements SenderMessage {
-    private final D6ShootersBot bot;
+    private final Bot bot;
     final Logger logger = Logger.getLogger(this.getClass().getName());
 
 
-    public SenderMessageTelegram(D6ShootersBot bot) {
+    public SenderMessageTelegram(Bot bot) {
         this.bot = bot;
     }
 
