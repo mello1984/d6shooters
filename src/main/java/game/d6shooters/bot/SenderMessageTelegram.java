@@ -15,12 +15,6 @@ public class SenderMessageTelegram implements SenderMessage {
         this.bot = bot;
     }
 
-    public void sendText(Long chatId, String s) {
-        SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
-                .setText(s);
-        send(sendMessage);
-    }
-
     public void sendMessage(SendMessage sendMessage) {
         send(sendMessage);
     }

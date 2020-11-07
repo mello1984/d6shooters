@@ -18,26 +18,31 @@ public class StartTurnHandler extends AbstractHandler {
         User user = Main.users.userMap.get(chatId);
         Squad squad = user.getSquad();
         DicesCup dicesCup = Main.users.userMap.get(chatId).getDicesCup();
-        SendMessageTemplate template = new SendMessageTemplate();
         squad.actionList = new ArrayList<>();
 
         if (squad.squadState == SquadState.REGULAR) {
             dicesCup.getFirstTurnDices();
             squad.squadState = SquadState.REROLL1;
             senderMessage.sendMessage(template.dicesString(chatId, dicesCup));
-            senderMessage.sendText(chatId, "Введите номера кубиков для переброски или 0");
+            senderMessage.sendMessage(
+                    template.getSendMessageOneLineButtons(user.getChatId(),
+                            "Введите номера кубиков для переброски или 0"));
             return;
         }
 
         if (squad.squadState == SquadState.REROLL1) {
             if (!dicesCup.checkString(message.getText())) {
-                senderMessage.sendText(chatId, "Некорректные данные, введите номера кубиков для переброски или 0");
+                senderMessage.sendMessage(
+                        template.getSendMessageOneLineButtons(user.getChatId(),
+                                "Некорректные данные, введите номера кубиков для переброски или 0"));
             } else {
                 squad.squadState = SquadState.REROLL2;
                 if (!message.getText().equals("0")) {
                     dicesCup.getRerolledDices(message.getText());
                     senderMessage.sendMessage(template.dicesString(chatId, dicesCup));
-                    senderMessage.sendText(chatId, "Введите номера кубиков для переброски или 0");
+                    senderMessage.sendMessage(
+                            template.getSendMessageOneLineButtons(user.getChatId(),
+                                    "Введите номера кубиков для переброски или 0"));
                     return;
                 }
             }
@@ -45,7 +50,9 @@ public class StartTurnHandler extends AbstractHandler {
 
         if (squad.squadState == SquadState.REROLL2) {
             if (!dicesCup.checkString(message.getText())) {
-                senderMessage.sendText(chatId, "Некорректные данные, введите номера кубиков для переброски или 0");
+                senderMessage.sendMessage(
+                        template.getSendMessageOneLineButtons(user.getChatId(),
+                                "Некорректные данные, введите номера кубиков для переброски или 0"));
             } else {
                 if (!message.getText().equals("0")) {
                     dicesCup.getRerolledDices(message.getText());
