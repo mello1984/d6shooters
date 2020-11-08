@@ -28,9 +28,7 @@ public class ActionEvent extends AbstractAction {
         switch (rnd) {
             case 1:
                 user.getSquad().setSquadState(SquadState.MOVE);
-                user.getSquad().getActionList().add(Squad.SquadAction.PATHFINDING);
-                user.getSquad().getActionList().add(Squad.SquadAction.PATHFINDING);
-                user.getSquad().getActionList().add(Squad.SquadAction.PATHFINDING);
+                user.getSquad().addPathfinding(3);
                 user.getActionManager().doActions();
                 break;
             case 2:

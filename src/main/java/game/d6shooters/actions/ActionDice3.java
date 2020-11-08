@@ -20,7 +20,7 @@ public class ActionDice3 extends AbstractAction {
         }
         user.getDicesCup().setUsedDiceCurrentValue(3);
 
-        user.getSquad().squadState = SquadState.CHECKHEAT;
+        user.getSquad().setSquadState(SquadState.CHECKHEAT);
         System.out.println(SquadState.OTHER + "->" + SquadState.CHECKHEAT);
         user.getActionManager().doActions();
     }

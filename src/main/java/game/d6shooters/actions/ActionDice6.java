@@ -20,7 +20,7 @@ public class ActionDice6 extends AbstractAction {
         int dice6count = user.getDicesCup().getCountActiveDiceCurrentValue(6);
 
         int killedShooters;
-        if (squad.actionList.stream().noneMatch(a -> a == Squad.SquadAction.GUNFIGHT)) {
+        if (squad.getGunfight() == 0) {
             killedShooters = (int) IntStream.range(1, dice6count).map(i -> DicesCup.getD6Int()).filter(d -> d >= 3).count();
         } else {
             killedShooters = getKilledShooters(user);
@@ -31,19 +31,19 @@ public class ActionDice6 extends AbstractAction {
             bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
                     "В перестрелке потеряли " + killedShooters + " стрелков."));
             squad.addShooters(-killedShooters);
-        } else  if (dice6count > 0) {
+        } else if (dice6count > 0) {
             bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
                     "В перестрелке никого не потеряли ."));
         }
 
-        squad.squadState = SquadState.MOVE;
+        squad.setSquadState(SquadState.MOVE);
         System.out.println(SquadState.GUNFIGHT + "->" + SquadState.MOVE);
         user.getActionManager().doActions();
     }
 
     private int getKilledShooters(User user) {
         int dice6count = user.getDicesCup().getCountActiveDiceCurrentValue(6);
-        int squadGunfight = (int) user.getSquad().actionList.stream().filter(a -> a == Squad.SquadAction.GUNFIGHT).count();
+        int squadGunfight = user.getSquad().getGunfight();
         int killedShooters = 0;
         while (dice6count > 0 && squadGunfight > 0) {
             if (isSquadWinner(user)) {
@@ -51,7 +51,7 @@ public class ActionDice6 extends AbstractAction {
                 useDice(user, 6);
             } else {
                 squadGunfight--;
-                user.getSquad().actionList.remove(Squad.SquadAction.GUNFIGHT);
+                user.getSquad().addGunfight(-1);
                 killedShooters++;
             }
         }
@@ -63,7 +63,7 @@ public class ActionDice6 extends AbstractAction {
         boolean out;
         int griggStrength;
         int squadStrength;
-        int squadGunfight = (int) user.getSquad().actionList.stream().filter(a -> a == Squad.SquadAction.GUNFIGHT).count();
+        int squadGunfight = user.getSquad().getGunfight();
         do {
             griggStrength = IntStream.rangeClosed(1, user.getDicesCup().getCountActiveDiceCurrentValue(6)).map(i -> DicesCup.getD6Int()).sum();
             squadStrength = IntStream.rangeClosed(1, squadGunfight).map(i -> DicesCup.getD6Int()).sum() + user.getSquad().getAmmo();

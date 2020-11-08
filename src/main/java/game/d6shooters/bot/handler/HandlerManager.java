@@ -18,7 +18,7 @@ public class HandlerManager {
         if (!Main.users.userMap.containsKey(message.getChatId())) return new StartGameHandler(bot);
         if (message.getText().equals("band")) return new TeamStateHandler(bot);
 
-        SquadState squadState = Main.users.userMap.get(message.getChatId()).getSquad().squadState;
+        SquadState squadState = Main.users.userMap.get(message.getChatId()).getSquad().getSquadState();
         Handler handler = switch (squadState) {
             case REGULAR, REROLL1, REROLL2 -> new StartTurnHandler(bot);
             case ALLOCATE, CHECKHEAT, CROSSROAD, EVENT, EVENT2, EVENT3, EVENT6 -> new ActionManagerHandler(bot);

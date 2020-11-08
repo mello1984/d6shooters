@@ -30,7 +30,7 @@ public class ActionDice4 extends AbstractAction {
                             buttons.toArray(new String[0])));
         }
         if (buttons.size() == 0) {
-            user.getSquad().squadState = SquadState.OTHER;
+            user.getSquad().setSquadState(SquadState.OTHER);
             System.out.println(SquadState.ALLOCATE + "->" + SquadState.OTHER);
             user.getActionManager().doActions();
         }
@@ -66,12 +66,12 @@ public class ActionDice4 extends AbstractAction {
                 break;
             case GUNFIGHT:
                 useDice(user, 4);
-                user.getSquad().actionList.add(Squad.SquadAction.GUNFIGHT);
+                user.getSquad().addGunfight(1);
                 break;
             case PATHFINDING:
                 useDice(user, 4);
                 useDice(user, 4);
-                user.getSquad().actionList.add(Squad.SquadAction.PATHFINDING);
+                user.getSquad().addPathfinding(1);
                 break;
             case REJECT:
                 user.getDicesCup().setUsedDiceCurrentValue(4);

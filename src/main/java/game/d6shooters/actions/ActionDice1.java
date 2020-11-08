@@ -24,7 +24,7 @@ public class ActionDice1 extends AbstractAction {
 
         Squad squad = user.getSquad();
         int dice1count = user.getDicesCup().getCountActiveDiceCurrentValue(1);
-        int pathfinding = (int) squad.actionList.stream().filter(a -> a == Squad.SquadAction.PATHFINDING).count();
+        int pathfinding = squad.getPathfinding();
         int distance = dice1count + pathfinding;
 
         if (distance > 0) {
@@ -32,7 +32,7 @@ public class ActionDice1 extends AbstractAction {
 
             squad.addPath(1);
             if (dice1count > 0) useDice(user, 1);
-            else squad.actionList.remove(Squad.SquadAction.PATHFINDING);
+            else squad.addPathfinding(-1);
 
             if (squad.getPlace().getType() != RoadNode.Type.BRANCHSTART)
                 squad.setPlace(RoadMap.next(squad.getPlace(), true));

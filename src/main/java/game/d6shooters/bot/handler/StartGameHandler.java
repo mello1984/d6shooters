@@ -22,7 +22,7 @@ public class StartGameHandler extends AbstractHandler {
             bot.send(template.helloString(chatId));
         } else {
             Main.users.userMap.put(chatId, new User(chatId, message.getFrom().getUserName()));
-            Main.users.userMap.get(chatId).getSquad().squadState = SquadState.REGULAR;
+            Main.users.userMap.get(chatId).getSquad().setSquadState(SquadState.REGULAR);
             String text = "Вы успешно начали игру\n"
                     + template.squadState(Main.users.userMap.get(chatId).getSquad());
             bot.send(template.getSendMessageOneLineButtons(chatId, text, ButtonsType.NEXT_TURN.name()));

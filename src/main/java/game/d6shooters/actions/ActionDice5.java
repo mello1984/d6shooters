@@ -32,7 +32,7 @@ public class ActionDice5 extends AbstractAction {
         }
         if (dice5count == 0) {
             System.out.println(SquadState.CHECKHEAT + "->" + SquadState.GUNFIGHT);
-            squad.squadState = SquadState.GUNFIGHT;
+            squad.setSquadState(SquadState.GUNFIGHT);
             user.getActionManager().doActions();
         }
     }

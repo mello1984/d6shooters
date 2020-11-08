@@ -29,7 +29,7 @@ public class ActionManager {
     }
 
     public void doActions() {
-        switch (user.getSquad().squadState) {
+        switch (user.getSquad().getSquadState()) {
             case ALLOCATE -> actionDice4.action(user);
             case CHECKHEAT -> actionDice5.action(user);
             case GUNFIGHT -> actionDice6.action(user);
@@ -46,7 +46,7 @@ public class ActionManager {
 
     public void doActions(Message message) {
 
-        switch (user.getSquad().squadState) {
+        switch (user.getSquad().getSquadState()) {
             case ALLOCATE -> actionDice4.processMessage(user, message);
             case CHECKHEAT -> actionDice5.processMessage(user, message);
             case CROSSROAD -> actionDice1.processMessage(user, message);

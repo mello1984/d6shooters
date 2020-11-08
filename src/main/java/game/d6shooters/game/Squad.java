@@ -1,34 +1,44 @@
 package game.d6shooters.game;
 
 import game.d6shooters.road.Place;
-import game.d6shooters.road.RoadMap;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
+@ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Squad {
-    private static final int MAXAMMO = 5;
-    private static final int MAXFOOD = 12;
-    private int gold = 3;
-    private int ammo = 5;
-    private int shooters = 12;
-    private int food = 6;
-    private int period = 0;
-    private int path = 0;
-    public List<SquadAction> actionList;
-    private int gunfight = 0;
-    private int pathfinding = 0;
+    static final int MAXAMMO = 5;
+    static final int MAXFOOD = 12;
+    int gold = 3;
+    int ammo = 5;
+    int shooters = 12;
+    int food = 6;
+    int period = 0;
+    int path = 0;
+    int gunfight = 0;
+    int pathfinding = 0;
     SquadAmmunition squadAmmunition = new SquadAmmunition();
-    public SquadState squadState;
+    SquadState squadState;
     Place place = Place.getNew();
-
 
     public int addGold(int value) {
         gold += value;
         return gold;
+    }
+
+    public int addGunfight(int value) {
+        gunfight += value;
+        return gunfight;
+    }
+
+    public int addPathfinding(int value) {
+        pathfinding += value;
+        return pathfinding;
     }
 
     public int addAmmo(int value) {
@@ -56,22 +66,5 @@ public class Squad {
     public int addPath(int value) {
         path += value;
         return path;
-    }
-
-    @Override
-    public String toString() {
-        return "Squad{" +
-                "gold=" + gold +
-                ", ammo=" + ammo +
-                ", shooters=" + shooters +
-                ", food=" + food +
-                ", period=" + period +
-                ", path=" + path +
-                ", squadAmmunition=" + squadAmmunition +
-                '}';
-    }
-
-    public enum SquadAction {
-        HIDE, SHELTER, PATHFINDING, GUNFIGHT
     }
 }
