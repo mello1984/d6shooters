@@ -6,7 +6,6 @@ import game.d6shooters.bot.ButtonsType;
 import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 public class StartGameHandler extends AbstractHandler {
@@ -26,8 +25,7 @@ public class StartGameHandler extends AbstractHandler {
             Main.users.userMap.get(chatId).getSquad().squadState = SquadState.REGULAR;
             String text = "Вы успешно начали игру\n"
                     + template.squadState(Main.users.userMap.get(chatId).getSquad());
-            SendMessage sendMessage = template.getSendMessageOneLineButtons(chatId, text, ButtonsType.NEXT_TURN.name());
-            bot.send(sendMessage);
+            bot.send(template.getSendMessageOneLineButtons(chatId, text, ButtonsType.NEXT_TURN.name()));
         }
     }
 }

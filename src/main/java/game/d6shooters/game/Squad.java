@@ -1,20 +1,28 @@
 package game.d6shooters.game;
 
-import game.d6shooters.road.Road;
+import game.d6shooters.road.Place;
+import game.d6shooters.road.RoadMap;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 public class Squad {
+    private static final int MAXAMMO = 5;
+    private static final int MAXFOOD = 12;
     private int gold = 3;
-    private int ammo = 5; // max 5
+    private int ammo = 5;
     private int shooters = 12;
-    private int food = 6; // max 12
+    private int food = 6;
     private int period = 0;
     private int path = 0;
     public List<SquadAction> actionList;
-    public Road road = new Road();
     SquadAmmunition squadAmmunition = new SquadAmmunition();
     public SquadState squadState;
+    Place place = Place.getNew();
+
 
     public int addGold(int value) {
         gold += value;
@@ -23,6 +31,7 @@ public class Squad {
 
     public int addAmmo(int value) {
         ammo += value;
+        ammo = Math.min(ammo, MAXAMMO);
         return ammo;
     }
 
@@ -33,6 +42,7 @@ public class Squad {
 
     public int addFood(int value) {
         food += value;
+        food = Math.min(food, MAXFOOD);
         return food;
     }
 
@@ -44,58 +54,6 @@ public class Squad {
     public int addPath(int value) {
         path += value;
         return path;
-    }
-
-//    public Squad(Road road) {
-//        this.road = road;
-//    }
-
-    public int getPath() {
-        return path;
-    }
-
-    public void setPath(int path) {
-        this.path = path;
-    }
-
-    public int getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(int period) {
-        this.period = period;
-    }
-
-    public int getGold() {
-        return gold;
-    }
-
-    public void setGold(int gold) {
-        this.gold = gold;
-    }
-
-    public int getAmmo() {
-        return ammo;
-    }
-
-    public void setAmmo(int ammo) {
-        this.ammo = ammo;
-    }
-
-    public int getShooters() {
-        return shooters;
-    }
-
-    public void setShooters(int shooters) {
-        this.shooters = shooters;
-    }
-
-    public int getFood() {
-        return food;
-    }
-
-    public void setFood(int food) {
-        this.food = food;
     }
 
     @Override

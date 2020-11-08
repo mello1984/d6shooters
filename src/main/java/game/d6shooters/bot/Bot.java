@@ -21,11 +21,12 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         HandlerManager handlerManager = new HandlerManager(this);
-        Handler handler = handlerManager.chooseHandler(update.getMessage());
-        handler.handle(update.getMessage());
-
+        handlerManager
+                .chooseHandler(update.getMessage())
+                .handle(update.getMessage());
     }
-    public void send(SendMessage sendMessage){
+
+    public void send(SendMessage sendMessage) {
         try {
             sendQueue.put(sendMessage);
         } catch (InterruptedException e) {

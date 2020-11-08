@@ -38,7 +38,7 @@ public class ActionManager {
                 actionDice3.action(user);
             }
         }
-        user.getSquad().addPeriod(1);
+
     }
 
     public void doActions(Message message) {

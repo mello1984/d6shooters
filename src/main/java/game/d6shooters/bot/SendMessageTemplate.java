@@ -27,6 +27,18 @@ public class SendMessageTemplate {
                 Icon.CLOCK.get() + " День: " + squad.getPeriod();
     }
 
+    public SendMessage squadState(Long chatId, Squad squad) {
+        String text = Icon.GUNFIGHTER.get() + " Отряд: " + squad.getShooters() + "\n" +
+                Icon.FOOD.get() + " Еда: " + squad.getFood() + "\n" +
+                Icon.AMMO.get() + " Боеприпасы: " + squad.getAmmo() + "\n" +
+                Icon.MONEYBAG.get() + " Золото: " + squad.getGold() + "\n" +
+                Icon.FOOTPRINTS.get() + " Пройдено: " + squad.getPath() + "\n" +
+                Icon.CLOCK.get() + " День: " + squad.getPeriod();
+        SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
+                .setText(text);
+        return sendMessage;
+    }
+
     public SendMessage helloString(Long chatId) {
         SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
                 .setText("Вы пока не начали игру. Отправьте 'startD6' для начала.");
