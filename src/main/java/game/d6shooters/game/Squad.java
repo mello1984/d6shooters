@@ -19,6 +19,8 @@ public class Squad {
     private int period = 0;
     private int path = 0;
     public List<SquadAction> actionList;
+    private int gunfight = 0;
+    private int pathfinding = 0;
     SquadAmmunition squadAmmunition = new SquadAmmunition();
     public SquadState squadState;
     Place place = Place.getNew();

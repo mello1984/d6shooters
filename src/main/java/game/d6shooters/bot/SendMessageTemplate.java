@@ -33,7 +33,7 @@ public class SendMessageTemplate {
                 Icon.AMMO.get() + " Боеприпасы: " + squad.getAmmo() + "\n" +
                 Icon.MONEYBAG.get() + " Золото: " + squad.getGold() + "\n" +
                 Icon.FOOTPRINTS.get() + " Пройдено: " + squad.getPath() + "\n" +
-                Icon.CLOCK.get() + " День: " + squad.getPeriod();
+                Icon.CLOCK.get() + " Прошло дней: " + squad.getPeriod();
         SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
                 .setText(text);
         return sendMessage;
@@ -50,6 +50,12 @@ public class SendMessageTemplate {
         SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
                 .setText(text);
         SendMessageFormat.setCustomOneLineButtons(sendMessage, oneLineButtons);
+        return sendMessage;
+    }
+
+    public SendMessage getSendMessageWithoutButtons(Long chatId, String text, String... oneLineButtons) {
+        SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
+                .setText(text);
         return sendMessage;
     }
 

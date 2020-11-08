@@ -13,8 +13,7 @@ public class TeamStateHandler extends AbstractHandler {
     @Override
     public void handle(Message message) {
         User user = Main.users.userMap.get(message.getChatId());
-        bot.send(
-                template.getSendMessageOneLineButtons(user.getChatId(),
-                        template.squadState(user.getSquad())));
+        bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                template.squadState(user.getSquad())));
     }
 }

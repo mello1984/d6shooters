@@ -21,7 +21,7 @@ public class MessageSender implements Runnable {
         try {
             while (true) {
                 SendMessage sendMessage = bot.sendQueue.take();
-                log.debug(String.format("Message sent to: %s", sendMessage.getChatId()));
+                log.debug(String.format("Message sent to: %s, : %s", sendMessage.getChatId(), sendMessage.getText()));
                 send(sendMessage);
                 Thread.sleep(SENDER_SLEEP_TIME);
 

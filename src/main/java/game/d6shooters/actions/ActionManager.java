@@ -6,13 +6,14 @@ import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 public class ActionManager {
-    private final Action actionDice1;
-    private final Action actionDice2;
-    private final Action actionDice3;
+    private final ActionDice1 actionDice1;
+    private final ActionDice2 actionDice2;
+    private final ActionDice3 actionDice3;
     private final ActionDice4 actionDice4;
     private final ActionDice5 actionDice5;
     private final ActionDice6 actionDice6;
     private final Action actionFeeding;
+    private final ActionEvent actionEvent;
     private final User user;
 
     public ActionManager(User user, Bot bot) {
@@ -24,6 +25,7 @@ public class ActionManager {
         actionDice5 = new ActionDice5(bot);
         actionDice6 = new ActionDice6(bot);
         actionFeeding = new ActionFeeding(bot);
+        actionEvent = new ActionEvent(bot);
     }
 
     public void doActions() {
@@ -37,12 +39,19 @@ public class ActionManager {
                 actionDice2.action(user);
                 actionDice3.action(user);
             }
+            case EVENT -> actionEvent.action(user);
         }
 
     }
 
     public void doActions(Message message) {
-        if (user.getSquad().squadState == SquadState.ALLOCATE) actionDice4.processMessage(user, message);
-        else if (user.getSquad().squadState == SquadState.CHECKHEAT) actionDice5.processMessage(user, message);
+
+        switch (user.getSquad().squadState) {
+            case ALLOCATE -> actionDice4.processMessage(user, message);
+            case CHECKHEAT -> actionDice5.processMessage(user, message);
+            case CROSSROAD -> actionDice1.processMessage(user, message);
+            case EVENT2, EVENT3, EVENT6 -> actionEvent.processMessage(user, message);
+        }
+
     }
 }

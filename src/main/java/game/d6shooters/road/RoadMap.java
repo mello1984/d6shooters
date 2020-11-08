@@ -1,12 +1,15 @@
 package game.d6shooters.road;
 
 
+import lombok.experimental.UtilityClass;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@UtilityClass
 public class RoadMap {
     public final static Map<Road, List<RoadNode>> map = new HashMap<>();
     private final static List<RoadNode> mainRoad = getRoad(80);
@@ -45,20 +48,20 @@ public class RoadMap {
 
     }
 
-    public static Place next(Place place) {
-        List<RoadNode> road = map.get(place.getRoad());
+    public static Place next(Place place, boolean mainRoad) {
         int number = place.getNumber();
-        RoadNode.Type type = road.get(number).getType();
-        RoadNode node = road.get(number);
-        Place result;
-        if (type != RoadNode.Type.BRANCHSTART && type != RoadNode.Type.BRANCHEND) {
-            result = new Place(place.getRoad(), ++number);
-        } else if (type == RoadNode.Type.BRANCHEND) {
-            result = new Place(node.getNextRoad(), node.getNextRoadNumberNode());
-        } else {
-            result = new Place(place.getRoad(), ++number); // mainroad
-            result = new Place(node.getNextRoad(), node.getNextRoadNumberNode()); // branch
-        }
+        RoadNode node = map.get(place.getRoad()).get(number);
+
+        Place result = switch (node.getType()) {
+            case ROAD, TOWN, EVENT -> new Place(place.getRoad(), ++number);
+            case BRANCHEND -> new Place(node.getNextRoad(), node.getNextRoadNumberNode());
+            case BRANCHSTART -> {
+                Place main = new Place(place.getRoad(), ++number);
+                Place branch = new Place(node.getNextRoad(), node.getNextRoadNumberNode());
+                yield mainRoad ? main : branch;
+            }
+            case RINO -> Place.getNew(); // RINO!!!
+        };
 
         return result;
     }
