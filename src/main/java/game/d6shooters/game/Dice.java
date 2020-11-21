@@ -2,7 +2,7 @@ package game.d6shooters.game;
 
 import java.util.Random;
 
-public class Dice {
+public class Dice implements Comparable<Dice> {
     private static Random random = new Random();
     DiceType type;
     private int value;
@@ -56,6 +56,12 @@ public class Dice {
     @Override
     public String toString() {
         return "{" + type + ": " + value + '}';
+    }
+
+    @Override
+    public int compareTo(Dice o) {
+        return type == o.type ? Integer.compare(value, o.value) :
+                type == DiceType.WHITE ? -1 : 1;
     }
 
     public enum DiceType {

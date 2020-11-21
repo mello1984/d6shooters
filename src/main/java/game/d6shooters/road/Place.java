@@ -16,7 +16,16 @@ public class Place {
         return RoadMap.map.get(road).get(number).getType();
     }
 
+    public String getTownName() {
+        return RoadMap.map.get(road).get(number).getTownName();
+    }
+
+
+    public TownShop getTownShop() {
+        return RoadMap.map.get(road).get(number).getTownShop();
+    }
+
     public static Place getNew() {
-        return new Place(RoadMap.Road.MAINROAD, 8);
+        return new Place(RoadMap.Road.MAINROAD, 13);
     }
 }

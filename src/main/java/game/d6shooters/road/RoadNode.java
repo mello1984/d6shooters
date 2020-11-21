@@ -12,9 +12,11 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoadNode {
     Type type;
-    String townName;
     RoadMap.Road nextRoad;
     int nextRoadNumberNode;
+    String townName;
+
+     TownShop townShop;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

@@ -6,6 +6,7 @@ import game.d6shooters.game.Squad;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SendMessageTemplate {
@@ -53,7 +54,21 @@ public class SendMessageTemplate {
         return sendMessage;
     }
 
-    public SendMessage getSendMessageWithoutButtons(Long chatId, String text, String... oneLineButtons) {
+    public SendMessage getSendMessageManyLineButtons(Long chatId, String text, String[]... buttons) {
+        SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
+                .setText(text);
+        SendMessageFormat.setCustomManyLineButtons(sendMessage, buttons);
+        return sendMessage;
+    }
+
+    public SendMessage getSendMessageManyLineButtons(Long chatId, String text, List<List<String>> buttons) {
+        SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
+                .setText(text);
+        SendMessageFormat.setCustomManyLineButtons(sendMessage, buttons);
+        return sendMessage;
+    }
+
+    public SendMessage getSendMessageWithoutButtons(Long chatId, String text) {
         SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
                 .setText(text);
         return sendMessage;

@@ -1,5 +1,6 @@
 package game.d6shooters.game;
 
+import game.d6shooters.bot.Icon;
 import game.d6shooters.road.Place;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,6 +26,10 @@ public class Squad {
     SquadAmmunition squadAmmunition = new SquadAmmunition();
     SquadState squadState;
     Place place = Place.getNew();
+    int pokerBetValue = 0;
+    Icon pokerBetType;
+    PokerDices pokerDices;
+
 
     public int addGold(int value) {
         gold += value;

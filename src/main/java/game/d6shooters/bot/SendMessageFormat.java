@@ -51,4 +51,41 @@ public class SendMessageFormat {
         keyboard.add(keyboardRow);
         replyKeyboardMarkup.setKeyboard(keyboard);
     }
+
+    public static void setCustomManyLineButtons(SendMessage sendMessage, String[]... buttons) {
+        // Создаем клавиатуру
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
+
+        // Создаем список строк клавиатуры
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        for (String[] strings : buttons) {
+            KeyboardRow keyboardRow = new KeyboardRow();
+            Arrays.stream(strings).forEach(button -> keyboardRow.add(new KeyboardButton(button)));
+            keyboard.add(keyboardRow);
+        }
+        replyKeyboardMarkup.setKeyboard(keyboard);
+    }
+
+    public static void setCustomManyLineButtons(SendMessage sendMessage, List<List<String>> buttons) {
+        // Создаем клавиатуру
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
+
+        // Создаем список строк клавиатуры
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        buttons.forEach(l -> {
+            KeyboardRow keyboardRow = new KeyboardRow();
+            l.forEach(button -> keyboardRow.add(new KeyboardButton(button)));
+            keyboard.add(keyboardRow);
+        });
+
+        replyKeyboardMarkup.setKeyboard(keyboard);
+    }
 }

@@ -45,14 +45,19 @@ public class ActionDice1 extends AbstractAction {
 
 
             if (squad.getPlace().getType() == RoadNode.Type.TOWN) {
-//                new ActionTown().action(user);
+                user.getDicesCup().setUsedDiceCurrentValue(1);
+                squad.setPathfinding(0);
+                squad.setSquadState(SquadState.TOWN);
+
+//                user.getActionManager().doActions();
             }
             if (squad.getPlace().getType() == RoadNode.Type.EVENT) {
                 squad.setSquadState(SquadState.EVENT);
-                user.getActionManager().doActions();
+//                user.getActionManager().doActions();
             }
             if (squad.getPlace().getType() == RoadNode.Type.RINO) {
-//                new ActionEvent().action(user);
+                squad.setSquadState(SquadState.ENDGAME);
+//                user.getActionManager().doActions();
             }
             user.getActionManager().doActions();
 

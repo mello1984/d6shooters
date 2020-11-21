@@ -3,7 +3,6 @@ package game.d6shooters.actions;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.Icon;
 import game.d6shooters.game.DicesCup;
-import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
@@ -11,7 +10,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.*;
 
-///////////////////////////////////// Надо править enum!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 @Log4j2
 public class ActionEvent extends AbstractAction {
@@ -21,11 +19,12 @@ public class ActionEvent extends AbstractAction {
 
     @Override
     public void action(User user) {
-        int rnd = DicesCup.getD6Int();
+        int roll = DicesCup.getD6Int();
         List<String> buttons = new ArrayList<>();
-        log.debug("EVENT, roll: " + rnd);
+        log.debug("EVENT, roll: " + roll);
+        bot.send(template.getSendMessageOneLineButtons(user.getChatId(), "EVENT, roll: " + roll));
 
-        switch (rnd) {
+        switch (roll) {
             case 1:
                 user.getSquad().setSquadState(SquadState.MOVE);
                 user.getSquad().addPathfinding(3);
@@ -44,10 +43,10 @@ public class ActionEvent extends AbstractAction {
                 break;
             case 3:
                 user.getSquad().setSquadState(SquadState.EVENT3);
-                if (user.getSquad().getAmmo() >= 2) buttons.add(Action.SELLAMMO.get());
-                if (user.getSquad().getFood() >= 2) buttons.add(Action.SELLFOOD.get());
-                if (user.getSquad().getGold() > 0) buttons.add(Action.BUYAMMO.get());
                 if (user.getSquad().getGold() > 0) buttons.add(Action.BUYFOOD.get());
+                if (user.getSquad().getGold() > 0) buttons.add(Action.BUYAMMO.get());
+                if (user.getSquad().getFood() >= 2) buttons.add(Action.SELLFOOD.get());
+                if (user.getSquad().getAmmo() >= 2) buttons.add(Action.SELLAMMO.get());
                 buttons.add(Action.NONE.get());
                 bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
                         "Вы встретили торговый обоз и можете поторговать",
@@ -59,9 +58,9 @@ public class ActionEvent extends AbstractAction {
                 break;
             case 5:
                 user.getSquad().setSquadState(SquadState.MOVE);
-                bot.send(template.getSendMessageOneLineButtons(user.getChatId(), Action.STRAY.get()));
                 user.getSquad().addPeriod(1);
                 user.getSquad().addFood(-1);
+                bot.send(template.getSendMessageOneLineButtons(user.getChatId(), Action.STRAY.get()));
                 user.getActionManager().doActions();
                 break;
             case 6:
@@ -71,10 +70,8 @@ public class ActionEvent extends AbstractAction {
                 if (user.getSquad().getGold() > 0 && user.getSquad().getFood() > 0)
                     buttons.add(Action.LOSEFOODANDGOLD.get());
                 buttons.add(Action.LOSE2GUN.get());
-
                 bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
-                        "Вы несете непредвиденные потери.",
-                        Action.LOSE2FOOD.get(), Action.LOSE2GOLD.get(), Action.LOSEFOODANDGOLD.get(), Action.LOSE2GUN.get()));
+                        "Вы несете непредвиденные потери.", buttons.toArray(new String[0])));
                 break;
         }
 
@@ -92,7 +89,7 @@ public class ActionEvent extends AbstractAction {
 
         switch (user.getSquad().getSquadState()) {
             case EVENT2 -> {
-                if (action == Action.HUNT) {
+                if (action == Action.HUNT && user.getSquad().getAmmo() > 0) {
                     user.getSquad().addAmmo(-1);
                     user.getSquad().addFood(2);
                 }
@@ -156,9 +153,7 @@ public class ActionEvent extends AbstractAction {
                     case LOSE2GUN: {
                         user.getSquad().addShooters(-2);
                     }
-
                 }
-
             }
         }
         bot.send(template.squadState(user.getChatId(), user.getSquad()));

@@ -31,7 +31,6 @@ public class ActionDice4 extends AbstractAction {
         }
         if (buttons.size() == 0) {
             user.getSquad().setSquadState(SquadState.OTHER);
-            System.out.println(SquadState.ALLOCATE + "->" + SquadState.OTHER);
             user.getActionManager().doActions();
         }
     }

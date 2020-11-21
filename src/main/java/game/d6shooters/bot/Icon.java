@@ -19,6 +19,14 @@ public enum Icon {
     BUFFALO(":water_buffalo:"),
     FOOTPRINTS(":footprints:"),
     CLOCK(":clock1:"),
+    COMPASS(":compass:"),
+    MAP(":world_map:"),
+    PILL(":pill:"),
+    BOMB(":bomb:"),
+    HUNTER(":dog2:"),
+    BINOCULAR(":telescope:"),
+    POKER(":clubs:"),
+
     ;
 
     private String value;

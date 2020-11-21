@@ -1,7 +1,6 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.bot.Bot;
-import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -14,6 +13,8 @@ public class ActionManager {
     private final ActionDice6 actionDice6;
     private final Action actionFeeding;
     private final ActionEvent actionEvent;
+    private final ActionEndGame actionEndGame;
+    private final ActionTown actionTown;
     private final User user;
 
     public ActionManager(User user, Bot bot) {
@@ -26,6 +27,8 @@ public class ActionManager {
         actionDice6 = new ActionDice6(bot);
         actionFeeding = new ActionFeeding(bot);
         actionEvent = new ActionEvent(bot);
+        actionEndGame = new ActionEndGame(bot);
+        actionTown = new ActionTown(bot);
     }
 
     public void doActions() {
@@ -34,12 +37,15 @@ public class ActionManager {
             case CHECKHEAT -> actionDice5.action(user);
             case GUNFIGHT -> actionDice6.action(user);
             case MOVE -> actionDice1.action(user);
+            case TOWN -> actionTown.action(user);
             case OTHER -> {
                 actionFeeding.action(user);
                 actionDice2.action(user);
                 actionDice3.action(user);
             }
             case EVENT -> actionEvent.action(user);
+            case ENDGAME -> actionEndGame.action(user);
+
         }
 
     }
