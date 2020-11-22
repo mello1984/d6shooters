@@ -16,12 +16,9 @@ public class ActionDice3 extends AbstractAction {
             user.getSquad().addGold(foundGold);
             bot.send(template.getSendMessageWithButtons(user.getChatId(),
                     "На рудниках добыли " + foundGold + " золота"));
-
         }
         user.getDicesCup().setUsedDiceCurrentValue(3);
-
         user.getSquad().setSquadState(SquadState.CHECKHEAT);
-        System.out.println(SquadState.OTHER + "->" + SquadState.CHECKHEAT);
         user.getActionManager().doActions();
     }
 }

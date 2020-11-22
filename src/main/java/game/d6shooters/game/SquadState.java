@@ -10,8 +10,6 @@ import lombok.experimental.FieldDefaults;
 public enum SquadState {
 
     STARTTURN(3),
-
-    REGULAR, REROLL1, REROLL2,
     ALLOCATE, OTHER, CHECKHEAT, GUNFIGHT, MOVE, TOWN, ENDGAME, CROSSROAD,
     EVENT, EVENT2, EVENT3, EVENT6,
     POKER1, POKER2, POKER3, POKER4,

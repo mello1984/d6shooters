@@ -1,14 +1,12 @@
 package game.d6shooters.game;
 
 import game.d6shooters.bot.Icon;
-import game.d6shooters.bot.SendMessageFormat;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.*;
 
 public class DicesCup {
     private static final Random random = new Random();
-    public List<Dice> diceList = new ArrayList<>();
+    private List<Dice> diceList = new ArrayList<>();
     private static final Map<Integer, String> dices = new HashMap<>() {{
         put(1, Icon.DICE1.get());
         put(2, Icon.DICE2.get());
@@ -29,6 +27,13 @@ public class DicesCup {
         diceList.add(new Dice(Dice.DiceType.RED));
     }
 
+    public List<Dice> getDiceList() {
+        return diceList;
+    }
+
+    public void setDiceList(List<Dice> diceList) {
+        this.diceList = diceList;
+    }
 
     public static int getD6Int() {
         return random.nextInt(6) + 1;

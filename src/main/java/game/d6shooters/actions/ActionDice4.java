@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActionDice4 extends AbstractAction {
-    private static final String REJECT = "Ничего";
-    private static final String HIDE = "Прятаться";
-    private static final String GUNFIGHT = "Отстреливаться";
-    private static final String SHELTER = "Укрываться от жары";
-    private static final String PATHFINDING = "Искать путь";
+    protected static final String REJECT = "Ничего";
+    protected static final String HIDE = "Прятаться";
+    protected static final String GUNFIGHT = "Отстреливаться";
+    protected static final String SHELTER = "Укрываться от жары";
+    protected static final String PATHFINDING = "Искать путь";
 
     public ActionDice4(Bot bot) {
         super(bot);
@@ -21,20 +21,19 @@ public class ActionDice4 extends AbstractAction {
 
     @Override
     public void action(User user) {
-        List<String> buttons = getListButtons(user);
-        if (buttons.size() > 0) {
-            bot.send(
-                    template.getSendMessageWithButtons(user.getChatId(),
-                            "Необходимо распределить " + user.getDicesCup().getCountActiveDiceCurrentValue(4) + " '4', будьте внимательны",
-                            buttons.toArray(new String[0])));
+        String[] buttons = getListButtons(user);
+        if (buttons.length > 0) {
+            bot.send(template.getSendMessageWithButtons(user.getChatId(),
+                    "Необходимо распределить " + user.getDicesCup().getCountActiveDiceCurrentValue(4) + " '4', будьте внимательны",
+                    getListButtons(user)));
         }
-        if (buttons.size() == 0) {
+        if (buttons.length == 0) {
             user.getSquad().setSquadState(SquadState.OTHER);
             user.getActionManager().doActions();
         }
     }
 
-    private List<String> getListButtons(User user) {
+    private String[] getListButtons(User user) {
         List<String> buttons = new ArrayList<>();
         int dice4count = user.getDicesCup().getCountActiveDiceCurrentValue(4);
         int dice5count = user.getDicesCup().getCountActiveDiceCurrentValue(5);
@@ -47,11 +46,17 @@ public class ActionDice4 extends AbstractAction {
             if (dice4count >= 2) buttons.add(PATHFINDING);
             buttons.add(REJECT);
         }
-        return buttons;
+        return buttons.toArray(new String[0]);
     }
 
     public void processMessage(User user, Message message) {
-        switch (message.getText()) {
+        allocateDices(user, message.getText());
+        bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
+        user.getActionManager().doActions();
+    }
+
+    protected void allocateDices(User user, String text) {
+        switch (text) {
             case HIDE:
                 useDice(user, 4);
                 useDice(user, 6);
@@ -77,9 +82,6 @@ public class ActionDice4 extends AbstractAction {
             default:
                 break;
         }
-
-        bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
-        user.getActionManager().doActions();
     }
 
 
