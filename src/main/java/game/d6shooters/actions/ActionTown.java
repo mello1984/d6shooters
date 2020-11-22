@@ -1,16 +1,15 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.bot.Bot;
-import game.d6shooters.bot.Icon;
-import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
+import game.d6shooters.game.SquadState;
 import game.d6shooters.road.Place;
-import game.d6shooters.road.RoadMap;
 import game.d6shooters.road.TownShop;
 import game.d6shooters.users.User;
+import lombok.extern.log4j.Log4j2;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.Arrays;
-
+@Log4j2
 public class ActionTown extends AbstractAction {
     public ActionTown(Bot bot) {
         super(bot);
@@ -18,46 +17,136 @@ public class ActionTown extends AbstractAction {
 
     @Override
     public void action(User user) {
+        log.debug("Запущен ActionTown");
+        Place place = user.getSquad().getPlace();
+        log.debug(place);
+        TownShop townShop = place.getTownShop();
+        log.debug(townShop);
+
+        bot.send(template.getSendMessageWithButtons(user.getChatId(),
+                String.format("Вы вошли в город %s и можете поторговать или сыграть в покер.", place.getTownName()),
+                townShop.getGoods(user)));
+    }
+
+    public void processMessage(User user, Message message) {
+        Squad squad = user.getSquad();
         Place place = user.getSquad().getPlace();
         TownShop townShop = place.getTownShop();
 
+        TownShop.Action action = TownShop.Action.getAction(message.getText());
 
-        bot.send(template.getSendMessageManyLineButtons(user.getChatId(),
-                String.format("Вы вошли в город %s и можете поторговать или сыграть в покер.", place.getTownName()),
-                townShop.getGoods(user)));
-        
+        switch (action) {
+            case BUY2FOOD -> {
+                if (squad.getGold() >= TownShop.StandardGood.FOOD1.getValue()) {
+                    squad.addFood(TownShop.StandardGood.FOOD1.getCount());
+                    squad.addGold(-TownShop.StandardGood.FOOD1.getValue());
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.FOOD1);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.FOOD2);
+                }
+            }
+            case BUY5FOOD -> {
+                if (squad.getGold() >= TownShop.StandardGood.FOOD2.getValue()) {
+                    squad.addFood(TownShop.StandardGood.FOOD2.getCount());
+                    squad.addGold(-TownShop.StandardGood.FOOD2.getValue());
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.FOOD1);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.FOOD2);
+                }
+            }
+            case BUY2AMMO -> {
+                if (squad.getGold() >= TownShop.StandardGood.AMMO1.getValue()) {
+                    squad.addAmmo(TownShop.StandardGood.AMMO1.getCount());
+                    squad.addGold(-TownShop.StandardGood.AMMO1.getValue());
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.AMMO1);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.AMMO2);
+                }
+            }
+            case BUY5AMMO -> {
+                if (squad.getGold() >= TownShop.StandardGood.AMMO2.getValue()) {
+                    squad.addAmmo(TownShop.StandardGood.AMMO2.getCount());
+                    squad.addGold(-TownShop.StandardGood.AMMO2.getValue());
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.AMMO1);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.AMMO2);
+                }
+            }
+            case HIRE1 -> {
+                if (squad.getGold() >= TownShop.StandardGood.HIRE1.getValue()) {
+                    squad.addShooters(TownShop.StandardGood.HIRE1.getCount());
+                    squad.addGold(-TownShop.StandardGood.HIRE1.getValue());
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.HIRE1);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.HIRE2);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.HIRE3);
+                }
+            }
+            case HIRE2 -> {
+                if (squad.getGold() >= TownShop.StandardGood.HIRE2.getValue()) {
+                    squad.addShooters(TownShop.StandardGood.HIRE2.getCount());
+                    squad.addGold(-TownShop.StandardGood.HIRE2.getValue());
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.HIRE1);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.HIRE2);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.HIRE3);
+                }
+            }
+            case HIRE3 -> {
+                if (squad.getGold() >= TownShop.StandardGood.HIRE3.getValue()) {
+                    squad.addShooters(TownShop.StandardGood.HIRE3.getCount());
+                    squad.addGold(-TownShop.StandardGood.HIRE3.getValue());
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.HIRE1);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.HIRE2);
+                    townShop.getStandardGoods().remove(TownShop.StandardGood.HIRE3);
+                }
+            }
+            case COMPASS -> {
+                if (squad.getGold() >= TownShop.SpecialGood.COMPASS.getValue() && townShop.getSpecialGood() == TownShop.SpecialGood.COMPASS) {
+                    squad.setCompass(true);
+                    squad.addGold(-TownShop.SpecialGood.COMPASS.getValue());
+                    townShop.setSpecialGood(TownShop.SpecialGood.NONE);
+                }
+            }
+            case HUNTER -> {
+                if (squad.getGold() >= TownShop.SpecialGood.COMPASS.getValue() && townShop.getSpecialGood() == TownShop.SpecialGood.COMPASS) {
+                    squad.setHunter(true);
+                    squad.addGold(-TownShop.SpecialGood.COMPASS.getValue());
+                    townShop.setSpecialGood(TownShop.SpecialGood.NONE);
+                }
+            }
+            case MAP -> {
+                if (squad.getGold() >= TownShop.SpecialGood.MAP.getValue() && townShop.getSpecialGood() == TownShop.SpecialGood.MAP) {
+                    squad.setMap(true);
+                    squad.addGold(-TownShop.SpecialGood.MAP.getValue());
+                    townShop.setSpecialGood(TownShop.SpecialGood.NONE);
+                }
+            }
+            case BINOCULAR -> {
+                if (squad.getGold() >= TownShop.SpecialGood.BINOCULAR.getValue() && townShop.getSpecialGood() == TownShop.SpecialGood.BINOCULAR) {
+                    squad.setBinocular(true);
+                    squad.addGold(-TownShop.SpecialGood.BINOCULAR.getValue());
+                    townShop.setSpecialGood(TownShop.SpecialGood.NONE);
+                }
+            }
+            case PILL -> {
+                if (squad.getGold() >= TownShop.SpecialGood.PILL.getValue() && townShop.getSpecialGood() == TownShop.SpecialGood.PILL) {
+                    squad.setPill(true);
+                    squad.addGold(-TownShop.SpecialGood.PILL.getValue());
+                    townShop.setSpecialGood(TownShop.SpecialGood.NONE);
+                }
+            }
+            case BOMB -> {
+                if (squad.getGold() >= TownShop.SpecialGood.BOMB.getValue() && townShop.getSpecialGood() == TownShop.SpecialGood.BOMB) {
+                    squad.setBomb(1); /// Надо доделать до +3
+                    squad.addGold(-TownShop.SpecialGood.BOMB.getValue());
+                    townShop.setSpecialGood(TownShop.SpecialGood.NONE);
+                }
+            }
+            case POKER -> {
+                new ActionPoker(bot).action(user);
+            }
+            case NONE, EMPTY -> {
+                squad.setSquadState(SquadState.MOVE);
+            }
+        }
 
+
+        user.getActionManager().doActions();
     }
-//
-//    private enum Action {
-//        BUY2FOOD(String.format("Купить 2%s за 1%s", Icon.FOOD.get(), Icon.MONEYBAG.get())),
-//        BUY5FOOD(String.format("Купить 5%s за 2%s", Icon.FOOD.get(), Icon.MONEYBAG.get())),
-//        BUY2AMMO(String.format("Купить 2%s за 1%s", Icon.AMMO.get(), Icon.MONEYBAG.get())),
-//        BUY5AMMO(String.format("Купить 5%s за 2%s", Icon.AMMO.get(), Icon.MONEYBAG.get())),
-//        HIRE(String.format("Нанять 1%s за 1%s", Icon.GUNFIGHTER.get(), Icon.MONEYBAG.get())),
-//        COMPASS(String.format("Купить компас %s за 2%s", Icon.COMPASS.get(), Icon.MONEYBAG.get())),
-//        HUNTER(String.format("Нанять охотника %s за 3%s", Icon.HUNTER.get(), Icon.MONEYBAG.get())),
-//        MAP(String.format("Купить карту золотых приисков %s за 2%s", Icon.MAP.get(), Icon.MONEYBAG.get())),
-//        BINOCULAR(String.format("Купить бинокль %s за 2%s", Icon.BINOCULAR.get(), Icon.MONEYBAG.get())),
-//        PILL(String.format("Купить медикаменты %s за %s", Icon.PILL.get(), Icon.MONEYBAG.get())),
-//        BOMB(String.format("Улучшить вооружение %s за 1%s", Icon.BOMB.get(), Icon.MONEYBAG.get())),
-//        POKER(String.format("Сыграть в покер %s", Icon.POKER.get())),
-//
-//        NONE("Отказаться"),
-//        EMPTY("");
-//
-//        private String value;
-//
-//        Action(String value) {
-//            this.value = value;
-//        }
-//
-//        private String get() {
-//            return value;
-//        }
-//
-//        public static Action getAction(String string) {
-//            return Arrays.stream(Action.values()).filter(a -> a.value.equals(string)).findFirst().orElse(EMPTY);
-//        }
-//    }
+
 }

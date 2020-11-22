@@ -12,7 +12,7 @@ public class ActionEndGame extends AbstractAction {
 
     @Override
     public void action(User user) {
-        bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+        bot.send(template.getSendMessageWithButtons(user.getChatId(),
                 String.format("Игра закончена. Вы набрали %d очков", getScores(user)), "startD6"));
     }
 

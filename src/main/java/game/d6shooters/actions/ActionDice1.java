@@ -38,7 +38,7 @@ public class ActionDice1 extends AbstractAction {
                 squad.setPlace(RoadMap.next(squad.getPlace(), true));
             else {
                 squad.setSquadState(SquadState.CROSSROAD);
-                bot.send(template.getSendMessageOneLineButtons(user.getChatId(), "Перекресток, выберите направление",
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), "Перекресток, выберите направление",
                         BRANCH, MAIN));
                 return;
             }
@@ -48,6 +48,7 @@ public class ActionDice1 extends AbstractAction {
                 user.getDicesCup().setUsedDiceCurrentValue(1);
                 squad.setPathfinding(0);
                 squad.setSquadState(SquadState.TOWN);
+                log.debug("Вошли в город " + squad.getSquadState());
 
 //                user.getActionManager().doActions();
             }
@@ -62,16 +63,17 @@ public class ActionDice1 extends AbstractAction {
             user.getActionManager().doActions();
 
         } else {
-            squad.setSquadState(SquadState.REGULAR);
+            squad.setSquadState(SquadState.STARTTURN);
+            squad.getSquadState().resetStep();
             squad.addPeriod(1);
-            bot.send(template.squadState(user.getChatId(), user.getSquad()));
-            bot.send(template.getSendMessageOneLineButtons(user.getChatId(), "Ход завершен}", ButtonsType.NEXT_TURN.name()));
+            bot.send(template.getSquadStateMessage(user.getChatId()));
+            bot.send(template.getSendMessageWithButtons(user.getChatId(), "Ход завершен", ButtonsType.NEXT_TURN.name()));
         }
     }
 
     public void processMessage(User user, Message message) {
         if (!message.getText().equals(BRANCH) && !message.getText().equals(MAIN)) {
-            bot.send(template.getSendMessageOneLineButtons(user.getChatId(), "Некорректная команда, выберите направление",
+            bot.send(template.getSendMessageWithButtons(user.getChatId(), "Некорректная команда, выберите направление",
                     BRANCH, MAIN));
             return;
         }
@@ -80,7 +82,7 @@ public class ActionDice1 extends AbstractAction {
             case BRANCH -> user.getSquad().setPlace(RoadMap.next(user.getSquad().getPlace(), true));
             case MAIN -> user.getSquad().setPlace(RoadMap.next(user.getSquad().getPlace(), false));
         }
-        bot.send(template.getSendMessageOneLineButtons(user.getChatId(), user.getSquad().getPlace().toString()));
+        bot.send(template.getSendMessageWithButtons(user.getChatId(), user.getSquad().getPlace().toString()));
         user.getSquad().setSquadState(SquadState.MOVE);
         user.getActionManager().doActions();
     }

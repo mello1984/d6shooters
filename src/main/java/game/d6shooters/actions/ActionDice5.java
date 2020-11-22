@@ -22,7 +22,7 @@ public class ActionDice5 extends AbstractAction {
         int dice5count = dicesCup.getCountActiveDiceCurrentValue(5);
         if (dice5count > 0) {
             int roll = DicesCup.getD6Int();
-            bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+            bot.send(template.getSendMessageWithButtons(user.getChatId(),
                     "Экстремальная жара, roll '" + roll + "' из 6.",
                     LOSE2FOOD, LOSE1GUNFIGHTER));
             if (roll < 3) {

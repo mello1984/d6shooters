@@ -5,11 +5,13 @@ import game.d6shooters.users.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import java.util.*;
 
 @Getter
+@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TownShop {
     static final List<SpecialGood> SPECIAL_GOOD_LIST = new ArrayList<>(Arrays.asList(SpecialGood.values()));
@@ -19,7 +21,7 @@ public class TownShop {
 
     public TownShop() {
         standardGoods = new HashSet<>(Arrays.asList(StandardGood.values()));
-        specialGood = SPECIAL_GOOD_LIST.get(new Random().nextInt(SPECIAL_GOOD_LIST.size() + 1));
+        specialGood = SPECIAL_GOOD_LIST.get(new Random().nextInt(SPECIAL_GOOD_LIST.size()));
         canGamingPoker = true;
     }
 
@@ -51,7 +53,8 @@ public class TownShop {
 
 
     @AllArgsConstructor
-    private enum StandardGood {
+    @Getter
+    public enum StandardGood {
         FOOD1(2, 1), FOOD2(5, 2), AMMO1(2, 1), AMMO2(5, 2),
         HIRE1(1, 1), HIRE2(2, 2), HIRE3(3, 3);
         private int count;
@@ -59,13 +62,14 @@ public class TownShop {
     }
 
     @AllArgsConstructor
-    private enum SpecialGood {
-        COMPASS(2), HUNTER(3), MAP(3), BINOCULAR(2), PILL(2), BOMB(1);
+    @Getter
+    public enum SpecialGood {
+        COMPASS(2), HUNTER(3), MAP(3), BINOCULAR(2), PILL(2), BOMB(1), NONE(0);
         private int value;
     }
 
     @FieldDefaults(level = AccessLevel.PRIVATE)
-    private enum Action {
+    public enum Action {
         BUY2FOOD(String.format("%d%s за %d%s", StandardGood.FOOD1.count, Icon.FOOD.get(), StandardGood.FOOD1.value, Icon.MONEYBAG.get())),
         BUY5FOOD(String.format("5%s за 2%s", Icon.FOOD.get(), Icon.MONEYBAG.get())),
         BUY2AMMO(String.format("2%s за 1%s", Icon.AMMO.get(), Icon.MONEYBAG.get())),

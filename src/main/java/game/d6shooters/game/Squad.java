@@ -2,15 +2,10 @@ package game.d6shooters.game;
 
 import game.d6shooters.bot.Icon;
 import game.d6shooters.road.Place;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
-@ToString
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Squad {
     static final int MAXAMMO = 5;
@@ -23,12 +18,18 @@ public class Squad {
     int path = 0;
     int gunfight = 0;
     int pathfinding = 0;
-    SquadAmmunition squadAmmunition = new SquadAmmunition();
     SquadState squadState;
     Place place = Place.getNew();
     int pokerBetValue = 0;
     Icon pokerBetType;
     PokerDices pokerDices;
+
+    boolean compass = false;
+    boolean hunter = false;
+    boolean map = false;
+    boolean binocular = false;
+    boolean pill = false;
+    int bomb = 0;
 
 
     public int addGold(int value) {

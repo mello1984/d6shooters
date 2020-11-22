@@ -36,7 +36,7 @@ public class ActionPoker extends AbstractAction {
                     buttons.get(buttons.size() - 1).add(tempList.get(i));
                 }
 
-                bot.send(template.getSendMessageManyLineButtons(user.getChatId(), "Озвучьте вашу ставку", buttons));
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), "Озвучьте вашу ставку", buttons));
                 user.getSquad().setSquadState(SquadState.POKER2);
             }
             case POKER2: {
@@ -59,46 +59,46 @@ public class ActionPoker extends AbstractAction {
                 user.getSquad().setPokerDices(new PokerDices());
                 user.getSquad().getPokerDices().getFirstTurnDices();
 
-                bot.send(template.getSendMessageManyLineButtons(user.getChatId(), "Ставка принята, ваш бросок:"));
-                bot.send(template.getSendMessageManyLineButtons(user.getChatId(), user.getSquad().getPokerDices().toString()));
-                bot.send(template.getSendMessageManyLineButtons(user.getChatId(), "Введите кубики для переброски или 0"));
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), "Ставка принята, ваш бросок:"));
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), user.getSquad().getPokerDices().toString()));
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), "Введите кубики для переброски или 0"));
                 user.getSquad().setSquadState(SquadState.POKER3);
             }
             case POKER3: {
                 if (!user.getSquad().getPokerDices().checkString(message.getText())) {
-                    bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                    bot.send(template.getSendMessageWithButtons(user.getChatId(),
                             "Некорректные данные, введите номера кубиков для переброски или 0"));
                 } else {
                     user.getSquad().setSquadState(SquadState.POKER4);
                     if (!message.getText().equals("0")) {
                         user.getSquad().getPokerDices().getRerolledDices(message.getText());
-                        bot.send(template.getSendMessageManyLineButtons(user.getChatId(), user.getSquad().getPokerDices().toString()));
-                        bot.send(template.getSendMessageManyLineButtons(user.getChatId(), "Введите кубики для переброски или 0"));
+                        bot.send(template.getSendMessageWithButtons(user.getChatId(), user.getSquad().getPokerDices().toString()));
+                        bot.send(template.getSendMessageWithButtons(user.getChatId(), "Введите кубики для переброски или 0"));
                     }
                 }
             }
             case POKER4: {
                 if (!user.getSquad().getPokerDices().checkString(message.getText())) {
-                    bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                    bot.send(template.getSendMessageWithButtons(user.getChatId(),
                             "Некорректные данные, введите номера кубиков для переброски или 0"));
                 } else {
 
 
                     user.getSquad().getPokerDices().getRerolledDices(message.getText());
-                    bot.send(template.getSendMessageManyLineButtons(user.getChatId(), user.getSquad().getPokerDices().toString())); // отправили финальное значение игрока
+                    bot.send(template.getSendMessageWithButtons(user.getChatId(), user.getSquad().getPokerDices().toString())); // отправили финальное значение игрока
                     switch (user.getSquad().getPokerDices().getResult()) {
                         case 0:
-                            bot.send(template.getSendMessageManyLineButtons(user.getChatId(),
+                            bot.send(template.getSendMessageWithButtons(user.getChatId(),
                                     "Вы сыграли вничью"));
                             user.getSquad().setPokerBetValue(0);
                             break;
                         case -1:
-                            bot.send(template.getSendMessageManyLineButtons(user.getChatId(),
+                            bot.send(template.getSendMessageWithButtons(user.getChatId(),
                                     "Вы проиграли"));
                             user.getSquad().setPokerBetValue(-user.getSquad().getPokerBetValue());
                             break;
                         case 1:
-                            bot.send(template.getSendMessageManyLineButtons(user.getChatId(),
+                            bot.send(template.getSendMessageWithButtons(user.getChatId(),
                                     "Вы выиграли"));
                             break;
                     }

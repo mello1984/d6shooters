@@ -28,11 +28,11 @@ public class ActionDice6 extends AbstractAction {
         killedShooters = Math.min(killedShooters, squad.getShooters());
 
         if (killedShooters > 0) {
-            bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+            bot.send(template.getSendMessageWithButtons(user.getChatId(),
                     "В перестрелке потеряли " + killedShooters + " стрелков."));
             squad.addShooters(-killedShooters);
         } else if (dice6count > 0) {
-            bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+            bot.send(template.getSendMessageWithButtons(user.getChatId(),
                     "В перестрелке никого не потеряли ."));
         }
 

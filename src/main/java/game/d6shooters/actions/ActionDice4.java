@@ -1,7 +1,6 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.bot.Bot;
-import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -25,7 +24,7 @@ public class ActionDice4 extends AbstractAction {
         List<String> buttons = getListButtons(user);
         if (buttons.size() > 0) {
             bot.send(
-                    template.getSendMessageOneLineButtons(user.getChatId(),
+                    template.getSendMessageWithButtons(user.getChatId(),
                             "Необходимо распределить " + user.getDicesCup().getCountActiveDiceCurrentValue(4) + " '4', будьте внимательны",
                             buttons.toArray(new String[0])));
         }
@@ -79,7 +78,7 @@ public class ActionDice4 extends AbstractAction {
                 break;
         }
 
-        bot.send(template.dicesString(user.getChatId(), user.getDicesCup()));
+        bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
         user.getActionManager().doActions();
     }
 

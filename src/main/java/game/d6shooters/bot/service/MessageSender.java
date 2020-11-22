@@ -1,15 +1,17 @@
 package game.d6shooters.bot.service;
 
 import game.d6shooters.bot.Bot;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+@Log4j2
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MessageSender implements Runnable {
-    private final int SENDER_SLEEP_TIME = 30;
-    private Bot bot;
-    private static final Logger log = LogManager.getLogger(MessageSender.class);
+    static int SLEEP_TIME = 30;
+    Bot bot;
 
     public MessageSender(Bot bot) {
         this.bot = bot;
@@ -23,7 +25,7 @@ public class MessageSender implements Runnable {
                 SendMessage sendMessage = bot.sendQueue.take();
                 log.debug(String.format("Message sent to: %s, : %s", sendMessage.getChatId(), sendMessage.getText()));
                 send(sendMessage);
-                Thread.sleep(SENDER_SLEEP_TIME);
+                Thread.sleep(SLEEP_TIME);
 
             }
         } catch (InterruptedException e) {

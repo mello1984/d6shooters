@@ -23,6 +23,70 @@ public class StartTurnHandler extends AbstractHandler {
         long chatId = message.getChatId();
         User user = Main.users.userMap.get(chatId);
         Squad squad = user.getSquad();
+        DicesCup dicesCup = user.getDicesCup();
+        squad.setGunfight(0);
+        squad.setPathfinding(0);
+
+        log.debug(squad);
+        log.debug(squad.getSquadState());
+
+        int step = squad.getSquadState().getStep();
+        switch (step) {
+            case 1:
+                dicesCup.getFirstTurnDices();
+                bot.send(template.getDicesStringMessage(chatId, dicesCup));
+                bot.send(template.getSendMessageNoButtons(user.getChatId(),
+                        "Введите номера кубиков для переброски или 0"));
+                squad.getSquadState().nextStep();
+                break;
+            case 2:
+
+                if (!dicesCup.checkString(message.getText())) {
+                    bot.send(template.getSendMessageNoButtons(user.getChatId(),
+                            "Некорректные данные, введите номера кубиков для переброски или 0"));
+                } else {
+                    squad.getSquadState().nextStep();
+                    if (!message.getText().equals("0")) {
+                        dicesCup.getRerolledDices(message.getText());
+                        bot.send(template.getDicesStringMessage(chatId, dicesCup));
+                        bot.send(template.getSendMessageWithButtons(user.getChatId(),
+                                "Введите номера кубиков для переброски или 0"));
+                    }
+                }
+
+                break;
+            case 3:
+                if (!dicesCup.checkString(message.getText())) {
+                    bot.send(template.getSendMessageNoButtons(user.getChatId(),
+                            "Некорректные данные, введите номера кубиков для переброски или 0"));
+                } else {
+                    if (!message.getText().equals("0")) {
+                        dicesCup.getRerolledDices(message.getText());
+                        bot.send(template.getDicesStringMessage(chatId, dicesCup));
+                    }
+                    squad.setSquadState(SquadState.ALLOCATE);
+                    user.setActionManager(new ActionManager(user, bot));
+                    user.getActionManager().doActions();
+                }
+
+                break;
+        }
+    }
+}
+
+/*
+public class StartTurnHandler extends AbstractHandler {
+    private static final Logger log = LogManager.getLogger(StartTurnHandler.class);
+
+    public StartTurnHandler(Bot bot) {
+        super(bot);
+    }
+
+    @Override
+    public void handle(Message message) {
+        long chatId = message.getChatId();
+        User user = Main.users.userMap.get(chatId);
+        Squad squad = user.getSquad();
         DicesCup dicesCup = Main.users.userMap.get(chatId).getDicesCup();
         squad.setGunfight(0);
         squad.setPathfinding(0);
@@ -36,22 +100,22 @@ public class StartTurnHandler extends AbstractHandler {
         if (squad.getSquadState() == SquadState.REGULAR) {
             dicesCup.getFirstTurnDices();
             squad.setSquadState(SquadState.REROLL1);
-            bot.send(template.dicesString(chatId, dicesCup));
-            bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+            bot.send(template.getDicesStringMessage(chatId, dicesCup));
+            bot.send(template.getSendMessageWithButtons(user.getChatId(),
                     "Введите номера кубиков для переброски или 0"));
             return;
         }
 
         if (squad.getSquadState() == SquadState.REROLL1) {
             if (!dicesCup.checkString(message.getText())) {
-                bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                bot.send(template.getSendMessageWithButtons(user.getChatId(),
                         "Некорректные данные, введите номера кубиков для переброски или 0"));
             } else {
                 squad.setSquadState(SquadState.REROLL2);
                 if (!message.getText().equals("0")) {
                     dicesCup.getRerolledDices(message.getText());
-                    bot.send(template.dicesString(chatId, dicesCup));
-                    bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                    bot.send(template.getDicesStringMessage(chatId, dicesCup));
+                    bot.send(template.getSendMessageWithButtons(user.getChatId(),
                             "Введите номера кубиков для переброски или 0"));
                     return;
                 }
@@ -60,12 +124,12 @@ public class StartTurnHandler extends AbstractHandler {
 
         if (squad.getSquadState() == SquadState.REROLL2) {
             if (!dicesCup.checkString(message.getText())) {
-                bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                bot.send(template.getSendMessageWithButtons(user.getChatId(),
                         "Некорректные данные, введите номера кубиков для переброски или 0"));
             } else {
                 if (!message.getText().equals("0")) {
                     dicesCup.getRerolledDices(message.getText());
-                    bot.send(template.dicesString(chatId, dicesCup));
+                    bot.send(template.getDicesStringMessage(chatId, dicesCup));
                 }
                 squad.setSquadState(SquadState.ALLOCATE);
                 user.setActionManager(new ActionManager(user, bot));
@@ -74,3 +138,4 @@ public class StartTurnHandler extends AbstractHandler {
         }
     }
 }
+ */

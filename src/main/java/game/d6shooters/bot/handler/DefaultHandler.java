@@ -10,8 +10,7 @@ public class DefaultHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        bot.send(
-                template.getSendMessageOneLineButtons(message.getChatId(),
-                        "Команда не распознана, просьба повторить"));
+        bot.send(template.getSendMessageNoButtons(message.getChatId(),
+                "Команда не распознана, просьба повторить"));
     }
 }

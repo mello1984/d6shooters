@@ -17,6 +17,8 @@ repositories {
 
 
 dependencies {
+    implementation 'org.jetbrains:annotations:19.0.0'
+
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
     // https://mvnrepository.com/artifact/org.telegram/telegrambots

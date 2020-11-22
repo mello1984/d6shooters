@@ -15,7 +15,7 @@ public class ActionFeeding extends AbstractAction {
         if (squad.getPeriod() % 5 == 0 && squad.getPeriod() < 40 && squad.getPeriod() > 0) {
             if (squad.getFood() >= squad.getShooters()) {
                 squad.addFood(-squad.getShooters());
-                bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                bot.send(template.getSendMessageWithButtons(user.getChatId(),
                         "Съели " + squad.getShooters() + " еды."));
             } else {
                 squad.setShooters(squad.getShooters() - squad.getFood());

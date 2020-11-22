@@ -22,7 +22,7 @@ public class ActionEvent extends AbstractAction {
         int roll = DicesCup.getD6Int();
         List<String> buttons = new ArrayList<>();
         log.debug("EVENT, roll: " + roll);
-        bot.send(template.getSendMessageOneLineButtons(user.getChatId(), "EVENT, roll: " + roll));
+        bot.send(template.getSendMessageWithButtons(user.getChatId(), "EVENT, roll: " + roll));
 
         switch (roll) {
             case 1:
@@ -33,7 +33,7 @@ public class ActionEvent extends AbstractAction {
             case 2:
                 if (user.getSquad().getAmmo() > 0) {
                     user.getSquad().setSquadState(SquadState.EVENT2);
-                    bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                    bot.send(template.getSendMessageWithButtons(user.getChatId(),
                             "Вы натыкаетесь на стадо животных и можете поохотиться.",
                             Action.HUNT.get(), Action.NONE.get()));
                 } else {
@@ -48,7 +48,7 @@ public class ActionEvent extends AbstractAction {
                 if (user.getSquad().getFood() >= 2) buttons.add(Action.SELLFOOD.get());
                 if (user.getSquad().getAmmo() >= 2) buttons.add(Action.SELLAMMO.get());
                 buttons.add(Action.NONE.get());
-                bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                bot.send(template.getSendMessageWithButtons(user.getChatId(),
                         "Вы встретили торговый обоз и можете поторговать",
                         buttons.toArray(new String[0])));
                 break;
@@ -60,7 +60,7 @@ public class ActionEvent extends AbstractAction {
                 user.getSquad().setSquadState(SquadState.MOVE);
                 user.getSquad().addPeriod(1);
                 user.getSquad().addFood(-1);
-                bot.send(template.getSendMessageOneLineButtons(user.getChatId(), Action.STRAY.get()));
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), Action.STRAY.get()));
                 user.getActionManager().doActions();
                 break;
             case 6:
@@ -70,7 +70,7 @@ public class ActionEvent extends AbstractAction {
                 if (user.getSquad().getGold() > 0 && user.getSquad().getFood() > 0)
                     buttons.add(Action.LOSEFOODANDGOLD.get());
                 buttons.add(Action.LOSE2GUN.get());
-                bot.send(template.getSendMessageOneLineButtons(user.getChatId(),
+                bot.send(template.getSendMessageWithButtons(user.getChatId(),
                         "Вы несете непредвиденные потери.", buttons.toArray(new String[0])));
                 break;
         }
@@ -83,7 +83,7 @@ public class ActionEvent extends AbstractAction {
         Action action = Action.getAction(message.getText());
 
         if (action == Action.EMPTY) {
-            bot.send(template.getSendMessageWithoutButtons(user.getChatId(), "Некорректная команда, просьба уточнить"));
+            bot.send(template.getSendMessageNoButtons(user.getChatId(), "Некорректная команда, просьба уточнить"));
             return;
         }
 
@@ -129,7 +129,7 @@ public class ActionEvent extends AbstractAction {
                         if (user.getSquad().getFood() >= 2) {
                             user.getSquad().addFood(-2);
                         } else {
-                            bot.send(template.getSendMessageOneLineButtons(user.getChatId(), "Да вы читер..."));
+                            bot.send(template.getSendMessageWithButtons(user.getChatId(), "Да вы читер..."));
                             user.getSquad().addShooters(-user.getSquad().getShooters());
                         }
                     }
@@ -137,7 +137,7 @@ public class ActionEvent extends AbstractAction {
                         if (user.getSquad().getGold() >= 2) {
                             user.getSquad().addGold(-2);
                         } else {
-                            bot.send(template.getSendMessageOneLineButtons(user.getChatId(), "Да вы читер..."));
+                            bot.send(template.getSendMessageWithButtons(user.getChatId(), "Да вы читер..."));
                             user.getSquad().addShooters(-user.getSquad().getShooters());
                         }
                     }
@@ -146,7 +146,7 @@ public class ActionEvent extends AbstractAction {
                             user.getSquad().addFood(-1);
                             user.getSquad().addGold(-1);
                         } else {
-                            bot.send(template.getSendMessageOneLineButtons(user.getChatId(), "Да вы читер..."));
+                            bot.send(template.getSendMessageWithButtons(user.getChatId(), "Да вы читер..."));
                             user.getSquad().addShooters(-user.getSquad().getShooters());
                         }
                     }
@@ -156,7 +156,7 @@ public class ActionEvent extends AbstractAction {
                 }
             }
         }
-        bot.send(template.squadState(user.getChatId(), user.getSquad()));
+        bot.send(template.getSquadStateMessage(user.getChatId()));
         user.getSquad().setSquadState(SquadState.MOVE);
         user.getActionManager().doActions();
     }

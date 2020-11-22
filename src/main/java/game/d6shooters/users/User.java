@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -21,6 +23,7 @@ public class User {
     DicesCup dicesCup;
     ActionManager actionManager;
     TownShop shop;
+    List<List<String>> buttons;
 
     public User(long chatId, String userName) {
         this.chatId = chatId;
@@ -28,6 +31,7 @@ public class User {
         squad = new Squad();
         dicesCup = new DicesCup();
         shop = new TownShop();
+        buttons = new ArrayList<>();
     }
 
     @Override

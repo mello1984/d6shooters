@@ -15,8 +15,7 @@ public class RoadNode {
     RoadMap.Road nextRoad;
     int nextRoadNumberNode;
     String townName;
-
-     TownShop townShop;
+    TownShop townShop = new TownShop();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
