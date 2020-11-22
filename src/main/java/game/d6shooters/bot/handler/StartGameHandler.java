@@ -1,6 +1,7 @@
 package game.d6shooters.bot.handler;
 
 import game.d6shooters.Main;
+import game.d6shooters.actions.ActionManager;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.ButtonsType;
 import game.d6shooters.bot.SendMessageTemplate;
@@ -17,12 +18,16 @@ public class StartGameHandler extends AbstractHandler {
     public void handle(Message message) {
         long chatId = message.getChatId();
         SendMessageTemplate template = new SendMessageTemplate();
-            Main.users.userMap.put(chatId, new User(chatId, message.getFrom().getUserName()));
-            Main.users.userMap.get(chatId).getSquad().setSquadState(SquadState.STARTTURN);
-            Main.users.userMap.get(chatId).getSquad().getSquadState().resetStep();
 
-            String text = "Вы успешно начали игру\n" + template.getSquadStateMessage(chatId).getText();
-            bot.send(template.getSendMessageWithButtons(chatId, text, ButtonsType.NEXT_TURN.name()));
+        User user = new User(chatId, message.getFrom().getUserName());
+        Main.users.userMap.put(chatId, user);
+
+        user.getSquad().setSquadState(SquadState.STARTTURN);
+        user.getSquad().getSquadState().resetStep();
+        user.setActionManager(new ActionManager(user, bot));
+
+        String text = "Вы успешно начали игру\n" + template.getSquadStateMessage(chatId).getText();
+        bot.send(template.getSendMessageWithButtons(chatId, text, ButtonsType.NEXT_TURN.name()));
 //        }
     }
 }

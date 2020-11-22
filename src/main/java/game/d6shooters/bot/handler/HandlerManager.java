@@ -22,9 +22,7 @@ public class HandlerManager {
 
         SquadState squadState = Main.users.userMap.get(message.getChatId()).getSquad().getSquadState();
         Handler handler = switch (squadState) {
-            case REGULAR, REROLL1, REROLL2 -> new StartTurnHandler(bot);
-            case STARTTURN -> new StartTurnHandler(bot);
-            case ALLOCATE, CHECKHEAT, CROSSROAD, EVENT, EVENT2, EVENT3, EVENT6, ENDGAME -> new ActionManagerHandler(bot);
+            case STARTTURN, ALLOCATE, CHECKHEAT, CROSSROAD, EVENT, EVENT2, EVENT3, EVENT6, ENDGAME -> new ActionManagerHandler(bot);
             default -> new DefaultHandler(bot);
         };
         log.debug("Choose handler: " + handler.getClass().getSimpleName());

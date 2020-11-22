@@ -15,6 +15,7 @@ public class ActionManager {
     private final ActionEvent actionEvent;
     private final ActionEndGame actionEndGame;
     private final ActionTown actionTown;
+    private final ActionStartTurn actionStartTurn;
     private final User user;
 
     public ActionManager(User user, Bot bot) {
@@ -29,6 +30,7 @@ public class ActionManager {
         actionEvent = new ActionEvent(bot);
         actionEndGame = new ActionEndGame(bot);
         actionTown = new ActionTown(bot);
+        actionStartTurn = new ActionStartTurn(bot);
     }
 
     public void doActions() {
@@ -45,6 +47,7 @@ public class ActionManager {
             }
             case EVENT -> actionEvent.action(user);
             case ENDGAME -> actionEndGame.action(user);
+            case STARTTURN -> actionStartTurn.action(user);
 
         }
 
@@ -53,6 +56,7 @@ public class ActionManager {
     public void doActions(Message message) {
 
         switch (user.getSquad().getSquadState()) {
+            case STARTTURN -> actionStartTurn.processMessage(user, message);
             case ALLOCATE -> actionDice4.processMessage(user, message);
             case CHECKHEAT -> actionDice5.processMessage(user, message);
             case CROSSROAD -> actionDice1.processMessage(user, message);
