@@ -28,6 +28,5 @@ public class StartGameHandler extends AbstractHandler {
 
         String text = "Вы успешно начали игру\n" + template.getSquadStateMessage(chatId).getText();
         bot.send(template.getSendMessageWithButtons(chatId, text, ButtonsType.NEXT_TURN.name()));
-//        }
     }
 }

@@ -21,7 +21,6 @@ public class Dice implements Comparable<Dice> {
         this.type = type;
     }
 
-
     public Dice(DiceType type, int value) {
         this.type = type;
         this.value = value;

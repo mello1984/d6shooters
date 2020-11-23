@@ -74,7 +74,7 @@ public class DicesCup {
 
     @Override
     public String toString() {
-        Collections.sort(diceList);
+//        Collections.sort(diceList);
 
         StringBuilder stringBuilder = new StringBuilder();
         if (diceList.stream().anyMatch(d -> d.getType() == Dice.DiceType.WHITE && !d.isUsed())) {
