@@ -16,7 +16,7 @@ public class ActionManager {
     private final ActionEndGame actionEndGame;
     private final ActionTown actionTown;
     private final ActionStartTurn actionStartTurn;
-    private final User user;
+    protected final User user;
 
     public ActionManager(User user, Bot bot) {
         this.user = user;
@@ -34,6 +34,7 @@ public class ActionManager {
     }
 
     public void doActions() {
+        System.out.println("ActionManager.doActions()");
         switch (user.getSquad().getSquadState()) {
             case ALLOCATE -> actionDice4.action(user);
             case CHECKHEAT -> actionDice5.action(user);

@@ -22,7 +22,7 @@ class ActionDice5Test {
     MockTemplate mockTemplate = new MockTemplate();
     MockActionManager mockActionManager = new MockActionManager(user, mockBot);
 
-    ActionDice5 actionDice5 = new ActionDice5(mockBot);
+    ActionDice5 action = new ActionDice5(mockBot);
     DicesCup dicesCup = new DicesCup();
     List<Dice> diceList = new ArrayList<>();
 
@@ -36,14 +36,14 @@ class ActionDice5Test {
         }};
         dicesCup.setDiceList(diceList);
 
-        actionDice5.template = mockTemplate;
+        action.template = mockTemplate;
         user.setDicesCup(dicesCup);
         user.setActionManager(mockActionManager);
     }
 
     @Test
     void actionDice5ProcessMessageTest1() {
-        actionDice5.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
+        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
         assertAll(
                 () -> assertEquals(4, user.getSquad().getFood()),
                 () -> assertEquals(12, user.getSquad().getShooters()),
@@ -53,8 +53,8 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest2() {
-        actionDice5.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
-        actionDice5.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
+        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
+        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
         assertAll(
                 () -> assertEquals(2, user.getSquad().getFood()),
                 () -> assertEquals(12, user.getSquad().getShooters()),
@@ -64,7 +64,7 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest3() {
-        actionDice5.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
+        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
         assertAll(
                 () -> assertEquals(6, user.getSquad().getFood()),
                 () -> assertEquals(11, user.getSquad().getShooters()),
@@ -74,8 +74,8 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest4() {
-        actionDice5.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
-        actionDice5.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
+        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
+        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
         assertAll(
                 () -> assertEquals(6, user.getSquad().getFood()),
                 () -> assertEquals(10, user.getSquad().getShooters()),
@@ -85,8 +85,8 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest5() {
-        actionDice5.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
-        actionDice5.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
+        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
+        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
         assertAll(
                 () -> assertEquals(4, user.getSquad().getFood()),
                 () -> assertEquals(11, user.getSquad().getShooters()),
@@ -96,7 +96,7 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest6() {
-        actionDice5.processMessage(user, new MockMessage("hello world"));
+        action.processMessage(user, new MockMessage("hello world"));
         assertAll(
                 () -> assertEquals(6, user.getSquad().getFood()),
                 () -> assertEquals(12, user.getSquad().getShooters()),

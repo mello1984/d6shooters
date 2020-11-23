@@ -20,13 +20,13 @@ class ActionDice3Test {
     MockTemplate mockTemplate = new MockTemplate();
     MockActionManager mockActionManager = new MockActionManager(user, mockBot);
 
-    ActionDice3 actionDice3 = new ActionDice3(mockBot);
+    ActionDice3 action = new ActionDice3(mockBot);
     DicesCup dicesCup = new DicesCup();
     List<Dice> diceList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        actionDice3.template = mockTemplate;
+        action.template = mockTemplate;
         user.setDicesCup(dicesCup);
         user.setActionManager(mockActionManager);
     }
@@ -38,7 +38,7 @@ class ActionDice3Test {
             add(new Dice(Dice.DiceType.WHITE, 3));
         }};
         dicesCup.setDiceList(diceList);
-        actionDice3.action(user);
+        action.action(user);
         assertAll(
                 () -> assertEquals(3, user.getSquad().getGold()),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3))
@@ -54,7 +54,7 @@ class ActionDice3Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        actionDice3.action(user);
+        action.action(user);
         assertAll(
                 () -> assertEquals(4, user.getSquad().getGold()),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3))
@@ -72,7 +72,7 @@ class ActionDice3Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        actionDice3.action(user);
+        action.action(user);
         assertAll(
                 () -> assertEquals(4, user.getSquad().getGold()),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3))

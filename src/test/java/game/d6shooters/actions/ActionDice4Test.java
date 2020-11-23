@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ActionDice4Test {
     User user = new User(0, "name");
-    ActionDice4 actionDice4 = new ActionDice4(null);
+    ActionDice4 action = new ActionDice4(null);
 
     @BeforeEach
     void setUp() {
@@ -41,7 +41,7 @@ class ActionDice4Test {
 
     @Test
     void PathfindingTest1() {
-        actionDice4.allocateDices(user, ActionDice4.PATHFINDING);
+        action.allocateDices(user, ActionDice4.PATHFINDING);
         assertAll(
                 () -> assertEquals(1, user.getSquad().getPathfinding()),
                 () -> assertEquals(2, user.getDicesCup().getCountActiveDiceCurrentValue(4))
@@ -50,8 +50,8 @@ class ActionDice4Test {
 
     @Test
     void PathfindingTest2() {
-        actionDice4.allocateDices(user, ActionDice4.PATHFINDING);
-        actionDice4.allocateDices(user, ActionDice4.PATHFINDING);
+        action.allocateDices(user, ActionDice4.PATHFINDING);
+        action.allocateDices(user, ActionDice4.PATHFINDING);
         assertAll(
                 () -> assertEquals(2, user.getSquad().getPathfinding()),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(4))
@@ -60,13 +60,13 @@ class ActionDice4Test {
 
     @Test
     void RejectTest() {
-        actionDice4.allocateDices(user, ActionDice4.REJECT);
+        action.allocateDices(user, ActionDice4.REJECT);
         assertAll(() -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(4)));
     }
 
     @Test
     void Hide1Test() {
-        actionDice4.allocateDices(user, ActionDice4.HIDE);
+        action.allocateDices(user, ActionDice4.HIDE);
         assertAll(
                 () -> assertEquals(3, user.getDicesCup().getCountActiveDiceCurrentValue(4)),
                 () -> assertEquals(1, user.getDicesCup().getCountActiveDiceCurrentValue(6)),
@@ -77,8 +77,8 @@ class ActionDice4Test {
 
     @Test
     void Hide2Test() {
-        actionDice4.allocateDices(user, ActionDice4.HIDE);
-        actionDice4.allocateDices(user, ActionDice4.HIDE);
+        action.allocateDices(user, ActionDice4.HIDE);
+        action.allocateDices(user, ActionDice4.HIDE);
         assertAll(
                 () -> assertEquals(2, user.getDicesCup().getCountActiveDiceCurrentValue(4)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(6)),
@@ -88,7 +88,7 @@ class ActionDice4Test {
 
     @Test
     void ShelterTest1() {
-        actionDice4.allocateDices(user, ActionDice4.SHELTER);
+        action.allocateDices(user, ActionDice4.SHELTER);
         assertAll(
                 () -> assertEquals(3, user.getDicesCup().getCountActiveDiceCurrentValue(4)),
                 () -> assertEquals(1, user.getDicesCup().getCountActiveDiceCurrentValue(5))
@@ -97,8 +97,8 @@ class ActionDice4Test {
 
     @Test
     void ShelterTest2() {
-        actionDice4.allocateDices(user, ActionDice4.SHELTER);
-        actionDice4.allocateDices(user, ActionDice4.SHELTER);
+        action.allocateDices(user, ActionDice4.SHELTER);
+        action.allocateDices(user, ActionDice4.SHELTER);
         assertAll(
                 () -> assertEquals(2, user.getDicesCup().getCountActiveDiceCurrentValue(4)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(5))
@@ -107,7 +107,7 @@ class ActionDice4Test {
 
     @Test
     void GunFightTest1() {
-        actionDice4.allocateDices(user, ActionDice4.GUNFIGHT);
+        action.allocateDices(user, ActionDice4.GUNFIGHT);
         assertAll(
                 () -> assertEquals(1, user.getSquad().getGunfight()),
                 () -> assertEquals(3, user.getDicesCup().getCountActiveDiceCurrentValue(4))
@@ -116,8 +116,8 @@ class ActionDice4Test {
 
     @Test
     void GunFightTest2() {
-        actionDice4.allocateDices(user, ActionDice4.GUNFIGHT);
-        actionDice4.allocateDices(user, ActionDice4.GUNFIGHT);
+        action.allocateDices(user, ActionDice4.GUNFIGHT);
+        action.allocateDices(user, ActionDice4.GUNFIGHT);
         assertAll(
                 () -> assertEquals(2, user.getSquad().getGunfight()),
                 () -> assertEquals(2, user.getDicesCup().getCountActiveDiceCurrentValue(4))
