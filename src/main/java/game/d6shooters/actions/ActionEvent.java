@@ -13,6 +13,13 @@ import java.util.*;
 
 @Log4j2
 public class ActionEvent extends AbstractAction {
+    public static final String TEXT1 = "EVENT, roll: %d";
+    public static final String TEXT2 = "Вы натыкаетесь на стадо животных и можете поохотиться.";
+    public static final String TEXT3 = "Вы встретили торговый обоз и можете поторговать";
+    public static final String TEXT4 = "Вы несете непредвиденные потери.";
+    public static final String TEXT5 = "";
+    public static final String TEXT6 = "";
+
     public ActionEvent(Bot bot) {
         super(bot);
     }
@@ -20,62 +27,61 @@ public class ActionEvent extends AbstractAction {
     @Override
     public void action(User user) {
         int roll = DicesCup.getD6Int();
+        bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(TEXT1, roll)));
         List<String> buttons = new ArrayList<>();
-        log.debug("EVENT, roll: " + roll);
-        bot.send(template.getSendMessageWithButtons(user.getChatId(), "EVENT, roll: " + roll));
 
         switch (roll) {
-            case 1:
-                user.getSquad().setSquadState(SquadState.MOVE);
+            case 1 -> {
                 user.getSquad().addPathfinding(3);
-                user.getActionManager().doActions();
-                break;
-            case 2:
+                toMoveAction(user);
+            }
+            case 2 -> {
                 if (user.getSquad().getAmmo() > 0) {
                     user.getSquad().setSquadState(SquadState.EVENT2);
-                    bot.send(template.getSendMessageWithButtons(user.getChatId(),
-                            "Вы натыкаетесь на стадо животных и можете поохотиться.",
-                            Action.HUNT.get(), Action.NONE.get()));
+                    bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, Action.HUNT.get(), Action.NONE.get()));
                 } else {
-                    user.getSquad().setSquadState(SquadState.MOVE);
-                    user.getActionManager().doActions();
+                    toMoveAction(user);
                 }
-                break;
-            case 3:
+            }
+            case 3 -> {
                 user.getSquad().setSquadState(SquadState.EVENT3);
                 if (user.getSquad().getGold() > 0) buttons.add(Action.BUYFOOD.get());
                 if (user.getSquad().getGold() > 0) buttons.add(Action.BUYAMMO.get());
                 if (user.getSquad().getFood() >= 2) buttons.add(Action.SELLFOOD.get());
                 if (user.getSquad().getAmmo() >= 2) buttons.add(Action.SELLAMMO.get());
                 buttons.add(Action.NONE.get());
-                bot.send(template.getSendMessageWithButtons(user.getChatId(),
-                        "Вы встретили торговый обоз и можете поторговать",
-                        buttons.toArray(new String[0])));
-                break;
-            case 4:
-                user.getSquad().setSquadState(SquadState.MOVE);
-                user.getActionManager().doActions();
-                break;
-            case 5:
-                user.getSquad().setSquadState(SquadState.MOVE);
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT3, buttons.toArray(new String[0])));
+            }
+            case 4 -> toMoveAction(user);
+            case 5 -> {
                 user.getSquad().addPeriod(1);
                 user.getSquad().addFood(-1);
                 bot.send(template.getSendMessageWithButtons(user.getChatId(), Action.STRAY.get()));
-                user.getActionManager().doActions();
-                break;
-            case 6:
+                toMoveAction(user);
+            }
+            case 6 -> {
                 user.getSquad().setSquadState(SquadState.EVENT6);
                 if (user.getSquad().getFood() >= 2) buttons.add(Action.LOSE2FOOD.get());
                 if (user.getSquad().getGold() >= 2) buttons.add(Action.LOSE2GOLD.get());
                 if (user.getSquad().getGold() > 0 && user.getSquad().getFood() > 0)
                     buttons.add(Action.LOSEFOODANDGOLD.get());
                 buttons.add(Action.LOSE2GUN.get());
-                bot.send(template.getSendMessageWithButtons(user.getChatId(),
-                        "Вы несете непредвиденные потери.", buttons.toArray(new String[0])));
-                break;
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT4, buttons.toArray(new String[0])));
+            }
         }
 
 
+    }
+
+    private void modify(User user, int pathfinding, int ammo, int food, int gold, int period, int gunfighter) {
+        user.getSquad().addPeriod(period);
+        user.getSquad().addPeriod(pathfinding);
+        if (user.getSquad().getAmmo() >= ammo) user.getSquad().addAmmo(ammo);
+    }
+
+    protected void toMoveAction(User user) {
+        user.getSquad().setSquadState(SquadState.MOVE);
+        user.getActionManager().doActions();
     }
 
     public void processMessage(User user, Message message) {
@@ -157,8 +163,7 @@ public class ActionEvent extends AbstractAction {
             }
         }
         bot.send(template.getSquadStateMessage(user.getChatId()));
-        user.getSquad().setSquadState(SquadState.MOVE);
-        user.getActionManager().doActions();
+        toMoveAction(user);
     }
 
     private enum Action {
@@ -172,7 +177,7 @@ public class ActionEvent extends AbstractAction {
         LOSE2GOLD(String.format("-2%s", Icon.MONEYBAG.get())),
         LOSE2FOOD(String.format("-2%s", Icon.FOOD.get())),
         LOSEFOODANDGOLD(String.format("-1%s, -1%s", Icon.FOOD.get(), Icon.MONEYBAG.get())),
-        NONE("Отказаться"),
+        NONE("Ехать дальше"),
         EMPTY("");
 
         private String value;

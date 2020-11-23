@@ -12,6 +12,7 @@ public enum SquadState {
     STARTTURN(3),
     ALLOCATE, OTHER, CHECKHEAT, GUNFIGHT, MOVE, TOWN, ENDGAME, CROSSROAD,
     EVENT, EVENT2, EVENT3, EVENT6,
+    POKER(4),
     POKER1, POKER2, POKER3, POKER4,
 
     ;
@@ -33,7 +34,8 @@ public enum SquadState {
             throw new IllegalArgumentException(String.format("SquadState = %s, step '%d' > maxStep '%d'", this.name(), step, maxStep));
     }
 
-    public void resetStep() {
+    public SquadState resetStep() {
         step = 1;
+        return this;
     }
 }

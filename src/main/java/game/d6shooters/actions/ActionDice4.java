@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class ActionDice4 extends AbstractAction {
     protected static final String REJECT = "Ничего";

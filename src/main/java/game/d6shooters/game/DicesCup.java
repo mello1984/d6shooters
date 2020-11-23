@@ -74,8 +74,6 @@ public class DicesCup {
 
     @Override
     public String toString() {
-//        Collections.sort(diceList);
-
         StringBuilder stringBuilder = new StringBuilder();
         if (diceList.stream().anyMatch(d -> d.getType() == Dice.DiceType.WHITE && !d.isUsed())) {
             stringBuilder.append(Icon.WHITESQUARE.get());
@@ -87,6 +85,4 @@ public class DicesCup {
         }
         return stringBuilder.toString();
     }
-
-
 }

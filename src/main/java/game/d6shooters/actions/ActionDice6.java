@@ -33,13 +33,13 @@ public class ActionDice6 extends AbstractAction {
 
         List<Integer> band = new ArrayList<>();
         int killedShooters;
-        if (squad.getGunfight() == 0) {
+        if (squad.getGunfight() == 0 && dice6count > 0) {
             killedShooters = IntStream.rangeClosed(1, dice6count).map(i -> DicesCup.getD6Int())
                     .peek(band::add)
                     .map(d -> d >= 3 ? 1 : 0).sum();
             killedShooters = Math.min(killedShooters, squad.getShooters());
             bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(TEXT3,
-                    band.stream().map(String::valueOf).collect(Collectors.joining(", ")), killedShooters)));
+                    band.stream().map(String::valueOf).collect(Collectors.joining(", ")), killedShooters))); // Поставить условие на отправку сообщения
         } else {
             killedShooters = getKilledShooters(user);
         }

@@ -20,7 +20,6 @@ public class Place {
         return RoadMap.map.get(road).get(number).getTownName();
     }
 
-
     public TownShop getTownShop() {
         return RoadMap.map.get(road).get(number).getTownShop();
     }

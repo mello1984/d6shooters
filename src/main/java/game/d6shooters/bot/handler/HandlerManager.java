@@ -15,7 +15,6 @@ public class HandlerManager {
 
     public Handler chooseHandler(Message message) {
         if (!Main.users.userMap.containsKey(message.getChatId())) return new StartGameHandler(bot);
-//        if (message.getText().equals("startD6")) return new StartGameHandler(bot);
         if (message.getText().equals("band")) return new TeamStateHandler(bot);
         if (message.getText().equals("help")) return new TeamStateHandler(bot);
         return new ActionManagerHandler(bot);
