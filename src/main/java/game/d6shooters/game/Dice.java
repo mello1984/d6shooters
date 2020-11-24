@@ -1,26 +1,23 @@
 package game.d6shooters.game;
 
+import lombok.Getter;
+
 import java.util.Random;
 
+@Getter
 public class Dice implements Comparable<Dice> {
-    private static Random random = new Random();
+    private static final Random random = new Random();
     DiceType type;
     private int value;
-    private boolean canReroll;
+    private boolean canRerolled;
     private boolean used;
 
-    public boolean isUsed() {
-        return used;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
-    }
 
     public Dice(DiceType type) {
         this.type = type;
     }
 
+    // For tests only
     public Dice(DiceType type, int value) {
         this.type = type;
         this.value = value;
@@ -30,32 +27,24 @@ public class Dice implements Comparable<Dice> {
         if (isFirstTry) {
             clean();
             value = random.nextInt(6) + 1;
-            if (type == DiceType.RED && value >= 5) canReroll = false;
-        } else if (canReroll) value = random.nextInt(6) + 1;
+            if (type == DiceType.RED && value >= 5) canRerolled = false;
+        } else if (canRerolled) value = random.nextInt(6) + 1;
     }
 
     private void clean() {
-        canReroll = true;
+        canRerolled = true;
         value = 0;
         used = false;
     }
 
-    public DiceType getType() {
-        return type;
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public boolean isCanReroll() {
-        return canReroll;
-    }
-
-    @Override
-    public String toString() {
-        return "{" + type + ": " + value + '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "{" + type + ": " + value + '}';
+//    }
 
     @Override
     public int compareTo(Dice o) {

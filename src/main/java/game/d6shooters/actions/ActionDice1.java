@@ -1,7 +1,7 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.bot.Bot;
-import game.d6shooters.bot.ButtonsType;
+import game.d6shooters.bot.CommandButton;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.road.RoadMap;
@@ -52,7 +52,7 @@ public class ActionDice1 extends AbstractAction {
             squad.setSquadState(SquadState.STARTTURN.resetStep());
             squad.addPeriod(1);
             bot.send(template.getSquadStateMessage(user.getChatId()));
-            bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, ButtonsType.NEXT_TURN.name()));
+            bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, CommandButton.NEXT_TURN.name()));
         }
     }
 

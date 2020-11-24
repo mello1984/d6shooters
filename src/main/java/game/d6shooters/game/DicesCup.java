@@ -57,7 +57,7 @@ public class DicesCup {
         return string.equals("0") || str.chars()
                 .map(c -> Character.digit(c, 10))
                 .distinct()
-                .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanReroll());
+                .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanRerolled());
     }
 
     public int getCountActiveDiceCurrentValue(int value) {

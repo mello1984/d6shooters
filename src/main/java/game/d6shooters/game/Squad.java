@@ -31,6 +31,8 @@ public class Squad {
     boolean pill = false;
     int bomb = 0;
 
+    boolean canActivateEvent = true;
+
 
     public int addGold(int value) {
         gold += value;

@@ -11,7 +11,7 @@ public class ActionManager {
     private final ActionDice4 actionDice4;
     private final ActionDice5 actionDice5;
     private final ActionDice6 actionDice6;
-    private final Action actionFeeding;
+    private final ActionFeeding actionFeeding;
     private final ActionEvent actionEvent;
     private final ActionEndGame actionEndGame;
     private final ActionTown actionTown;
@@ -34,7 +34,6 @@ public class ActionManager {
     }
 
     public void doActions() {
-        System.out.println("ActionManager.doActions()");
         switch (user.getSquad().getSquadState()) {
             case ALLOCATE -> actionDice4.action(user);
             case CHECKHEAT -> actionDice5.action(user);
@@ -55,7 +54,6 @@ public class ActionManager {
     }
 
     public void doActions(Message message) {
-
         switch (user.getSquad().getSquadState()) {
             case STARTTURN -> actionStartTurn.processMessage(user, message);
             case ALLOCATE -> actionDice4.processMessage(user, message);

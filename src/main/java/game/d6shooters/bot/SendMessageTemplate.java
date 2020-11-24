@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.*;
 
 public class SendMessageTemplate {
-    private static final List<String> standardButtons = Arrays.asList("band", "help");
+    private static final List<String> standardButtons = Arrays.asList(CommandButton.BAND.get(), CommandButton.COMMAND.get());
 
     public SendMessage getSendMessageWithButtons(Long chatId, String text, List<List<String>> buttons) {
         buttons.removeAll(standardButtons);
@@ -18,7 +18,7 @@ public class SendMessageTemplate {
         SendMessage sendMessage = SendMessageFormat
                 .getSendMessageBaseFormat(chatId)
                 .setText(text);
-        SendMessageFormat.setCustomManyLineButtons(sendMessage, buttons);
+        SendMessageFormat.setButtons(sendMessage, buttons);
         return sendMessage;
     }
 
@@ -28,13 +28,6 @@ public class SendMessageTemplate {
         }};
         return getSendMessageWithButtons(chatId, text, buttons);
     }
-
-//    public SendMessage getSendMessageWithButtons(Long chatId, String text, List<String> oneLineButtons) {
-//        List<List<String>> buttons = new ArrayList<>() {{
-//            add(oneLineButtons);
-//        }};
-//        return getSendMessageWithButtons(chatId, text, buttons);
-//    }
 
     public SendMessage getSendMessageNoButtons(Long chatId, String text) {
 

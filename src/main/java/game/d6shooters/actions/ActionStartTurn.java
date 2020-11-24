@@ -8,6 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Log4j2
 public class ActionStartTurn extends AbstractAction {
+    private static final String TEXT1 = "Введите номера кубиков для переброски или 0";
+    private static final String TEXT2 = "Некорректные данные, введите номера кубиков для переброски или 0";
+
     public ActionStartTurn(Bot bot) {
         super(bot);
     }
@@ -31,7 +34,7 @@ public class ActionStartTurn extends AbstractAction {
     private void step1(User user) {
         user.getDicesCup().getFirstTurnDices();
         bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
-        bot.send(template.getSendMessageNoButtons(user.getChatId(), "Введите номера кубиков для переброски или 0"));
+        bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT1));
         user.getSquad().getSquadState().nextStep();
     }
 
@@ -41,7 +44,7 @@ public class ActionStartTurn extends AbstractAction {
         else {
             user.getDicesCup().getRerolledDices(message.getText());
             bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
-            bot.send(template.getSendMessageNoButtons(user.getChatId(), "Введите номера кубиков для переброски или 0"));
+            bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT1));
             user.getSquad().getSquadState().nextStep();
         }
     }
@@ -57,7 +60,7 @@ public class ActionStartTurn extends AbstractAction {
 
     private boolean checkText(User user, String text) {
         if (!user.getDicesCup().checkString(text)) {
-            bot.send(template.getSendMessageNoButtons(user.getChatId(), "Некорректные данные, введите номера кубиков для переброски или 0"));
+            bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT2));
             return false;
         }
         return true;

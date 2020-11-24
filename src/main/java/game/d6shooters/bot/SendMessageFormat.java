@@ -18,7 +18,7 @@ public class SendMessageFormat {
         return sendMessage;
     }
 
-    public static void setCustomManyLineButtons(SendMessage sendMessage, List<List<String>> buttons) {
+    public static void setButtons(SendMessage sendMessage, List<List<String>> buttons) {
         // Создаем клавиатуру
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -35,5 +35,11 @@ public class SendMessageFormat {
         });
 
         replyKeyboardMarkup.setKeyboard(keyboard);
+    }
+
+    public static void setButtons(SendMessage sendMessage, String... buttons) {
+        List<List<String>> oneLineButtons = new ArrayList<>();
+        oneLineButtons.add(Arrays.asList(buttons));
+        setButtons(sendMessage, oneLineButtons);
     }
 }
