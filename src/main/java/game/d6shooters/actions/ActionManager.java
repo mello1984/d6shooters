@@ -60,6 +60,7 @@ public class ActionManager {
             case CHECKHEAT -> actionDice5.processMessage(user, message);
             case CROSSROAD -> actionDice1.processMessage(user, message);
             case EVENT2, EVENT3, EVENT6 -> actionEvent.processMessage(user, message);
+            case TOWN -> actionTown.processMessage(user, message);
         }
 
     }

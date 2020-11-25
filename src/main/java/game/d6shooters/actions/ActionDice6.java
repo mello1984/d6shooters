@@ -21,7 +21,7 @@ public class ActionDice6 extends AbstractAction {
 
     private static final String TEXT1 = "В перестрелке потеряли %d стрелков.";
     private static final String TEXT2 = "Удача на нашей стороне, в перестрелке никого не потеряли.";
-    private static final String TEXT3 = "Бросок бандитов: [%s], убито: %d";
+    private static final String TEXT3 = "Пытаемся оторваться от погони, бросок бандитов: [%s], убито: %d";
     private static final String TEXT4 = "Бросок бандитов: [%s], бросок стрелков: [%s], боеприпасы: %d, вооружение: %d, итог: [%d:%d] %s";
     private static final String TEXT5 = "бандит убит";
     private static final String TEXT6 = "погиб стрелок";

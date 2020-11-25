@@ -25,6 +25,6 @@ public class Place {
     }
 
     public static Place getNew() {
-        return new Place(RoadMap.Road.MAINROAD, 0);
+        return new Place(RoadMap.Road.MAINROAD, 13);
     }
 }
