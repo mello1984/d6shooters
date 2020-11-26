@@ -9,12 +9,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.*;
 
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Log4j2
 public class TownShop {
     final Set<Item> items;
     Item specialItem;
@@ -25,6 +27,15 @@ public class TownShop {
     public TownShop() {
         items = new LinkedHashSet<>(Arrays.asList(Item.values()));
         canGamingPoker = true;
+        specialItem = switch (DicesCup.getD6Int()) {
+            case 1 -> Item.COMPASS;
+            case 2 -> Item.HUNTER;
+            case 3 -> Item.MAP;
+            case 4 -> Item.BINOCULAR;
+            case 5 -> Item.PILL;
+            case 6 -> Item.BOMB1;
+            default -> Item.EMPTY;
+        };
     }
 
     public List<List<String>> getGoods(User user) {
@@ -70,14 +81,14 @@ public class TownShop {
     }
 
     protected List<String> getSpecialItemButtons(Squad squad) {
-        return switch (DicesCup.getD6Int()) {
-            case 1 -> setSpecialItem(squad.getGold(), squad.isCompass(), Item.COMPASS);
-            case 2 -> setSpecialItem(squad.getGold(), squad.isHunter(), Item.HUNTER);
-            case 3 -> setSpecialItem(squad.getGold(), squad.isMap(), Item.MAP);
-            case 4 -> setSpecialItem(squad.getGold(), squad.isBinocular(), Item.BINOCULAR);
-            case 5 -> setSpecialItem(squad.getGold(), squad.isPill(), Item.PILL);
-            case 6 -> {
-                specialItem = Item.BOMB1;
+        log.debug("SpecialItem: " + specialItem);
+        List<String> resultList = switch (specialItem) {
+            case COMPASS -> setSpecialItem(squad.getGold(), squad.isCompass(), Item.COMPASS);
+            case HUNTER -> setSpecialItem(squad.getGold(), squad.isHunter(), Item.HUNTER);
+            case MAP -> setSpecialItem(squad.getGold(), squad.isMap(), Item.MAP);
+            case BINOCULAR -> setSpecialItem(squad.getGold(), squad.isBinocular(), Item.BINOCULAR);
+            case PILL -> setSpecialItem(squad.getGold(), squad.isPill(), Item.PILL);
+            case BOMB1 -> {
                 List<String> list = new ArrayList<>();
                 if (squad.getBomb() < 3 && squad.getGold() >= Item.BOMB1.value) list.add(Item.BOMB1.getText());
                 if (squad.getBomb() < 2 && squad.getGold() >= Item.BOMB2.value) list.add(Item.BOMB2.getText());
@@ -86,12 +97,31 @@ public class TownShop {
             }
             default -> new ArrayList<>();
         };
+        log.debug("SpecialItem Button: " + resultList);
+        return resultList;
     }
+//    // Надо переписать на ранее установленный specialItem
+//    protected List<String> getSpecialItemButtons(Squad squad) {
+//        return switch (DicesCup.getD6Int()) {
+//            case 1 -> setSpecialItem(squad.getGold(), squad.isCompass(), Item.COMPASS);
+//            case 2 -> setSpecialItem(squad.getGold(), squad.isHunter(), Item.HUNTER);
+//            case 3 -> setSpecialItem(squad.getGold(), squad.isMap(), Item.MAP);
+//            case 4 -> setSpecialItem(squad.getGold(), squad.isBinocular(), Item.BINOCULAR);
+//            case 5 -> setSpecialItem(squad.getGold(), squad.isPill(), Item.PILL);
+//            case 6 -> {
+//                List<String> list = new ArrayList<>();
+//                if (squad.getBomb() < 3 && squad.getGold() >= Item.BOMB1.value) list.add(Item.BOMB1.getText());
+//                if (squad.getBomb() < 2 && squad.getGold() >= Item.BOMB2.value) list.add(Item.BOMB2.getText());
+//                if (squad.getBomb() == 0 && squad.getGold() >= Item.BOMB3.value) list.add(Item.BOMB3.getText());
+//                yield list;
+//            }
+//            default -> new ArrayList<>();
+//        };
+//    }
 
-    protected List<String> setSpecialItem(int gold, boolean squadItem, Item item) {
-        specialItem = item;
+    protected List<String> setSpecialItem(int gold, boolean squadHasItem, Item item) {
         List<String> list = new ArrayList<>();
-        if (!squadItem && gold >= item.value) list.add(item.getText());
+        if (!squadHasItem && gold >= item.value) list.add(item.getText());
         return list;
     }
 

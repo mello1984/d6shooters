@@ -1,5 +1,7 @@
 package game.d6shooters.road;
 
+import game.d6shooters.game.Squad;
+import game.d6shooters.users.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,22 +11,25 @@ import lombok.experimental.FieldDefaults;
 @ToString
 @EqualsAndHashCode
 public class Place {
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    Squad squad;
     RoadMap.Road road;
     int number;
 
     public RoadNode.Type getType() {
-        return RoadMap.map.get(road).get(number).getType();
+        return squad.getRoadMap().map.get(road).get(number).getType();
     }
 
     public String getTownName() {
-        return RoadMap.map.get(road).get(number).getTownName();
+        return squad.getRoadMap().map.get(road).get(number).getTownName();
     }
 
     public TownShop getTownShop() {
-        return RoadMap.map.get(road).get(number).getTownShop();
+        return squad.getRoadMap().map.get(road).get(number).getTownShop();
     }
 
-    public static Place getNew() {
-        return new Place(RoadMap.Road.MAINROAD, 13);
+    public static Place getNew(Squad squad) {
+        return new Place(squad, RoadMap.Road.MAINROAD, 13);
     }
 }

@@ -39,7 +39,7 @@ public class ActionDice1 extends AbstractAction {
             squad.addPathfinding(-1);
 
             if (squad.getPlace().getType() != RoadNode.Type.BRANCHSTART)
-                squad.setPlace(RoadMap.next(squad.getPlace(), true));
+                squad.setPlace(squad.getRoadMap().next(squad.getPlace(), true));
             else {
                 squad.setSquadState(SquadState.CROSSROAD);
                 bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT1, BRANCH, MAIN));
@@ -49,7 +49,7 @@ public class ActionDice1 extends AbstractAction {
             user.getActionManager().doActions();
 
         } else {
-            squad.setSquadState(SquadState.STARTTURN.resetStep());
+            squad.setSquadState(SquadState.STARTTURN1);
             squad.addPeriod(1);
             bot.send(template.getSquadStateMessage(user.getChatId()));
             bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, CommandButton.NEXT_TURN.name()));
@@ -69,8 +69,8 @@ public class ActionDice1 extends AbstractAction {
 
     public void processMessage(User user, Message message) {
         switch (message.getText()) {
-            case BRANCH -> user.getSquad().setPlace(RoadMap.next(user.getSquad().getPlace(), false));
-            case MAIN -> user.getSquad().setPlace(RoadMap.next(user.getSquad().getPlace(), true));
+            case BRANCH -> user.getSquad().setPlace(user.getSquad().getRoadMap().next(user.getSquad().getPlace(), false));
+            case MAIN -> user.getSquad().setPlace(user.getSquad().getRoadMap().next(user.getSquad().getPlace(), true));
             default -> {
                 bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT3, BRANCH, MAIN));
                 return;

@@ -1,16 +1,15 @@
 package game.d6shooters.game;
 
+import game.d6shooters.bot.Icon;
 import lombok.Value;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PokerDices extends DicesCup {
-    public List<Dice> diceList = new ArrayList<>();
-    private Combination combination;
-    Random random = new Random();
-
-
     public PokerDices() {
+        super();
+        diceList.clear();
         diceList.add(new Dice(Dice.DiceType.WHITE));
         diceList.add(new Dice(Dice.DiceType.WHITE));
         diceList.add(new Dice(Dice.DiceType.WHITE));
@@ -25,6 +24,7 @@ public class PokerDices extends DicesCup {
         int d3 = diceList.get(2).getValue();
         int d4 = diceList.get(3).getValue();
         int d5 = diceList.get(4).getValue();
+        Combination combination;
         if (d1 == d5) combination = new Combination(6, d3, 0);
         else if (d1 == d4 || d2 == d5) combination = new Combination(5, d3, 0);
         else if (d1 == 1 && d2 == 2 && d3 == 3 && d4 == 4 && d5 == 5) combination = new Combination(4, d3, 0);
@@ -37,6 +37,16 @@ public class PokerDices extends DicesCup {
         return Combination.compareToBase(combination);
     }
 
+    @Override
+    public String toString() {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        diceList.stream().filter(d -> d.getType() == Dice.DiceType.WHITE && !d.isUsed()).forEach(d -> stringBuilder.append(dices.get(d.getValue())));
+//        return stringBuilder.toString();
+
+        return diceList.stream().filter(d -> d.getType() == Dice.DiceType.WHITE && !d.isUsed()).map(d -> dices.get(d.getValue())).collect(Collectors.joining(""));
+
+
+    }
 
     @Value
     private static class Combination implements Comparable<Combination> {

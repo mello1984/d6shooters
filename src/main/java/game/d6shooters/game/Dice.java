@@ -41,10 +41,10 @@ public class Dice implements Comparable<Dice> {
         this.used = used;
     }
 
-//    @Override
-//    public String toString() {
-//        return "{" + type + ": " + value + '}';
-//    }
+    @Override
+    public String toString() {
+        return "{" + type + ": " + value + ":" + used + '}';
+    }
 
     @Override
     public int compareTo(Dice o) {

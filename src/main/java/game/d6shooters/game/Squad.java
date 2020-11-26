@@ -2,12 +2,9 @@ package game.d6shooters.game;
 
 import game.d6shooters.bot.Icon;
 import game.d6shooters.road.Place;
-import game.d6shooters.road.TownShop;
+import game.d6shooters.road.RoadMap;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -23,7 +20,8 @@ public class Squad {
     int gunfight = 0;
     int pathfinding = 0;
     SquadState squadState;
-    Place place = Place.getNew();
+    RoadMap roadMap = new RoadMap(this);
+    Place place = Place.getNew(this);
     int pokerBetValue = 0;
     Icon pokerBetType;
     PokerDices pokerDices;
@@ -34,10 +32,7 @@ public class Squad {
     boolean binocular = false;
     boolean pill = false;
     int bomb = 0;
-
-
     boolean canActivateEvent = true;
-
 
     public int addGold(int value) {
         gold += value;
@@ -76,6 +71,7 @@ public class Squad {
         bomb = Math.min(bomb, 3);
         return bomb;
     }
+
     public int addPeriod(int value) {
         period += value;
         return period;

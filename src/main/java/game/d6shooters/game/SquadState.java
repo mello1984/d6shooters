@@ -9,7 +9,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum SquadState {
 
-    STARTTURN(3),
+//    STARTTURN(3),
+    STARTTURN1, STARTTURN2, STARTTURN3,
     ALLOCATE, OTHER, CHECKHEAT, GUNFIGHT, MOVE, TOWN, ENDGAME, CROSSROAD,
     EVENT, EVENT2, EVENT3, EVENT6,
     POKER(4),

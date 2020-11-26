@@ -1,6 +1,8 @@
 package game.d6shooters.road;
 
 
+import game.d6shooters.game.Squad;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 import java.util.HashMap;
@@ -9,21 +11,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@UtilityClass
+@Getter
 public class RoadMap {
-    public final static Map<Road, List<RoadNode>> map = new HashMap<>();
-    private final static List<RoadNode> mainRoad = getRoad(80);
-    private final static List<RoadNode> lonrockRoad = getRoad(5);
-    private final static List<RoadNode> bakskinRoad = getRoad(8);
+    public final Map<Road, List<RoadNode>> map = new HashMap<>();
+    private final List<RoadNode> mainRoad = getRoad(80);
+    private final List<RoadNode> lonrockRoad = getRoad(5);
+    private final List<RoadNode> bakskinRoad = getRoad(8);
     private final static String KALIKO = "Калико";
     private final static String GOLDHILL = "Голдхилл";
     private final static String THOMPSON = "Томпсон";
     private final static String BAKSKIN = "Бакскин";
     private final static String LONROK = "Лонрок";
     private final static String RINO = "Рино";
+    private final Squad squad;
 
-
-    static {
+    public RoadMap(Squad squad) {
         IntStream.of(9, 19, 29, 39, 49, 59, 69, 76).forEach(i -> mainRoad.get(i).setType(RoadNode.Type.EVENT));
         IntStream.of(14, 34, 54).forEach(i -> mainRoad.get(i).setType(RoadNode.Type.TOWN));
         mainRoad.get(79).setType(RoadNode.Type.RINO);
@@ -45,22 +47,22 @@ public class RoadMap {
         map.put(Road.MAINROAD, mainRoad);
         map.put(Road.LONROK, lonrockRoad);
         map.put(Road.BAKSKIN, bakskinRoad);
-
+        this.squad = squad;
     }
 
-    public static Place next(Place place, boolean mainRoad) {
+    public Place next(Place place, boolean mainRoad) {
         int number = place.getNumber();
-        RoadNode node = map.get(place.getRoad()).get(number);
+        RoadNode node = this.map.get(place.getRoad()).get(number);
 
         Place result = switch (node.getType()) {
-            case ROAD, TOWN, EVENT -> new Place(place.getRoad(), ++number);
-            case BRANCHEND -> new Place(node.getNextRoad(), node.getNextRoadNumberNode());
+            case ROAD, TOWN, EVENT -> new Place(squad, place.getRoad(), ++number);
+            case BRANCHEND -> new Place(squad, node.getNextRoad(), node.getNextRoadNumberNode());
             case BRANCHSTART -> {
-                Place main = new Place(place.getRoad(), ++number);
-                Place branch = new Place(node.getNextRoad(), node.getNextRoadNumberNode());
+                Place main = new Place(squad, place.getRoad(), ++number);
+                Place branch = new Place(squad, node.getNextRoad(), node.getNextRoadNumberNode());
                 yield mainRoad ? main : branch;
             }
-            case RINO -> Place.getNew(); // RINO!!!
+            case RINO -> Place.getNew(squad); // RINO!!!
         };
 
         return result;

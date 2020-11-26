@@ -1,13 +1,16 @@
 package game.d6shooters.game;
 
 import game.d6shooters.bot.Icon;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 
+@Getter
+@Setter
 public class DicesCup {
     private static final Random random = new Random();
-    private List<Dice> diceList = new ArrayList<>();
-    private static final Map<Integer, String> dices = new HashMap<>() {{
+    protected static final Map<Integer, String> dices =  new HashMap<>() {{
         put(1, Icon.DICE1.get());
         put(2, Icon.DICE2.get());
         put(3, Icon.DICE3.get());
@@ -15,6 +18,7 @@ public class DicesCup {
         put(5, Icon.DICE5.get());
         put(6, Icon.DICE6.get());
     }};
+    protected List<Dice> diceList = new ArrayList<>();
 
     public DicesCup() {
         diceList.add(new Dice(Dice.DiceType.WHITE));
@@ -27,18 +31,9 @@ public class DicesCup {
         diceList.add(new Dice(Dice.DiceType.RED));
     }
 
-    public List<Dice> getDiceList() {
-        return diceList;
-    }
-
-    public void setDiceList(List<Dice> diceList) {
-        this.diceList = diceList;
-    }
-
     public static int getD6Int() {
         return random.nextInt(6) + 1;
     }
-
 
     public List<Dice> getFirstTurnDices() {
         diceList.forEach(dice -> dice.nextD6(true));

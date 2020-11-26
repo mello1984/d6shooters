@@ -42,9 +42,9 @@ class ActionDice1Test {
 
     @Test
     void actionDice1ProcessMessageTest1() {
-        user.getSquad().setPlace(new Place(RoadMap.Road.MAINROAD, 43));
+        user.getSquad().setPlace(new Place(user.getSquad(), RoadMap.Road.MAINROAD, 43));
         action.processMessage(user, new MockMessage(ActionDice1.BRANCH));
-        Place expected = new Place(RoadMap.Road.LONROK, 0);
+        Place expected = new Place(user.getSquad(),RoadMap.Road.LONROK, 0);
         assertAll(
                 () -> assertEquals(expected, user.getSquad().getPlace())
         );
@@ -52,9 +52,9 @@ class ActionDice1Test {
 
     @Test
     void actionDice1ProcessMessageTest2() {
-        user.getSquad().setPlace(new Place(RoadMap.Road.MAINROAD, 43));
+        user.getSquad().setPlace(new Place(user.getSquad(),RoadMap.Road.MAINROAD, 43));
         action.processMessage(user, new MockMessage(ActionDice1.MAIN));
-        Place expected = new Place(RoadMap.Road.MAINROAD, 44);
+        Place expected = new Place(user.getSquad(),RoadMap.Road.MAINROAD, 44);
         assertAll(
                 () -> assertEquals(expected, user.getSquad().getPlace())
         );
@@ -62,9 +62,9 @@ class ActionDice1Test {
 
     @Test
     void actionDice1ProcessMessageTest3() {
-        user.getSquad().setPlace(new Place(RoadMap.Road.MAINROAD, 67));
+        user.getSquad().setPlace(new Place(user.getSquad(),RoadMap.Road.MAINROAD, 67));
         action.processMessage(user, new MockMessage(ActionDice1.BRANCH));
-        Place expected = new Place(RoadMap.Road.BAKSKIN, 0);
+        Place expected = new Place(user.getSquad(),RoadMap.Road.BAKSKIN, 0);
         assertAll(
                 () -> assertEquals(expected, user.getSquad().getPlace())
         );
@@ -72,9 +72,9 @@ class ActionDice1Test {
 
     @Test
     void actionDice1ProcessMessageTest4() {
-        user.getSquad().setPlace(new Place(RoadMap.Road.MAINROAD, 67));
+        user.getSquad().setPlace(new Place(user.getSquad(),RoadMap.Road.MAINROAD, 67));
         action.processMessage(user, new MockMessage(ActionDice1.MAIN));
-        Place expected = new Place(RoadMap.Road.MAINROAD, 68);
+        Place expected = new Place(user.getSquad(),RoadMap.Road.MAINROAD, 68);
         assertAll(
                 () -> assertEquals(expected, user.getSquad().getPlace())
         );
@@ -82,9 +82,9 @@ class ActionDice1Test {
 
     @Test
     void actionDice1ProcessMessageTest5() {
-        user.getSquad().setPlace(new Place(RoadMap.Road.MAINROAD, 67));
+        user.getSquad().setPlace(new Place(user.getSquad(),RoadMap.Road.MAINROAD, 67));
         action.processMessage(user, new MockMessage("Other"));
-        Place expected = new Place(RoadMap.Road.MAINROAD, 67);
+        Place expected = new Place(user.getSquad(),RoadMap.Road.MAINROAD, 67);
         assertAll(
                 () -> assertEquals(expected, user.getSquad().getPlace())
         );
@@ -92,7 +92,7 @@ class ActionDice1Test {
 
     @Test
     void executeSpecialPlacesTest1() {
-        user.getSquad().setPlace(new Place(RoadMap.Road.MAINROAD, 79));
+        user.getSquad().setPlace(new Place(user.getSquad(),RoadMap.Road.MAINROAD, 79));
         action.executeSpecialPlaces(user.getSquad());
         assertAll(
                 () -> assertEquals(SquadState.ENDGAME, user.getSquad().getSquadState())
@@ -101,7 +101,7 @@ class ActionDice1Test {
 
     @Test
     void executeSpecialPlacesTest2() {
-        user.getSquad().setPlace(new Place(RoadMap.Road.MAINROAD, 39));
+        user.getSquad().setPlace(new Place(user.getSquad(),RoadMap.Road.MAINROAD, 39));
         action.executeSpecialPlaces(user.getSquad());
         assertAll(
                 () -> assertEquals(SquadState.EVENT, user.getSquad().getSquadState())
@@ -110,7 +110,7 @@ class ActionDice1Test {
 
     @Test
     void executeSpecialPlacesTest3() {
-        user.getSquad().setPlace(new Place(RoadMap.Road.MAINROAD, 14));
+        user.getSquad().setPlace(new Place(user.getSquad(),RoadMap.Road.MAINROAD, 14));
         action.executeSpecialPlaces(user.getSquad());
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),

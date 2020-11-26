@@ -24,10 +24,15 @@ public class ActionStartTurn extends AbstractAction {
         user.getSquad().setPathfinding(0);
         log.debug(user.getSquad());
 
-        switch (user.getSquad().getSquadState().getStep()) {
-            case 1 -> step1(user);
-            case 2 -> step2(user, message);
-            case 3 -> step3(user, message);
+//        switch (user.getSquad().getSquadState().getStep()) {
+//            case 1 -> step1(user);
+//            case 2 -> step2(user, message);
+//            case 3 -> step3(user, message);
+//        }
+        switch (user.getSquad().getSquadState()) {
+            case STARTTURN1 -> step1(user);
+            case STARTTURN2 -> step2(user, message);
+            case STARTTURN3 -> step3(user, message);
         }
     }
 
@@ -35,7 +40,8 @@ public class ActionStartTurn extends AbstractAction {
         user.getDicesCup().getFirstTurnDices();
         bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
         bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT1));
-        user.getSquad().getSquadState().nextStep();
+        user.getSquad().setSquadState(SquadState.STARTTURN2);
+//        user.getSquad().getSquadState().nextStep();
     }
 
     private void step2(User user, Message message) {
@@ -45,7 +51,8 @@ public class ActionStartTurn extends AbstractAction {
             user.getDicesCup().getRerolledDices(message.getText());
             bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
             bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT1));
-            user.getSquad().getSquadState().nextStep();
+//            user.getSquad().getSquadState().nextStep();
+            user.getSquad().setSquadState(SquadState.STARTTURN3);
         }
     }
 
