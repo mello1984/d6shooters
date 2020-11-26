@@ -10,7 +10,7 @@ import java.util.*;
 @Setter
 public class DicesCup {
     private static final Random random = new Random();
-    protected static final Map<Integer, String> dices =  new HashMap<>() {{
+    protected static final Map<Integer, String> dices = new HashMap<>() {{
         put(1, Icon.DICE1.get());
         put(2, Icon.DICE2.get());
         put(3, Icon.DICE3.get());
@@ -54,6 +54,20 @@ public class DicesCup {
                 .distinct()
                 .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanRerolled());
     }
+
+//    public boolean checkString(String string, boolean executeBinocle) {
+//        String str = string.replaceAll("[/D]*", "");
+//        if (str.length() > 8 || str.length() == 0) return false;
+//
+//        if (!executeBinocle) return string.equals("0") || str.chars()
+//                .map(c -> Character.digit(c, 10))
+//                .distinct()
+//                .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanRerolled());
+//
+//        int count = str.replaceAll("[012345]*","").length();
+//
+//
+//    }
 
     public int getCountActiveDiceCurrentValue(int value) {
         return (int) diceList.stream()

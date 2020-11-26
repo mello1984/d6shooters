@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.game.SquadState;
 import game.d6shooters.mocks.MockActionManager;
 import game.d6shooters.mocks.MockBot;
 import game.d6shooters.mocks.MockTemplate;
@@ -41,7 +42,8 @@ class ActionDice3Test {
         action.action(user);
         assertAll(
                 () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3))
+                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3)),
+                () -> assertEquals(SquadState.CHECKHEAT, user.getSquad().getSquadState())
         );
     }
 
@@ -57,7 +59,8 @@ class ActionDice3Test {
         action.action(user);
         assertAll(
                 () -> assertEquals(4, user.getSquad().getGold()),
-                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3))
+                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3)),
+                () -> assertEquals(SquadState.CHECKHEAT, user.getSquad().getSquadState())
         );
     }
 
@@ -75,9 +78,66 @@ class ActionDice3Test {
         action.action(user);
         assertAll(
                 () -> assertEquals(4, user.getSquad().getGold()),
-                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3))
+                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3)),
+                () -> assertEquals(SquadState.CHECKHEAT, user.getSquad().getSquadState())
         );
     }
 
+    @Test
+    void getFoundGoldTest1() {
+        diceList = new ArrayList<>() {{
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+        }};
+        dicesCup.setDiceList(diceList);
+        user.getSquad().setMap(false);
+        assertEquals(2, action.getFoundGold(user));
+    }
 
+    @Test
+    void getFoundGoldTest2() {
+        diceList = new ArrayList<>() {{
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+        }};
+        dicesCup.setDiceList(diceList);
+        user.getSquad().setMap(true);
+        assertEquals(3, action.getFoundGold(user));
+    }
+
+    @Test
+    void getFoundGoldTest3() {
+        diceList = new ArrayList<>() {{
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+        }};
+        dicesCup.setDiceList(diceList);
+        user.getSquad().setMap(false);
+        assertEquals(1, action.getFoundGold(user));
+    }
+
+    @Test
+    void getFoundGoldTest4() {
+        diceList = new ArrayList<>() {{
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.WHITE, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+            add(new Dice(Dice.DiceType.RED, 3));
+        }};
+        dicesCup.setDiceList(diceList);
+        user.getSquad().setMap(true);
+        assertEquals(2, action.getFoundGold(user));
+    }
 }

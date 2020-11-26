@@ -2,6 +2,7 @@ package game.d6shooters.actions;
 
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.CommandButton;
+import game.d6shooters.game.Dice;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.road.RoadMap;
@@ -10,8 +11,6 @@ import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.stream.IntStream;
-
 @Log4j2
 public class ActionDice1 extends AbstractAction {
     protected final static String BRANCH = "Свернуть к городу";
@@ -19,8 +18,6 @@ public class ActionDice1 extends AbstractAction {
     private final static String TEXT1 = "Перекресток, выберите направление";
     private final static String TEXT2 = "Ход завершен";
     private final static String TEXT3 = "Некорректная команда, выберите направление";
-    private final static String TEXT4 = "";
-    private final static String TEXT5 = "";
 
     public ActionDice1(Bot bot) {
         super(bot);
@@ -29,10 +26,7 @@ public class ActionDice1 extends AbstractAction {
     @Override
     public void action(User user) {
         Squad squad = user.getSquad();
-        IntStream.rangeClosed(1, user.getDicesCup().getCountActiveDiceCurrentValue(1)).forEach(i -> {
-            useDice(user, 1);
-            squad.addPathfinding(1);
-        });
+        convertDice1ToPathfinding(user);
 
         if (squad.getPathfinding() > 0) {
             squad.addPath(1);
@@ -54,6 +48,13 @@ public class ActionDice1 extends AbstractAction {
             bot.send(template.getSquadStateMessage(user.getChatId()));
             bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, CommandButton.NEXT_TURN.name()));
         }
+    }
+
+    protected void convertDice1ToPathfinding(User user) {
+        int red = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.RED).count();
+        int white = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.WHITE).count();
+        user.getSquad().addPathfinding(white + (user.getSquad().isMap() ? 2 : 1) * red);
+        user.getDicesCup().setUsedDiceCurrentValue(1);
     }
 
     protected void executeSpecialPlaces(Squad squad) {

@@ -52,7 +52,6 @@ public class ActionManager {
             }
             case EVENT -> actionEvent.action(user);
             case ENDGAME -> actionEndGame.action(user);
-//            case STARTTURN -> actionStartTurn.action(user);
             case STARTTURN1, STARTTURN2, STARTTURN3 -> actionStartTurn.action(user);
             case POKER1 -> actionPoker.action(user);
 
@@ -62,7 +61,6 @@ public class ActionManager {
 
     public void doActions(Message message) {
         switch (user.getSquad().getSquadState()) {
-//            case STARTTURN -> actionStartTurn.processMessage(user, message);
             case STARTTURN1, STARTTURN2, STARTTURN3 -> actionStartTurn.processMessage(user, message);
             case ALLOCATE -> actionDice4.processMessage(user, message);
             case CHECKHEAT -> actionDice5.processMessage(user, message);

@@ -26,12 +26,6 @@ public class HandlerManager {
             case RESTART, RESTART2 -> new RestartHandler(bot);
             case BACK -> new BackHandler(bot);
             default -> new ActionManagerHandler(bot);
-//            default -> new DefaultHandler(bot);
         };
-
-//        if (command == CommandButtons.BAND) return new TeamStateHandler(bot);
-//        if (command == CommandButtons.COMMAND) return new CommandHandler(bot);
-//        if (command == CommandButtons.HELP) return new TeamStateHandler(bot);
-//        return new ActionManagerHandler(bot);
     }
 }

@@ -95,8 +95,6 @@ public class ActionPoker extends AbstractAction {
                 executeResultGame(user);
             }
         }
-
-
     }
 
     protected void executeResultGame(User user) {

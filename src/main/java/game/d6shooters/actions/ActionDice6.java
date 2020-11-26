@@ -24,6 +24,7 @@ public class ActionDice6 extends AbstractAction {
     private static final String TEXT4 = "Бросок бандитов: [%s], бросок стрелков: [%s], боеприпасы: %d, вооружение: %d, итог: [%d:%d] %s";
     private static final String TEXT5 = "бандит убит";
     private static final String TEXT6 = "погиб стрелок";
+    private static final String TEXT7 = "Охотник покинул ваш отряд";
 
     @Override
     public void action(User user) {
@@ -35,6 +36,12 @@ public class ActionDice6 extends AbstractAction {
                 user.getSquad().addShooters(-killedShooters);
             } else bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2));
         }
+
+        if (user.getSquad().getShooters() <= 1) {
+            bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT7));
+            user.getSquad().setHunter(false);
+        }
+
         user.getSquad().setSquadState(SquadState.MOVE);
         log.debug(String.format("SquadState %s -> MOVE", user.getSquad().getSquadState()));
         user.getActionManager().doActions();

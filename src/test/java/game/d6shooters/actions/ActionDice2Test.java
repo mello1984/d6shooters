@@ -68,4 +68,86 @@ class ActionDice2Test {
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(2))
         );
     }
+
+    @Test
+    void getFoundFoodTest1() {
+        diceList = new ArrayList<>() {{
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.RED, 2));
+
+            add(new Dice(Dice.DiceType.WHITE, 1));
+            add(new Dice(Dice.DiceType.RED, 3));
+        }};
+        dicesCup.setDiceList(diceList);
+        user.getSquad().setHunter(false);
+
+        int result = action.getFoundFood(user);
+        assertAll(
+                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(2)),
+                () -> assertEquals(1, result)
+        );
+    }
+
+    @Test
+    void getFoundFoodTest2() {
+        diceList = new ArrayList<>() {{
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.RED, 2));
+
+            add(new Dice(Dice.DiceType.WHITE, 1));
+            add(new Dice(Dice.DiceType.RED, 3));
+        }};
+        dicesCup.setDiceList(diceList);
+        user.getSquad().setHunter(true);
+
+        int result = action.getFoundFood(user);
+        assertAll(
+                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(2)),
+                () -> assertEquals(2, result)
+        );
+    } @Test
+    void getFoundFoodTest3() {
+        diceList = new ArrayList<>() {{
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.RED, 2));
+            add(new Dice(Dice.DiceType.RED, 2));
+
+            add(new Dice(Dice.DiceType.WHITE, 1));
+            add(new Dice(Dice.DiceType.RED, 3));
+        }};
+        dicesCup.setDiceList(diceList);
+        user.getSquad().setHunter(false);
+
+        int result = action.getFoundFood(user);
+        assertAll(
+                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(2)),
+                () -> assertEquals(2, result)
+        );
+    }
+
+    @Test
+    void getFoundFoodTest4() {
+        diceList = new ArrayList<>() {{
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.WHITE, 2));
+            add(new Dice(Dice.DiceType.RED, 2));
+            add(new Dice(Dice.DiceType.RED, 2));
+
+            add(new Dice(Dice.DiceType.WHITE, 1));
+            add(new Dice(Dice.DiceType.RED, 3));
+        }};
+        dicesCup.setDiceList(diceList);
+        user.getSquad().setHunter(true);
+
+        int result = action.getFoundFood(user);
+        assertAll(
+                () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(2)),
+                () -> assertEquals(3, result)
+        );
+    }
 }
