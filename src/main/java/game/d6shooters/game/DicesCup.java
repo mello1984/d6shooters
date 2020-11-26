@@ -1,12 +1,24 @@
 package game.d6shooters.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import game.d6shooters.bot.Icon;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.*;
+
+@Getter
+@Setter
 public class DicesCup {
-    private static Random random = new Random();
-    public List<Dice> diceList = new ArrayList<>();
+    private static final Random random = new Random();
+    protected static final Map<Integer, String> dices = new HashMap<>() {{
+        put(1, Icon.DICE1.get());
+        put(2, Icon.DICE2.get());
+        put(3, Icon.DICE3.get());
+        put(4, Icon.DICE4.get());
+        put(5, Icon.DICE5.get());
+        put(6, Icon.DICE6.get());
+    }};
+    protected List<Dice> diceList = new ArrayList<>();
 
     public DicesCup() {
         diceList.add(new Dice(Dice.DiceType.WHITE));
@@ -19,11 +31,9 @@ public class DicesCup {
         diceList.add(new Dice(Dice.DiceType.RED));
     }
 
-
     public static int getD6Int() {
         return random.nextInt(6) + 1;
     }
-
 
     public List<Dice> getFirstTurnDices() {
         diceList.forEach(dice -> dice.nextD6(true));
@@ -38,12 +48,26 @@ public class DicesCup {
 
     public boolean checkString(String string) {
         String str = string.replaceAll("[/D]*", "");
-        if (str.length() > 8 || str.length() == 0) return false;
+        if (str.length() > 8 || str.length() == 0) return false; //Поправить константу 8
         return string.equals("0") || str.chars()
                 .map(c -> Character.digit(c, 10))
                 .distinct()
-                .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanReroll());
+                .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanRerolled());
     }
+
+//    public boolean checkString(String string, boolean executeBinocle) {
+//        String str = string.replaceAll("[/D]*", "");
+//        if (str.length() > 8 || str.length() == 0) return false;
+//
+//        if (!executeBinocle) return string.equals("0") || str.chars()
+//                .map(c -> Character.digit(c, 10))
+//                .distinct()
+//                .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanRerolled());
+//
+//        int count = str.replaceAll("[012345]*","").length();
+//
+//
+//    }
 
     public int getCountActiveDiceCurrentValue(int value) {
         return (int) diceList.stream()
@@ -59,8 +83,15 @@ public class DicesCup {
 
     @Override
     public String toString() {
-        return "DicesCup{" + diceList + '}';
+        StringBuilder stringBuilder = new StringBuilder();
+        if (diceList.stream().anyMatch(d -> d.getType() == Dice.DiceType.WHITE && !d.isUsed())) {
+            stringBuilder.append(Icon.WHITESQUARE.get());
+            diceList.stream().filter(d -> d.getType() == Dice.DiceType.WHITE && !d.isUsed()).forEach(d -> stringBuilder.append(dices.get(d.getValue())));
+        }
+        if (diceList.stream().anyMatch(d -> d.getType() == Dice.DiceType.RED && !d.isUsed())) {
+            stringBuilder.append("\n").append(Icon.REDSQUARE.get());
+            diceList.stream().filter(d -> d.getType() == Dice.DiceType.RED && !d.isUsed()).forEach(d -> stringBuilder.append(dices.get(d.getValue())));
+        }
+        return stringBuilder.toString();
     }
-
-
 }

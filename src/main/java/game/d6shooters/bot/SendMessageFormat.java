@@ -15,28 +15,10 @@ public class SendMessageFormat {
         sendMessage.setParseMode("HTML");
         sendMessage.disableWebPagePreview();
         sendMessage.setChatId(chatId);
-//        setMainButtons(sendMessage, chatId);
         return sendMessage;
     }
 
-    public static void setMainButtons(SendMessage sendMessage, Long chatId) {
-        // Создаем клавиатуру
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
-
-        // Создаем список строк клавиатуры
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow keyboardRow = new KeyboardRow();
-        keyboardRow.add(new KeyboardButton(ButtonsType.NEXT_TURN.name()));
-        keyboard.add(keyboardRow);
-
-        replyKeyboardMarkup.setKeyboard(keyboard);
-    }
-
-    public static void setCustomOneLineButtons(SendMessage sendMessage, String... buttons) {
+    public static void setButtons(SendMessage sendMessage, List<List<String>> buttons) {
         // Создаем клавиатуру
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -46,9 +28,18 @@ public class SendMessageFormat {
 
         // Создаем список строк клавиатуры
         List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow keyboardRow = new KeyboardRow();
-        Arrays.stream(buttons).forEach(button -> keyboardRow.add(new KeyboardButton(button)));
-        keyboard.add(keyboardRow);
+        buttons.forEach(l -> {
+            KeyboardRow keyboardRow = new KeyboardRow();
+            l.forEach(button -> keyboardRow.add(new KeyboardButton(button)));
+            keyboard.add(keyboardRow);
+        });
+
         replyKeyboardMarkup.setKeyboard(keyboard);
+    }
+
+    public static void setButtons(SendMessage sendMessage, String... buttons) {
+        List<List<String>> oneLineButtons = new ArrayList<>();
+        oneLineButtons.add(Arrays.asList(buttons));
+        setButtons(sendMessage, oneLineButtons);
     }
 }

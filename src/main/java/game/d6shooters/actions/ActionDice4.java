@@ -1,36 +1,40 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.game.Squad;
+import game.d6shooters.bot.Bot;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class ActionDice4 extends AbstractAction {
-    private static final String REJECT = "Ничего";
-    private static final String HIDE = "Прятаться";
-    private static final String GUNFIGHT = "Отстреливаться";
-    private static final String SHELTER = "Укрываться от жары";
-    private static final String PATHFINDING = "Искать путь";
+    protected static final String REJECT = "Ничего";
+    protected static final String HIDE = "Прятаться";
+    protected static final String GUNFIGHT = "Отстреливаться";
+    protected static final String SHELTER = "Укрываться от жары";
+    protected static final String PATHFINDING = "Искать путь";
+
+    public ActionDice4(Bot bot) {
+        super(bot);
+    }
 
     @Override
     public void action(User user) {
-        List<String> buttons = getListButtons(user);
-        if (buttons.size() > 0) {
-            senderMessage.sendMessage(
-                    template.getSendMessageOneLineButtons(user.getChatId(),
-                            "Необходимо распределить " + user.getDicesCup().getCountActiveDiceCurrentValue(4) + " '4', будьте внимательны",
-                            buttons.toArray(new String[0])));
+        String[] buttons = getListButtons(user);
+        if (buttons.length > 0) {
+            bot.send(template.getSendMessageWithButtons(user.getChatId(),
+                    "Необходимо распределить " + user.getDicesCup().getCountActiveDiceCurrentValue(4) + " '4', будьте внимательны",
+                    getListButtons(user)));
         }
-        if (buttons.size() == 0) {
-            user.getSquad().squadState = SquadState.OTHER;
-            System.out.println(SquadState.ALLOCATE + "->" + SquadState.OTHER);
+        if (buttons.length == 0) {
+            user.getSquad().setSquadState(SquadState.OTHER);
+            user.getActionManager().doActions();
         }
     }
 
-    private List<String> getListButtons(User user) {
+    private String[] getListButtons(User user) {
         List<String> buttons = new ArrayList<>();
         int dice4count = user.getDicesCup().getCountActiveDiceCurrentValue(4);
         int dice5count = user.getDicesCup().getCountActiveDiceCurrentValue(5);
@@ -43,11 +47,17 @@ public class ActionDice4 extends AbstractAction {
             if (dice4count >= 2) buttons.add(PATHFINDING);
             buttons.add(REJECT);
         }
-        return buttons;
+        return buttons.toArray(new String[0]);
     }
 
     public void processMessage(User user, Message message) {
-        switch (message.getText()) {
+        allocateDices(user, message.getText());
+        bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
+        user.getActionManager().doActions();
+    }
+
+    protected void allocateDices(User user, String text) {
+        switch (text) {
             case HIDE:
                 useDice(user, 4);
                 useDice(user, 6);
@@ -60,12 +70,12 @@ public class ActionDice4 extends AbstractAction {
                 break;
             case GUNFIGHT:
                 useDice(user, 4);
-                user.getSquad().actionList.add(Squad.SquadAction.GUNFIGHT);
+                user.getSquad().addGunfight(1);
                 break;
             case PATHFINDING:
                 useDice(user, 4);
                 useDice(user, 4);
-                user.getSquad().actionList.add(Squad.SquadAction.PATHFINDING);
+                user.getSquad().addPathfinding(1);
                 break;
             case REJECT:
                 user.getDicesCup().setUsedDiceCurrentValue(4);
@@ -73,9 +83,6 @@ public class ActionDice4 extends AbstractAction {
             default:
                 break;
         }
-
-        senderMessage.sendMessage(template.dicesString(user.getChatId(), user.getDicesCup()));
-        user.getActionManager().doActions();
     }
 
 

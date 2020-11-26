@@ -1,36 +1,36 @@
 package game.d6shooters.bot;
 
-import game.d6shooters.bot.handler.Handler;
-import game.d6shooters.bot.handler.HandlerManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+@Log4j2
 public class Bot extends TelegramLongPollingBot {
     public final BlockingQueue<SendMessage> sendQueue = new LinkedBlockingQueue<>();
-    public final BlockingQueue<SendMessage> receiveQueue = new LinkedBlockingQueue<>();
-    public static final Logger log = LogManager.getLogger(Bot.class);
+    public final BlockingQueue<Message> receiveQueue = new LinkedBlockingQueue<>();
     private static final int PAUSE = 1000;
-
-    public static SenderMessage senderMessage;
-
-    public Bot() {
-        senderMessage = new SenderMessageTelegram(this);
-    }
-
 
     @Override
     public void onUpdateReceived(Update update) {
-        HandlerManager handlerManager = new HandlerManager();
-        Handler handler = handlerManager.chooseHandler(update.getMessage());
-        handler.handle(update.getMessage());
+        try {
+            if (update.hasMessage()) receiveQueue.put(update.getMessage());
+        } catch (InterruptedException e) {
+            log.error(e);
+        }
+    }
 
+    public void send(SendMessage sendMessage) {
+        try {
+            sendQueue.put(sendMessage);
+        } catch (InterruptedException e) {
+            log.error(e);
+        }
     }
 
     public void botConnect() {
