@@ -3,12 +3,19 @@ package game.d6shooters.actions;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.game.Dice;
 import game.d6shooters.users.User;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
 
 public class ActionDice2 extends AbstractAction {
     private static final String TEXT1 = "На охоте добыли %d провизии";
 
     public ActionDice2(Bot bot) {
         super(bot);
+    }
+
+    public ActionDice2(Bot bot, Action next) {
+        super(bot, next);
     }
 
     @Override

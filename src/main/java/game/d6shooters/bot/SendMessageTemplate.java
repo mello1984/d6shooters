@@ -9,6 +9,14 @@ import java.util.*;
 
 public class SendMessageTemplate {
     private static final List<String> standardButtons = Arrays.asList(CommandButton.BAND.get(), CommandButton.COMMAND.get());
+    private static SendMessageTemplate sendMessageTemplate = null;
+
+
+    public static SendMessageTemplate getInstance() {
+        if (sendMessageTemplate == null) sendMessageTemplate = new SendMessageTemplate();
+        return sendMessageTemplate;
+    }
+
 
     public SendMessage getSendMessageWithButtons(Long chatId, String text, List<List<String>> buttons) {
         buttons.removeAll(standardButtons);
@@ -30,15 +38,12 @@ public class SendMessageTemplate {
     }
 
     public SendMessage getSendMessageNoButtons(Long chatId, String text) {
-
-        SendMessage sendMessage = SendMessageFormat.getSendMessageBaseFormat(chatId)
-                .setText(text);
-        return sendMessage;
+        return SendMessageFormat.getSendMessageBaseFormat(chatId).setText(text);
     }
 
 
     public SendMessage getDicesStringMessage(Long chatId, DicesCup dicesCup) {
-        return this.getSendMessageNoButtons(chatId, dicesCup.toString());
+        return getSendMessageNoButtons(chatId, dicesCup.toString());
     }
 
     public SendMessage getSquadStateMessage(Long chatId) {
@@ -49,6 +54,6 @@ public class SendMessageTemplate {
                 Icon.MONEYBAG.get() + " Золото: " + squad.getGold() + "\n" +
                 Icon.FOOTPRINTS.get() + " Пройдено: " + squad.getPath() + "\n" +
                 Icon.CLOCK.get() + " Прошло дней: " + squad.getPeriod();
-        return this.getSendMessageWithButtons(chatId, text, Main.users.userMap.get(chatId).getButtons());
+        return getSendMessageWithButtons(chatId, text, Main.users.userMap.get(chatId).getButtons());
     }
 }

@@ -18,6 +18,13 @@ public class RestartHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
+        if (CommandButton.getAction(message.getText()) == CommandButton.RESTART || CommandButton.getAction(message.getText()) == CommandButton.RESTART2)
+            processMessage(message);
+        else nextHandler.handle(message);
+    }
+
+    @Override
+    public void processMessage(Message message) {
         User user = Main.users.userMap.get(message.getChatId());
         long chatId = user.getChatId();
 

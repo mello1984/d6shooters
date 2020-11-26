@@ -5,7 +5,6 @@ import game.d6shooters.bot.CommandButton;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
-import game.d6shooters.road.RoadMap;
 import game.d6shooters.road.RoadNode;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;

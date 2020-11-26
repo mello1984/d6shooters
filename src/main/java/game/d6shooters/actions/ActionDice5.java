@@ -40,7 +40,7 @@ public class ActionDice5 extends AbstractAction {
         }
     }
 
-    protected void processMessage(User user, Message message) {
+    public void processMessage(User user, Message message) {
         Button button = Button.getButton(message.getText());
         if (button != Button.EMPTY) useDice(user, 5);
         switch (button) {

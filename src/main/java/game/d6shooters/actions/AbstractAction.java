@@ -4,14 +4,34 @@ import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Log4j2
 public abstract class AbstractAction implements Action {
     SendMessageTemplate template = new SendMessageTemplate();
     Bot bot;
+    Action next;
 
     public AbstractAction(Bot bot) {
         this.bot = bot;
+    }
+
+    public AbstractAction(Bot bot, Action next) {
+        this.bot = bot;
+        this.next = next;
+    }
+
+    public Action setNext(Action next) {
+        this.next = next;
+        return this;
+    }
+
+    @Override
+    public void action(User user) {
+    }
+
+    @Override
+    public void processMessage(User user, Message message) {
     }
 
     void useDice(User user, int value) {
