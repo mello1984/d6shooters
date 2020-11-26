@@ -2,33 +2,56 @@ package game.d6shooters.bot.handler;
 
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
-import game.d6shooters.game.SquadState;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import game.d6shooters.bot.CommandButton;
+import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+@Log4j2
 public class HandlerManager {
-    private static final Logger log = LogManager.getLogger(HandlerManager.class);
-    private Bot bot;
+    private final Bot bot;
+    Handler startGameHandler;
+    Handler teamStateHandler;
+    Handler commandHandler;
+    Handler eventHandler;
+    Handler helpHandler;
+    Handler restartHandler;
+    Handler backHandler;
+    Handler actionManagerHandler;
+
 
     public HandlerManager(Bot bot) {
         this.bot = bot;
+        startGameHandler = new StartGameHandler(bot);
+        teamStateHandler = new TeamStateHandler(bot);
+        commandHandler = new CommandHandler(bot);
+        eventHandler = new EventHandler(bot);
+        helpHandler = new HelpHandler(bot);
+        restartHandler = new RestartHandler(bot);
+        backHandler = new BackHandler(bot);
+        actionManagerHandler = new ActionManagerHandler(bot);
+
+        startGameHandler.setNextHandler(teamStateHandler);
+        teamStateHandler.setNextHandler(commandHandler);
+        commandHandler.setNextHandler(eventHandler);
+        eventHandler.setNextHandler(helpHandler);
+        helpHandler.setNextHandler(restartHandler);
+        restartHandler.setNextHandler(backHandler);
+        backHandler.setNextHandler(actionManagerHandler);
+        actionManagerHandler.setNextHandler(startGameHandler);
     }
 
-    public Handler chooseHandler(Message message) {
-        long chatId = message.getChatId();
-
-        if (!Main.users.userMap.containsKey(chatId)) return new StartGameHandler(bot);
-        if (message.getText().equals("band")) return new TeamStateHandler(bot);
-
-        SquadState squadState = Main.users.userMap.get(chatId).getSquad().squadState;
-        Handler handler = switch (squadState) {
-            case REGULAR, REROLL1, REROLL2 -> new StartTurnHandler(bot);
-            case ALLOCATE -> new AllocationCubesHandler(bot);
-            case CHECKHEAT -> new CheckHeatHandler(bot);
-            default -> new DefaultHandler(bot);
-        };
-        log.info("Choose handler: " + handler.getClass().getSimpleName());
-        return handler;
+    public Handler getStartHandler(Message message) {
+        return startGameHandler;
+//        if (!Main.users.userMap.containsKey(message.getChatId())) return new StartGameHandler(bot);
+//        CommandButton command = CommandButton.getAction(message.getText());
+//        return switch (command) {
+//            case BAND -> new TeamStateHandler(bot);
+//            case COMMAND -> new CommandHandler(bot);
+//            case EVENT -> new EventHandler(bot);
+//            case HELP -> new HelpHandler(bot);
+//            case RESTART, RESTART2 -> new RestartHandler(bot);
+//            case BACK -> new BackHandler(bot);
+//            default -> new ActionManagerHandler(bot);
+//        };
     }
 }

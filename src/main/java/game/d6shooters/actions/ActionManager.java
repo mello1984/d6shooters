@@ -1,19 +1,26 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.bot.Bot;
-import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ActionManager {
-    private final Action actionDice1;
-    private final Action actionDice2;
-    private final Action actionDice3;
-    private final ActionDice4 actionDice4;
-    private final ActionDice5 actionDice5;
-    private final ActionDice6 actionDice6;
-    private final Action actionFeeding;
-    private final User user;
+    ActionDice1 actionDice1;
+    ActionDice2 actionDice2;
+    ActionDice3 actionDice3;
+    ActionDice4 actionDice4;
+    ActionDice5 actionDice5;
+    ActionDice6 actionDice6;
+    ActionFeeding actionFeeding;
+    ActionEvent actionEvent;
+    ActionEndGame actionEndGame;
+    ActionTown actionTown;
+    ActionStartTurn actionStartTurn;
+    ActionPoker actionPoker;
+    protected final User user;
 
     public ActionManager(User user, Bot bot) {
         this.user = user;
@@ -24,25 +31,44 @@ public class ActionManager {
         actionDice5 = new ActionDice5(bot);
         actionDice6 = new ActionDice6(bot);
         actionFeeding = new ActionFeeding(bot);
+        actionEvent = new ActionEvent(bot);
+        actionEndGame = new ActionEndGame(bot);
+        actionTown = new ActionTown(bot);
+        actionStartTurn = new ActionStartTurn(bot);
+        actionPoker = new ActionPoker(bot);
     }
 
     public void doActions() {
-        switch (user.getSquad().squadState) {
+        switch (user.getSquad().getSquadState()) {
             case ALLOCATE -> actionDice4.action(user);
             case CHECKHEAT -> actionDice5.action(user);
             case GUNFIGHT -> actionDice6.action(user);
             case MOVE -> actionDice1.action(user);
+            case TOWN -> actionTown.action(user);
             case OTHER -> {
                 actionFeeding.action(user);
                 actionDice2.action(user);
                 actionDice3.action(user);
             }
+            case EVENT -> actionEvent.action(user);
+            case ENDGAME -> actionEndGame.action(user);
+            case STARTTURN1, STARTTURN2, STARTTURN3 -> actionStartTurn.action(user);
+            case POKER1 -> actionPoker.action(user);
+
         }
-        user.getSquad().addPeriod(1);
+
     }
 
     public void doActions(Message message) {
-        if (user.getSquad().squadState == SquadState.ALLOCATE) actionDice4.processMessage(user, message);
-        else if (user.getSquad().squadState == SquadState.CHECKHEAT) actionDice5.processMessage(user, message);
+        switch (user.getSquad().getSquadState()) {
+            case STARTTURN1, STARTTURN2, STARTTURN3 -> actionStartTurn.processMessage(user, message);
+            case ALLOCATE -> actionDice4.processMessage(user, message);
+            case CHECKHEAT -> actionDice5.processMessage(user, message);
+            case CROSSROAD -> actionDice1.processMessage(user, message);
+            case EVENT2, EVENT3, EVENT6 -> actionEvent.processMessage(user, message);
+            case TOWN -> actionTown.processMessage(user, message);
+            case POKER2, POKER3, POKER4 -> actionPoker.processMessage(user, message);
+        }
+
     }
 }

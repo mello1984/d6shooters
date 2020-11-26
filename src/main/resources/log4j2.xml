@@ -22,7 +22,8 @@
     </Appenders>
 
     <Loggers>
-        <Root level="INFO">
+<!--        <Root level="INFO">-->
+        <Root level="DEBUG">
             <AppenderRef ref="STDOUT"/>
             <!--            <AppenderRef ref="rollingFile"/>-->
         </Root>
