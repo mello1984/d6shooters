@@ -42,17 +42,23 @@ public class ActionDice1 extends AbstractAction {
             user.getActionManager().doActions();
 
         } else {
-            squad.setSquadState(SquadState.STARTTURN1);
             squad.addResource(Squad.PERIOD, 1);
-            bot.send(template.getSquadStateMessage(user.getChatId()));
-            bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, CommandButton.NEXT_TURN.name()));
+
+            if (squad.getResource(Squad.PERIOD) < 40) {
+                squad.setSquadState(SquadState.STARTTURN1);
+                bot.send(template.getSquadStateMessage(user.getChatId()));
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, CommandButton.NEXT_TURN.name()));
+            } else {
+                squad.setSquadState(SquadState.ENDGAME);
+                user.getActionManager().doActions();
+            }
         }
     }
 
     protected void convertDice1ToPathfinding(User user) {
         int red = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.RED).count();
         int white = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.WHITE).count();
-        user.getSquad().addResource(Squad.PATHFINDING,white + (user.getSquad().hasResource(Squad.COMPASS) ? 2 : 1) * red);
+        user.getSquad().addResource(Squad.PATHFINDING, white + (user.getSquad().hasResource(Squad.COMPASS) ? 2 : 1) * red);
         user.getDicesCup().setUsedDiceCurrentValue(1);
     }
 

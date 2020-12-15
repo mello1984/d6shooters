@@ -30,6 +30,6 @@ public class Place {
     }
 
     public static Place getNew(Squad squad) {
-        return new Place(squad, RoadMap.Road.MAINROAD, 13);
+        return new Place(squad, RoadMap.Road.MAINROAD, 78);
     }
 }

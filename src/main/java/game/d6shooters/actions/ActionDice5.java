@@ -58,6 +58,7 @@ public class ActionDice5 extends AbstractAction {
                 user.getDicesCup().setUsedDiceCurrentValue(5);
             }
         }
+        if (!user.getSquad().hasResource(Squad.SHOOTER)) user.getSquad().setSquadState(SquadState.ENDGAME);
         user.getActionManager().doActions();
     }
 

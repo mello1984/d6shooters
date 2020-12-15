@@ -7,7 +7,8 @@ import game.d6shooters.road.RoadNode;
 import game.d6shooters.users.User;
 
 public class ActionEndGame extends AbstractAction {
-    private static final String TEXT1 = "Игра закончена. Вы набрали %d очков";
+    private static final String TEXT1 = "Игра закончена. Вы выиграли и набрали %d очков";
+    private static final String TEXT2 = "Игра закончена. Вы проиграли";
 
     public ActionEndGame(Bot bot) {
         super(bot);
@@ -15,7 +16,10 @@ public class ActionEndGame extends AbstractAction {
 
     @Override
     public void action(User user) {
-        bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(TEXT1, getScores(user))));
+        if (user.getSquad().getPlace().getType()== RoadNode.Type.RINO)
+            bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(TEXT1, getScores(user))));
+        else bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT2));
+
         bot.send(template.getSquadStateMessage(user.getChatId()));
         new RestartHandler(bot).restartGame(user.getChatId());
     }

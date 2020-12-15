@@ -67,7 +67,6 @@ public class ActionStartTurn extends AbstractAction {
     }
 
     private void nextSquadState(User user) {
-        user.getSquad().getSquadState().resetStep();
         user.getSquad().setSquadState(SquadState.ALLOCATE);
         user.getActionManager().doActions();
     }

@@ -54,7 +54,8 @@ public class ActionDice6 extends AbstractAction {
             user.getSquad().setResource(Squad.HUNTER, 0);
         }
 
-        user.getSquad().setSquadState(SquadState.MOVE);
+        if (!user.getSquad().hasResource(Squad.SHOOTER)) user.getSquad().setSquadState(SquadState.ENDGAME);
+        else user.getSquad().setSquadState(SquadState.MOVE);
         log.debug(String.format("SquadState %s -> MOVE", user.getSquad().getSquadState()));
         user.getActionManager().doActions();
     }
