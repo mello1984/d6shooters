@@ -2,6 +2,7 @@ package game.d6shooters.actions;
 
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.Squad;
 import game.d6shooters.users.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +44,7 @@ class ActionDice4Test {
     void PathfindingTest1() {
         action.allocateDices(user, ActionDice4.PATHFINDING);
         assertAll(
-                () -> assertEquals(1, user.getSquad().getPathfinding()),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.PATHFINDING)),
                 () -> assertEquals(2, user.getDicesCup().getCountActiveDiceCurrentValue(4))
         );
     }
@@ -53,7 +54,7 @@ class ActionDice4Test {
         action.allocateDices(user, ActionDice4.PATHFINDING);
         action.allocateDices(user, ActionDice4.PATHFINDING);
         assertAll(
-                () -> assertEquals(2, user.getSquad().getPathfinding()),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.PATHFINDING)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(4))
         );
     }
@@ -70,7 +71,7 @@ class ActionDice4Test {
         assertAll(
                 () -> assertEquals(3, user.getDicesCup().getCountActiveDiceCurrentValue(4)),
                 () -> assertEquals(1, user.getDicesCup().getCountActiveDiceCurrentValue(6)),
-                () -> assertEquals(1, user.getSquad().getPeriod())
+                () -> assertEquals(1, user.getSquad().getResource(Squad.PERIOD))
 
         );
     }
@@ -82,7 +83,7 @@ class ActionDice4Test {
         assertAll(
                 () -> assertEquals(2, user.getDicesCup().getCountActiveDiceCurrentValue(4)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(6)),
-                () -> assertEquals(2, user.getSquad().getPeriod())
+                () -> assertEquals(2, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -109,7 +110,7 @@ class ActionDice4Test {
     void GunFightTest1() {
         action.allocateDices(user, ActionDice4.GUNFIGHT);
         assertAll(
-                () -> assertEquals(1, user.getSquad().getGunfight()),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GUNFIGHT)),
                 () -> assertEquals(3, user.getDicesCup().getCountActiveDiceCurrentValue(4))
         );
     }
@@ -119,7 +120,7 @@ class ActionDice4Test {
         action.allocateDices(user, ActionDice4.GUNFIGHT);
         action.allocateDices(user, ActionDice4.GUNFIGHT);
         assertAll(
-                () -> assertEquals(2, user.getSquad().getGunfight()),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.GUNFIGHT)),
                 () -> assertEquals(2, user.getDicesCup().getCountActiveDiceCurrentValue(4))
         );
     }

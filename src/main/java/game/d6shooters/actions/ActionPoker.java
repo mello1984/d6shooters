@@ -3,6 +3,7 @@ package game.d6shooters.actions;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.Icon;
 import game.d6shooters.game.PokerDices;
+import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -26,9 +27,9 @@ public class ActionPoker extends AbstractAction {
 
     @Override //action - only SquadState.POKER1
     public void action(User user) {
-        List<String> food = IntStream.range(1, user.getSquad().getFood()).mapToObj(i -> i + Icon.FOOD.get()).collect(Collectors.toList());
-        List<String> gold = IntStream.range(1, user.getSquad().getGold()).mapToObj(i -> i + Icon.MONEYBAG.get()).collect(Collectors.toList());
-        List<String> ammo = IntStream.range(1, user.getSquad().getAmmo()).mapToObj(i -> i + Icon.AMMO.get()).collect(Collectors.toList());
+        List<String> food = IntStream.range(1, user.getSquad().getResource(Squad.FOOD)).mapToObj(i -> i + Icon.FOOD.get()).collect(Collectors.toList());
+        List<String> gold = IntStream.range(1, user.getSquad().getResource(Squad.GOLD)).mapToObj(i -> i + Icon.MONEYBAG.get()).collect(Collectors.toList());
+        List<String> ammo = IntStream.range(1, user.getSquad().getResource(Squad.AMMO)).mapToObj(i -> i + Icon.AMMO.get()).collect(Collectors.toList());
 
         List<String> tempList = new ArrayList<>();
         tempList.addAll(gold);
@@ -64,50 +65,50 @@ public class ActionPoker extends AbstractAction {
                 text = text.replaceAll(Icon.FOOD.get(), "").replaceAll(Icon.MONEYBAG.get(), "").replaceAll(Icon.AMMO.get(), "");
                 user.getSquad().setPokerBetValue(Integer.parseInt(text));
 
-                user.getSquad().setPokerDices(new PokerDices());
-                user.getSquad().getPokerDices().getFirstTurnDices();
+                user.setPokerDices(new PokerDices());
+                user.getPokerDices().getFirstTurnDices();
                 bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT2));
-                bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getSquad().getPokerDices().toString()));
+                bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getPokerDices().toString()));
                 bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT3));
                 user.getSquad().setSquadState(SquadState.POKER3);
             }
             case POKER3 -> {
-                if (!user.getSquad().getPokerDices().checkString(message.getText())) {
+                if (!user.getPokerDices().checkString(message.getText())) {
                     bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT4));
                     return;
                 }
 
                 user.getSquad().setSquadState(SquadState.POKER4);
                 if (!message.getText().equals("0")) {
-                    user.getSquad().getPokerDices().getRerolledDices(message.getText());
-                    bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getSquad().getPokerDices().toString()));
+                    user.getPokerDices().getRerolledDices(message.getText());
+                    bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getPokerDices().toString()));
                     bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT3));
                 } else processMessage(user, message);
             }
             case POKER4 -> {
-                if (!user.getSquad().getPokerDices().checkString(message.getText())) {
+                if (!user.getPokerDices().checkString(message.getText())) {
                     bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT4));
                     return;
                 }
 
-                if (!message.getText().equals("0")) user.getSquad().getPokerDices().getRerolledDices(message.getText());
-                bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getSquad().getPokerDices().toString()));
+                if (!message.getText().equals("0")) user.getPokerDices().getRerolledDices(message.getText());
+                bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getPokerDices().toString()));
                 executeResultGame(user);
             }
         }
     }
 
     protected void executeResultGame(User user) {
-        switch (user.getSquad().getPokerDices().getResult()) {
+        switch (user.getPokerDices().getResult()) {
             case 0 -> setResultGame(user, "Ничья", 0);
             case -1 -> setResultGame(user, "Вы проиграли", -1);
             case 1 -> setResultGame(user, "Вы выиграли", 1);
         }
 
         switch (user.getSquad().getPokerBetType()) {
-            case AMMO -> user.getSquad().addAmmo(user.getSquad().getPokerBetValue());
-            case FOOD -> user.getSquad().addFood(user.getSquad().getPokerBetValue());
-            case MONEYBAG -> user.getSquad().addGold(user.getSquad().getPokerBetValue());
+            case AMMO -> user.getSquad().addResource(Squad.AMMO, user.getSquad().getPokerBetValue());
+            case FOOD -> user.getSquad().addResource(Squad.FOOD, user.getSquad().getPokerBetValue());
+            case MONEYBAG -> user.getSquad().addResource(Squad.GOLD, user.getSquad().getPokerBetValue());
         }
 
         user.getSquad().setSquadState(SquadState.TOWN);

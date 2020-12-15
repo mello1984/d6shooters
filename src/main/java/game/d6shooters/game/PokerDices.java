@@ -1,6 +1,5 @@
 package game.d6shooters.game;
 
-import game.d6shooters.bot.Icon;
 import lombok.Value;
 
 import java.util.*;

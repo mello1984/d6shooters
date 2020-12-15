@@ -2,6 +2,7 @@ package game.d6shooters.actions;
 
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.Squad;
 import game.d6shooters.mocks.MockActionManager;
 import game.d6shooters.mocks.MockBot;
 import game.d6shooters.mocks.MockMessage;
@@ -45,19 +46,19 @@ class ActionDice5Test {
     void actionDice5ProcessMessageTest1() {
         action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
         assertAll(
-                () -> assertEquals(4, user.getSquad().getFood()),
-                () -> assertEquals(12, user.getSquad().getShooters()),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(12, user.getSquad().getResource(Squad.SHOOTER)),
                 () -> assertEquals(1, user.getDicesCup().getCountActiveDiceCurrentValue(5))
         );
-    }
+            }
 
     @Test
     void actionDice5ProcessMessageTest2() {
         action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
         action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
         assertAll(
-                () -> assertEquals(2, user.getSquad().getFood()),
-                () -> assertEquals(12, user.getSquad().getShooters()),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(12, user.getSquad().getResource(Squad.SHOOTER)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(5))
         );
     }
@@ -66,8 +67,8 @@ class ActionDice5Test {
     void actionDice5ProcessMessageTest3() {
         action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
         assertAll(
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(11, user.getSquad().getShooters()),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(11, user.getSquad().getResource(Squad.SHOOTER)),
                 () -> assertEquals(1, user.getDicesCup().getCountActiveDiceCurrentValue(5))
         );
     }
@@ -77,8 +78,8 @@ class ActionDice5Test {
         action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
         action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
         assertAll(
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(5))
         );
     }
@@ -88,8 +89,8 @@ class ActionDice5Test {
         action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
         action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
         assertAll(
-                () -> assertEquals(4, user.getSquad().getFood()),
-                () -> assertEquals(11, user.getSquad().getShooters()),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(11, user.getSquad().getResource(Squad.SHOOTER)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(5))
         );
     }
@@ -98,8 +99,8 @@ class ActionDice5Test {
     void actionDice5ProcessMessageTest6() {
         action.processMessage(user, new MockMessage("hello world"));
         assertAll(
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(12, user.getSquad().getShooters()),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(12, user.getSquad().getResource(Squad.SHOOTER)),
                 () -> assertEquals(2, user.getDicesCup().getCountActiveDiceCurrentValue(5))
         );
     }

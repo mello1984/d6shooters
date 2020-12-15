@@ -1,6 +1,7 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.Main;
+import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.mocks.MockActionManager;
 import game.d6shooters.mocks.MockBot;
@@ -24,36 +25,36 @@ class ActionDice6Test {
         action.template = mockTemplate;
         user.setActionManager(mockActionManager);
         user.getSquad().setSquadState(SquadState.TOWN);
-        user.getSquad().setAmmo(3);
-        user.getSquad().setShooters(8);
+        user.getSquad().setResource(Squad.AMMO, 3);
+        user.getSquad().setResource(Squad.SHOOTER, 8);
     }
 
     @Test
     void getKilledShootersInShootoutTest1() {
-        user.getSquad().setAmmo(3);
+        user.getSquad().setResource(Squad.AMMO, 3);
         action.getKilledShootersInShootout(user);
-        assertEquals(2, user.getSquad().getAmmo());
+        assertEquals(2, user.getSquad().getResource(Squad.AMMO));
     }
 
     @Test
     void getKilledShootersInShootoutTest2() {
-        user.getSquad().setAmmo(0);
+        user.getSquad().setResource(Squad.AMMO, 0);
         action.getKilledShootersInShootout(user);
-        assertEquals(0, user.getSquad().getAmmo());
+        assertEquals(0, user.getSquad().getResource(Squad.AMMO));
     }
 
     @Test
     void getKilledShootersNoShootoutTest1() {
-        user.getSquad().setAmmo(3);
+        user.getSquad().setResource(Squad.AMMO, 3);
         action.getKilledShootersNoShootout(user);
-        assertEquals(3, user.getSquad().getAmmo());
+        assertEquals(3, user.getSquad().getResource(Squad.AMMO));
     }
 
     @Test
     void getKilledShootersNoShootoutTest2() {
-        user.getSquad().setAmmo(0);
+        user.getSquad().setResource(Squad.AMMO, 0);
         action.getKilledShootersNoShootout(user);
-        assertEquals(0, user.getSquad().getAmmo());
+        assertEquals(0, user.getSquad().getResource(Squad.AMMO));
     }
 
 

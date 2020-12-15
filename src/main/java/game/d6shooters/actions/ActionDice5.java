@@ -3,6 +3,7 @@ package game.d6shooters.actions;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.Icon;
 import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
@@ -44,8 +45,8 @@ public class ActionDice5 extends AbstractAction {
         Button button = Button.getButton(message.getText());
         if (button != Button.EMPTY) useDice(user, 5);
         switch (button) {
-            case LOSE2FOOD -> user.getSquad().addFood(-2);
-            case LOSE1GUNFIGHTER -> user.getSquad().addShooters(-1);
+            case LOSE2FOOD -> user.getSquad().addResource(Squad.FOOD,-2);
+            case LOSE1GUNFIGHTER -> user.getSquad().addResource(Squad.SHOOTER,-1);
         }
         user.getActionManager().doActions();
     }

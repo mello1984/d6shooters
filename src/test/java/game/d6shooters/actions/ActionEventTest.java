@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.mocks.MockActionManager;
 import game.d6shooters.mocks.MockBot;
@@ -22,8 +23,8 @@ class ActionEventTest {
     void setUp() {
         action.template = mockTemplate;
         user.setActionManager(mockActionManager);
-        user.getSquad().setAmmo(3);
-        user.getSquad().setShooters(10);
+        user.getSquad().setResource(Squad.AMMO,3);
+        user.getSquad().setResource(Squad.SHOOTER,10);
     }
 
 
@@ -31,12 +32,12 @@ class ActionEventTest {
     void modifyTest1() {
         action.modify(user, 1, 2, 3, -4, 5, 10);
         assertAll(
-                () -> assertEquals(4, user.getSquad().getAmmo()),
-                () -> assertEquals(8, user.getSquad().getFood()),
-                () -> assertEquals(6, user.getSquad().getGold()),
-                () -> assertEquals(6, user.getSquad().getShooters()),
-                () -> assertEquals(5, user.getSquad().getPathfinding()),
-                () -> assertEquals(10, user.getSquad().getPeriod())
+                () -> assertEquals(4, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(8, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(5, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -44,12 +45,12 @@ class ActionEventTest {
     void modifyTest2() {
         action.modify(user, -1, -2, -3, -1, 10, 100);
         assertAll(
-                () -> assertEquals(2, user.getSquad().getAmmo()),
-                () -> assertEquals(4, user.getSquad().getFood()),
-                () -> assertEquals(0, user.getSquad().getGold()),
-                () -> assertEquals(9, user.getSquad().getShooters()),
-                () -> assertEquals(10, user.getSquad().getPathfinding()),
-                () -> assertEquals(100, user.getSquad().getPeriod())
+                () -> assertEquals(2, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(9, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(100, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -57,12 +58,12 @@ class ActionEventTest {
     void modifyTest3() {
         action.modify(user, -6, -2, -3, -1, 10, 100);
         assertAll(
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(4, user.getSquad().getFood()),
-                () -> assertEquals(0, user.getSquad().getGold()),
-                () -> assertEquals(0, user.getSquad().getShooters()),
-                () -> assertEquals(10, user.getSquad().getPathfinding()),
-                () -> assertEquals(100, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(100, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -70,12 +71,12 @@ class ActionEventTest {
     void modifyTest4() {
         action.modify(user, -1, -10, -3, -1, 10, 100);
         assertAll(
-                () -> assertEquals(2, user.getSquad().getAmmo()),
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(0, user.getSquad().getGold()),
-                () -> assertEquals(0, user.getSquad().getShooters()),
-                () -> assertEquals(10, user.getSquad().getPathfinding()),
-                () -> assertEquals(100, user.getSquad().getPeriod())
+                () -> assertEquals(2, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(100, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -83,12 +84,12 @@ class ActionEventTest {
     void modifyTest5() {
         action.modify(user, -1, -2, -10, -1, 10, 100);
         assertAll(
-                () -> assertEquals(2, user.getSquad().getAmmo()),
-                () -> assertEquals(4, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(0, user.getSquad().getShooters()),
-                () -> assertEquals(10, user.getSquad().getPathfinding()),
-                () -> assertEquals(100, user.getSquad().getPeriod())
+                () -> assertEquals(2, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(100, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -96,12 +97,12 @@ class ActionEventTest {
     void modifyTest6() {
         action.modify(user, 0, -1, 0, 0, 0, 1);
         assertAll(
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(5, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(1, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(5, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -109,12 +110,12 @@ class ActionEventTest {
     void modifyTest7() {
         action.modify(user, 0, 0, 0, 0, 0, 0);
         assertAll(
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -122,7 +123,7 @@ class ActionEventTest {
     @Test
     void startEvent1Test() {
         action.startEvent1(user);
-        assertEquals(3, user.getSquad().getPathfinding());
+        assertEquals(3, user.getSquad().getResource(Squad.PATHFINDING));
     }
 
     @Test
@@ -133,7 +134,7 @@ class ActionEventTest {
 
     @Test
     void startEvent2Test2() {
-        user.getSquad().setAmmo(0);
+        user.getSquad().setResource(Squad.AMMO,0);
         action.startEvent2(user);
         assertEquals(SquadState.MOVE, user.getSquad().getSquadState());
     }
@@ -151,12 +152,12 @@ class ActionEventTest {
         System.out.println(user.getSquad());
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(5, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(1, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(5, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -195,12 +196,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(2, user.getSquad().getAmmo()),
-                () -> assertEquals(8, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(2, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(8, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -211,12 +212,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(8, user.getSquad().getFood()),
-                () -> assertEquals(2, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(8, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -227,12 +228,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(5, user.getSquad().getAmmo()),
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(2, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(5, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -243,12 +244,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(4, user.getSquad().getFood()),
-                () -> assertEquals(4, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -259,12 +260,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(1, user.getSquad().getAmmo()),
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(4, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(1, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -275,12 +276,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -291,12 +292,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(4, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -307,12 +308,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(8, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(8, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -323,12 +324,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(5, user.getSquad().getFood()),
-                () -> assertEquals(2, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(5, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -339,12 +340,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(8, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(8, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 
@@ -355,12 +356,12 @@ class ActionEventTest {
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.EVENT6, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getAmmo()),
-                () -> assertEquals(6, user.getSquad().getFood()),
-                () -> assertEquals(3, user.getSquad().getGold()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getPathfinding()),
-                () -> assertEquals(0, user.getSquad().getPeriod())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PERIOD))
         );
     }
 }

@@ -17,4 +17,9 @@ public class DefaultHandler extends AbstractHandler {
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), "DEFAULT HANDLER");
         bot.send(sendMessage);
     }
+
+    @Override
+    public void processMessage(Message message) {
+
+    }
 }

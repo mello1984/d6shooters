@@ -1,6 +1,7 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.Main;
+import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.mocks.MockActionManager;
 import game.d6shooters.mocks.MockBot;
@@ -26,8 +27,8 @@ class ActionTownTest {
         action.template = mockTemplate;
         user.setActionManager(mockActionManager);
         user.getSquad().setSquadState(SquadState.TOWN);
-        user.getSquad().setAmmo(0);
-        user.getSquad().setShooters(8);
+        user.getSquad().setResource(Squad.AMMO,0);
+        user.getSquad().setResource(Squad.SHOOTER,8);
     }
 
     @Test
@@ -47,8 +48,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.FOOD1.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(8, user.getSquad().getFood()),
-                () -> assertEquals(2, user.getSquad().getGold()),
+                () -> assertEquals(8, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.FOOD1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.FOOD2))
         );
@@ -59,8 +60,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.FOOD2.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(11, user.getSquad().getFood()),
-                () -> assertEquals(1, user.getSquad().getGold()),
+                () -> assertEquals(11, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.FOOD1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.FOOD2))
         );
@@ -68,12 +69,12 @@ class ActionTownTest {
 
     @Test
     void processMessageTest5() {
-        user.getSquad().setFood(8);
+        user.getSquad().setResource(Squad.FOOD, 8);
         action.processMessage(user, new MockMessage(TownShop.Item.FOOD2.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(12, user.getSquad().getFood()),
-                () -> assertEquals(1, user.getSquad().getGold()),
+                () -> assertEquals(12, user.getSquad().getResource(Squad.FOOD)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.FOOD1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.FOOD2))
         );
@@ -84,8 +85,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.AMMO1.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(2, user.getSquad().getAmmo()),
-                () -> assertEquals(2, user.getSquad().getGold()),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.AMMO1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.AMMO2))
         );
@@ -96,8 +97,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.AMMO2.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(5, user.getSquad().getAmmo()),
-                () -> assertEquals(1, user.getSquad().getGold()),
+                () -> assertEquals(5, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.AMMO1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.AMMO2))
         );
@@ -105,12 +106,12 @@ class ActionTownTest {
 
     @Test
     void processMessageTest8() {
-        user.getSquad().setAmmo(2);
+        user.getSquad().setResource(Squad.AMMO,2);
         action.processMessage(user, new MockMessage(TownShop.Item.AMMO2.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(5, user.getSquad().getAmmo()),
-                () -> assertEquals(1, user.getSquad().getGold()),
+                () -> assertEquals(5, user.getSquad().getResource(Squad.AMMO)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.AMMO1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.AMMO2))
         );
@@ -121,8 +122,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.HIRE1.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(9, user.getSquad().getShooters()),
-                () -> assertEquals(2, user.getSquad().getGold()),
+                () -> assertEquals(9, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HIRE1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HIRE2)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HIRE3))
@@ -134,8 +135,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.HIRE2.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(10, user.getSquad().getShooters()),
-                () -> assertEquals(1, user.getSquad().getGold()),
+                () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HIRE1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HIRE2)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HIRE3))
@@ -147,8 +148,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.HIRE3.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(11, user.getSquad().getShooters()),
-                () -> assertEquals(0, user.getSquad().getGold()),
+                () -> assertEquals(11, user.getSquad().getResource(Squad.SHOOTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HIRE1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HIRE2)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HIRE3))
@@ -161,8 +162,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.COMPASS.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertTrue(user.getSquad().isCompass()),
-                () -> assertEquals(1, user.getSquad().getGold()),
+                () -> assertTrue(user.getSquad().hasResource(Squad.COMPASS)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.COMPASS))
         );
     }
@@ -173,8 +174,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.HUNTER.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertTrue(user.getSquad().isHunter()),
-                () -> assertEquals(0, user.getSquad().getGold()),
+                () -> assertTrue(user.getSquad().hasResource(Squad.HUNTER)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.HUNTER))
         );
     }
@@ -185,8 +186,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.MAP.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertTrue(user.getSquad().isMap()),
-                () -> assertEquals(0, user.getSquad().getGold()),
+                () -> assertTrue(user.getSquad().hasResource(Squad.MAP)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.MAP))
         );
     }
@@ -197,8 +198,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.BINOCULAR.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertTrue(user.getSquad().isBinocular()),
-                () -> assertEquals(1, user.getSquad().getGold()),
+                () -> assertTrue(user.getSquad().hasResource(Squad.BINOCULAR)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BINOCULAR))
         );
     }
@@ -209,8 +210,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.PILL.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertTrue(user.getSquad().isPill()),
-                () -> assertEquals(1, user.getSquad().getGold()),
+                () -> assertTrue(user.getSquad().hasResource(Squad.PILL)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.PILL))
         );
     }
@@ -221,8 +222,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.BOMB1.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(1, user.getSquad().getBomb()),
-                () -> assertEquals(2, user.getSquad().getGold()),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.BOMB)),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BOMB1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BOMB2)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BOMB3))
@@ -235,8 +236,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.BOMB2.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(2, user.getSquad().getBomb()),
-                () -> assertEquals(1, user.getSquad().getGold()),
+                () -> assertEquals(2, user.getSquad().getResource(Squad.BOMB)),
+                () -> assertEquals(1, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BOMB1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BOMB2)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BOMB3))
@@ -249,8 +250,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage(TownShop.Item.BOMB3.getText()));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(3, user.getSquad().getBomb()),
-                () -> assertEquals(0, user.getSquad().getGold()),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.BOMB)),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BOMB1)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BOMB2)),
                 () -> assertFalse(user.getSquad().getPlace().getTownShop().getItems().contains(TownShop.Item.BOMB3))
@@ -261,8 +262,8 @@ class ActionTownTest {
         action.processMessage(user, new MockMessage("Hello world"));
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(0, user.getSquad().getBomb()),
-                () -> assertEquals(3, user.getSquad().getGold()),
+                () -> assertEquals(0, user.getSquad().getResource(Squad.BOMB)),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertEquals( user.getSquad().getPlace().getTownShop().getSpecialItem(), TownShop.Item.BOMB1)
         );
     }

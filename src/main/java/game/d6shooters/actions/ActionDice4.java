@@ -1,6 +1,7 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.bot.Bot;
+import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -62,7 +63,7 @@ public class ActionDice4 extends AbstractAction {
                 useDice(user, 4);
                 useDice(user, 6);
                 if (user.getDicesCup().getCountActiveDiceCurrentValue(6) > 0) useDice(user, 6);
-                user.getSquad().addPeriod(1);
+                user.getSquad().addResource(Squad.PERIOD,1);
                 break;
             case SHELTER:
                 useDice(user, 4);
@@ -70,12 +71,12 @@ public class ActionDice4 extends AbstractAction {
                 break;
             case GUNFIGHT:
                 useDice(user, 4);
-                user.getSquad().addGunfight(1);
+                user.getSquad().addResource(Squad.GUNFIGHT,1);
                 break;
             case PATHFINDING:
                 useDice(user, 4);
                 useDice(user, 4);
-                user.getSquad().addPathfinding(1);
+                user.getSquad().addResource(Squad.PATHFINDING,1);
                 break;
             case REJECT:
                 user.getDicesCup().setUsedDiceCurrentValue(4);

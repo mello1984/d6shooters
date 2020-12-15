@@ -2,6 +2,7 @@ package game.d6shooters.actions;
 
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.mocks.MockActionManager;
 import game.d6shooters.mocks.MockBot;
@@ -111,7 +112,7 @@ class ActionDice1Test {
         action.executeSpecialPlaces(user.getSquad());
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
-                () -> assertEquals(0, user.getSquad().getPathfinding())
+                () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING))
         );
     }
 
@@ -126,12 +127,12 @@ class ActionDice1Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setMap(false);
+        user.getSquad().setResource(Squad.MAP,0);
 
         action.convertDice1ToPathfinding(user);
         assertAll(
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(1)),
-                () -> assertEquals(3, user.getSquad().getPathfinding())
+                () -> assertEquals(3, user.getSquad().getResource(Squad.PATHFINDING))
         );
 
     }
@@ -147,12 +148,12 @@ class ActionDice1Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setMap(true);
+        user.getSquad().setResource(Squad.MAP,1);
 
         action.convertDice1ToPathfinding(user);
         assertAll(
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(1)),
-                () -> assertEquals(4, user.getSquad().getPathfinding())
+                () -> assertEquals(4, user.getSquad().getResource(Squad.PATHFINDING))
         );
     }
 

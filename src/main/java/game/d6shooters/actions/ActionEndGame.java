@@ -23,9 +23,8 @@ public class ActionEndGame extends AbstractAction {
     private int getScores(User user) {
         Squad squad = user.getSquad();
         int scores = squad.getPlace().getType() == RoadNode.Type.RINO ? 10 : 0;
-        scores += 40 - squad.getPeriod();
-        scores += squad.getFood() + 3 * squad.getShooters() + squad.getAmmo() / 2 + 2 * squad.getGold();
+        scores += 40 - squad.getResource(Squad.PERIOD);
+        scores += squad.getResource(Squad.FOOD) + 3 * squad.getResource(Squad.SHOOTER) + squad.getResource(Squad.AMMO) / 2 + 2 * squad.getResource(Squad.GOLD);
         return scores;
-
     }
 }
