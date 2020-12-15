@@ -73,7 +73,7 @@ public class ActionPoker extends AbstractAction {
                 user.getSquad().setSquadState(SquadState.POKER3);
             }
             case POKER3 -> {
-                if (!user.getPokerDices().checkString(message.getText())) {
+                if (!user.getPokerDices().checkString(message.getText(), false)) {
                     bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT4));
                     return;
                 }
@@ -86,7 +86,7 @@ public class ActionPoker extends AbstractAction {
                 } else processMessage(user, message);
             }
             case POKER4 -> {
-                if (!user.getPokerDices().checkString(message.getText())) {
+                if (!user.getPokerDices().checkString(message.getText(),false)) {
                     bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT4));
                     return;
                 }

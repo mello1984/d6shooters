@@ -18,8 +18,4 @@ public class DefaultHandler extends AbstractHandler {
         bot.send(sendMessage);
     }
 
-    @Override
-    public void processMessage(Message message) {
-
-    }
 }

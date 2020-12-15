@@ -59,7 +59,7 @@ public class ActionStartTurn extends AbstractAction {
     }
 
     private boolean checkText(User user, String text) {
-        if (!user.getDicesCup().checkString(text)) {
+        if (!user.getDicesCup().checkString(text, false)) {
             bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT2));
             return false;
         }

@@ -1,16 +1,21 @@
 package game.d6shooters.game;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Random;
 
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Dice implements Comparable<Dice> {
     private static final Random random = new Random();
-    DiceType type;
-    private int value;
-    private boolean canRerolled;
-    private boolean used;
+    final DiceType type;
+    int value;
+    boolean canRerolled;
+    @Setter
+    boolean used;
 
 
     public Dice(DiceType type) {
@@ -25,20 +30,11 @@ public class Dice implements Comparable<Dice> {
 
     public void nextD6(boolean isFirstTry) {
         if (isFirstTry) {
-            clean();
+            canRerolled = true;
+            used = false;
             value = random.nextInt(6) + 1;
-            if (type == DiceType.RED && value >= 5) canRerolled = false;
+            canRerolled = !(type == DiceType.RED && value >= 5);
         } else if (canRerolled) value = random.nextInt(6) + 1;
-    }
-
-    private void clean() {
-        canRerolled = true;
-        value = 0;
-        used = false;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
     }
 
     @Override

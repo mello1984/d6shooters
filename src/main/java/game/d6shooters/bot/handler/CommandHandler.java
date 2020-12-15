@@ -21,17 +21,12 @@ public class CommandHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        if (CommandButton.getAction(message.getText()) == CommandButton.COMMAND) processMessage(message);
-        else nextHandler.handle(message);
-    }
-
-    @Override
-    public void processMessage(Message message) {
         User user = Main.users.userMap.get(message.getChatId());
         Squad squad = user.getSquad();
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), "Выберите дополнительную команду");
 
         List<String> buttons = new ArrayList<>(Arrays.asList(CommandButton.HELP.get(), CommandButton.RESTART.get(), CommandButton.BACK.get()));
+//        boolean canActivateEvent = squad.isCanActivateEvent() && squad.getSquadState() == SquadState.STARTTURN && squad.getSquadState().getStep() == 1;
         boolean canActivateEvent = squad.isCanActivateEvent() && squad.getSquadState() == SquadState.STARTTURN1;
         if (canActivateEvent) {
             buttons.add(0, CommandButton.EVENT.get());

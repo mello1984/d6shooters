@@ -38,7 +38,6 @@ public class Squad {
     Place place = Place.getNew(this);
     Icon pokerBetType;
     int pokerBetValue = 0;
-//    PokerDices pokerDices; // move
     boolean canActivateEvent = true;
 
     public Squad() {

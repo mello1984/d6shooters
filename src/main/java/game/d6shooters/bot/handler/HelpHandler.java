@@ -15,15 +15,10 @@ public class HelpHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        if (CommandButton.getAction(message.getText()) == CommandButton.HELP) processMessage(message);
-        else nextHandler.handle(message);
-    }
-
-    @Override
-    public void processMessage(Message message) {
         User user = Main.users.userMap.get(message.getChatId());
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), "HELP TEXT");
         SendMessageFormat.setButtons(sendMessage,user.getButtons());
         bot.send(sendMessage);
     }
 }
+

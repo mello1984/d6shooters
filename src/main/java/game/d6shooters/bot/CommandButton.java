@@ -28,7 +28,6 @@ public enum CommandButton {
     }
 
     public static CommandButton getAction(String string) {
-        return map.get(string);
-//        return Arrays.stream(CommandButton.values()).filter(a -> a.value.equals(string)).findFirst().orElse(EMPTY);
+        return map.getOrDefault(string, EMPTY);
     }
 }
