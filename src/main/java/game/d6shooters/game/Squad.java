@@ -31,6 +31,7 @@ public class Squad {
     public static final String BINOCULAR = "binocular";
     public static final String PILL = "pill";
     public static final String BOMB = "bomb";
+    public static final String KILLED_SHOOTERS = "killed_shooters";
     private Map<String, Integer> resources = new HashMap<>();
 
     SquadState squadState;
@@ -53,7 +54,7 @@ public class Squad {
         resources.put(HUNTER, 0);
         resources.put(MAP, 0);
         resources.put(BINOCULAR, 0);
-        resources.put(PILL, 0);
+        resources.put(PILL, 1);
         resources.put(BOMB, 0);
     }
 

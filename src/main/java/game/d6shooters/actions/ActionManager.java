@@ -67,6 +67,7 @@ public class ActionManager {
             case CROSSROAD -> actionDice1.processMessage(user, message);
             case EVENT2, EVENT3, EVENT6 -> actionEvent.processMessage(user, message);
             case TOWN -> actionTown.processMessage(user, message);
+            case GUNFIGHT -> actionDice6.processMessage(user, message);
             case POKER2, POKER3, POKER4 -> actionPoker.processMessage(user, message);
         }
 

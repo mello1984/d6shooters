@@ -76,6 +76,7 @@ public class ActionEvent extends AbstractAction {
         if (user.getSquad().getResource(Squad.GOLD) >= 2) buttons.add(Action.LOSE2GOLD.get());
         if (user.getSquad().getResource(Squad.GOLD) > 0 && user.getSquad().getResource(Squad.FOOD) > 0)
             buttons.add(Action.LOSEFOODANDGOLD.get());
+        if (user.getSquad().hasResource(Squad.PILL)) buttons.add(Action.LOSE_PILL.get());
         buttons.add(Action.LOSE2GUN.get());
         bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT4, buttons.toArray(new String[0])));
     }
@@ -111,6 +112,7 @@ public class ActionEvent extends AbstractAction {
                     case LOSE2GOLD -> modify(user, 0, 0, -2, 0, 0, 0);
                     case LOSEFOODANDGOLD -> modify(user, 0, -1, -1, 0, 0, 0);
                     case LOSE2GUN -> modify(user, 0, 0, 0, -2, 0, 0);
+                    case LOSE_PILL -> user.getSquad().setResource(Squad.PILL, 0);
                     default -> {
                         bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT5));
                         return;
@@ -153,6 +155,7 @@ public class ActionEvent extends AbstractAction {
         LOSE2GOLD(String.format("-2%s", Icon.MONEYBAG.get())),
         LOSE2FOOD(String.format("-2%s", Icon.FOOD.get())),
         LOSEFOODANDGOLD(String.format("-1%s, -1%s", Icon.FOOD.get(), Icon.MONEYBAG.get())),
+        LOSE_PILL(String.format("-%s", Icon.PILL.get())),
         NONE("Ехать дальше"),
         EMPTY("");
 

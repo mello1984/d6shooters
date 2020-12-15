@@ -35,11 +35,6 @@ public class ActionTown extends AbstractAction {
             switch (item) {
                 case FOOD1, FOOD2, AMMO1, AMMO2, HIRE1, HIRE2, HIRE3, BOMB1, BOMB2, BOMB3 -> squad.addResource(item.getResource(), item.getCount());
                 case COMPASS, HUNTER, MAP, BINOCULAR, PILL -> squad.addResource(item.getResource(), 1);
-                case EMPTY -> {
-                    Place place = user.getSquad().getPlace();
-                    bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(TEXT1, place.getTownName()), place.getTownShop().getGoods(user)));
-                    return;
-                }
             }
             squad.addResource(Squad.GOLD, -item.getValue());
             user.getSquad().getPlace().getTownShop().getItems().removeIf(i -> i.getGroup() == item.getGroup());

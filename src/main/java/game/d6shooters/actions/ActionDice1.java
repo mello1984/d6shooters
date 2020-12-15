@@ -52,7 +52,7 @@ public class ActionDice1 extends AbstractAction {
     protected void convertDice1ToPathfinding(User user) {
         int red = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.RED).count();
         int white = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.WHITE).count();
-        user.getSquad().addResource(Squad.PATHFINDING,white + (user.getSquad().hasResource(Squad.MAP) ? 2 : 1) * red);
+        user.getSquad().addResource(Squad.PATHFINDING,white + (user.getSquad().hasResource(Squad.COMPASS) ? 2 : 1) * red);
         user.getDicesCup().setUsedDiceCurrentValue(1);
     }
 

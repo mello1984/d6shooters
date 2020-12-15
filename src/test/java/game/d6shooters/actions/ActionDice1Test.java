@@ -127,7 +127,7 @@ class ActionDice1Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setResource(Squad.MAP,0);
+        user.getSquad().setResource(Squad.COMPASS,0);
 
         action.convertDice1ToPathfinding(user);
         assertAll(
@@ -148,7 +148,7 @@ class ActionDice1Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setResource(Squad.MAP,1);
+        user.getSquad().setResource(Squad.COMPASS,1);
 
         action.convertDice1ToPathfinding(user);
         assertAll(
