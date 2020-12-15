@@ -8,13 +8,8 @@ import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public abstract class AbstractHandler implements Handler {
-    SendMessageTemplate template = SendMessageTemplate.getInstance();
+    SendMessageTemplate template = new SendMessageTemplate();
     Bot bot;
-    Handler nextHandler;
-
-    public void setNextHandler(Handler nextHandler) {
-        this.nextHandler = nextHandler;
-    }
 
     public AbstractHandler(Bot bot) {
         this.bot = bot;

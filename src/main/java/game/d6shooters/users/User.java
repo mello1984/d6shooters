@@ -2,6 +2,7 @@ package game.d6shooters.users;
 
 import game.d6shooters.actions.ActionManager;
 import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.PokerDices;
 import game.d6shooters.game.Squad;
 import game.d6shooters.road.TownShop;
 import lombok.AccessLevel;
@@ -21,6 +22,7 @@ public class User {
     String userName;
     Squad squad;
     DicesCup dicesCup;
+    PokerDices pokerDices;
     ActionManager actionManager;
     TownShop shop;
     List<List<String>> buttons;

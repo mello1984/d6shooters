@@ -14,13 +14,10 @@ public class BackHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        if (CommandButton.getAction(message.getText()) == CommandButton.BACK) processMessage(message);
-        else nextHandler.handle(message);
-    }
-
-    @Override
-    public void processMessage(Message message) {
         User user = Main.users.userMap.get(message.getChatId());
         bot.send(template.getSquadStateMessage(user.getChatId()));
+
+//        SendMessage sendMessage = template.getSendMessageWithButtons(user.getChatId(), "");
+//        bot.send(sendMessage);
     }
 }

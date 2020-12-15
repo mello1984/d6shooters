@@ -13,12 +13,6 @@ public class ActionManagerHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        if (CommandButton.getAction(message.getText()) == CommandButton.EMPTY) processMessage(message);
-        else nextHandler.handle(message);
-    }
-
-    @Override
-    public void processMessage(Message message) {
         User user = Main.users.userMap.get(message.getChatId());
         user.getActionManager().doActions(message);
     }

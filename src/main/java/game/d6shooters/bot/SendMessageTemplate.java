@@ -48,12 +48,12 @@ public class SendMessageTemplate {
 
     public SendMessage getSquadStateMessage(Long chatId) {
         Squad squad = Main.users.userMap.get(chatId).getSquad();
-        String text = Icon.GUNFIGHTER.get() + " Отряд: " + squad.getShooters() + "\n" +
-                Icon.FOOD.get() + " Еда: " + squad.getFood() + "\n" +
-                Icon.AMMO.get() + " Боеприпасы: " + squad.getAmmo() + "\n" +
-                Icon.MONEYBAG.get() + " Золото: " + squad.getGold() + "\n" +
-                Icon.FOOTPRINTS.get() + " Пройдено: " + squad.getPath() + "\n" +
-                Icon.CLOCK.get() + " Прошло дней: " + squad.getPeriod();
+        String text = Icon.GUNFIGHTER.get() + " Отряд: " + squad.getResource(Squad.SHOOTER) + "\n" +
+                Icon.FOOD.get() + " Еда: " + squad.getResource(Squad.FOOD) + "\n" +
+                Icon.AMMO.get() + " Боеприпасы: " + squad.getResource(Squad.AMMO) + "\n" +
+                Icon.MONEYBAG.get() + " Золото: " + squad.getResource(Squad.GOLD) + "\n" +
+                Icon.FOOTPRINTS.get() + " Пройдено: " + squad.getResource(Squad.PATH) + "\n" +
+                Icon.CLOCK.get() + " Прошло дней: " + squad.getResource(Squad.PERIOD);
         return getSendMessageWithButtons(chatId, text, Main.users.userMap.get(chatId).getButtons());
     }
 }

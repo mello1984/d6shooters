@@ -6,79 +6,78 @@ import game.d6shooters.road.RoadMap;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Squad {
-    static final int MAXAMMO = 5;
-    static final int MAXFOOD = 12;
-    int gold = 3;
-    int ammo = 5;
-    int shooters = 12;
-    int food = 6;
-    int period = 0;
-    int path = 0;
-    int gunfight = 0;
-    int pathfinding = 0;
+    private static final int MAX_AMMO = 5;
+    private static final int MAX_FOOD = 12;
+    private static final int MAX_SHOOTERS = 12;
+    private static final int MAX_BOMB = 3;
+
+    public static final String GOLD = "gold";
+    public static final String AMMO = "ammo";
+    public static final String SHOOTER = "shooter";
+    public static final String FOOD = "food";
+    public static final String PERIOD = "period";
+    public static final String PATH = "path";
+    public static final String GUNFIGHT = "gunfight";
+    public static final String PATHFINDING = "pathfinding";
+    public static final String COMPASS = "compass";
+    public static final String HUNTER = "hunter";
+    public static final String MAP = "map";
+    public static final String BINOCULAR = "binocular";
+    public static final String PILL = "pill";
+    public static final String BOMB = "bomb";
+    public static final String KILLED_SHOOTERS = "killed_shooters";
+    private Map<String, Integer> resources = new HashMap<>();
+
     SquadState squadState;
     RoadMap roadMap = new RoadMap(this);
     Place place = Place.getNew(this);
-    int pokerBetValue = 0;
     Icon pokerBetType;
-    PokerDices pokerDices;
-
-    boolean compass = false;
-    boolean hunter = false;
-    boolean map = false;
-    boolean binocular = false;
-    boolean pill = false;
-    int bomb = 0;
+    int pokerBetValue = 0;
     boolean canActivateEvent = true;
 
-    public int addGold(int value) {
-        gold += value;
-        return gold;
+    public Squad() {
+        resources.put(GOLD, 3);
+        resources.put(AMMO, 5);
+        resources.put(SHOOTER, 12);
+        resources.put(FOOD, 6);
+        resources.put(PERIOD, 0);
+        resources.put(PATH, 0);
+        resources.put(GUNFIGHT, 0);
+        resources.put(PATHFINDING, 0);
+        resources.put(COMPASS, 0);
+        resources.put(HUNTER, 0);
+        resources.put(MAP, 0);
+        resources.put(BINOCULAR, 0);
+        resources.put(PILL, 1);
+        resources.put(BOMB, 0);
     }
 
-    public int addGunfight(int value) {
-        gunfight += value;
-        return gunfight;
+    public int getResource(String resource) {
+        return resources.get(resource);
     }
 
-    public int addPathfinding(int value) {
-        pathfinding += value;
-        return pathfinding;
+    public boolean hasResource(String resource) {
+        return resources.get(resource) > 0;
     }
 
-    public int addAmmo(int value) {
-        ammo += value;
-        ammo = Math.min(ammo, MAXAMMO);
-        return ammo;
+    public void setResource(String resource, int value) {
+        resources.put(resource, value);
     }
 
-    public int addShooters(int value) {
-        shooters += value;
-        return shooters;
-    }
-
-    public int addFood(int value) {
-        food += value;
-        food = Math.min(food, MAXFOOD);
-        return food;
-    }
-
-    public int addBomb(int value) {
-        bomb += value;
-        bomb = Math.min(bomb, 3);
-        return bomb;
-    }
-
-    public int addPeriod(int value) {
-        period += value;
-        return period;
-    }
-
-    public int addPath(int value) {
-        path += value;
-        return path;
+    public int addResource(String resource, int value) {
+        int x = resources.get(resource);
+        x += value;
+        if (resource.equals(AMMO)) x = Math.min(x, MAX_AMMO);
+        if (resource.equals(FOOD)) x = Math.min(x, MAX_FOOD);
+        if (resource.equals(SHOOTER)) x = Math.min(x, MAX_SHOOTERS);
+        if (resource.equals(BOMB)) x = Math.min(x, MAX_BOMB);
+        resources.put(resource, x);
+        return x;
     }
 }

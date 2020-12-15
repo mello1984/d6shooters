@@ -1,12 +1,12 @@
 package game.d6shooters.game;
 
-import game.d6shooters.bot.Icon;
 import lombok.Value;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class PokerDices extends DicesCup {
+    private static final int MAX_VALUE = 5;
     public PokerDices() {
         super();
         diceList.clear();
@@ -38,14 +38,15 @@ public class PokerDices extends DicesCup {
     }
 
     @Override
+    protected int getMaxValue() {
+        return MAX_VALUE;
+    }
+
+    @Override
     public String toString() {
-//        StringBuilder stringBuilder = new StringBuilder();
-//        diceList.stream().filter(d -> d.getType() == Dice.DiceType.WHITE && !d.isUsed()).forEach(d -> stringBuilder.append(dices.get(d.getValue())));
-//        return stringBuilder.toString();
-
-        return diceList.stream().filter(d -> d.getType() == Dice.DiceType.WHITE && !d.isUsed()).map(d -> dices.get(d.getValue())).collect(Collectors.joining(""));
-
-
+        return diceList.stream()
+                .map(dice -> dices.get(dice.getValue()))
+                .collect(Collectors.joining(""));
     }
 
     @Value

@@ -27,9 +27,9 @@ public class ActionDice1 extends AbstractAction {
         Squad squad = user.getSquad();
         convertDice1ToPathfinding(user);
 
-        if (squad.getPathfinding() > 0) {
-            squad.addPath(1);
-            squad.addPathfinding(-1);
+        if (squad.getResource(Squad.PATHFINDING) > 0) {
+            squad.addResource(Squad.PATH, 1);
+            squad.addResource(Squad.PATHFINDING, -1);
 
             if (squad.getPlace().getType() != RoadNode.Type.BRANCHSTART)
                 squad.setPlace(squad.getRoadMap().next(squad.getPlace(), true));
@@ -42,24 +42,30 @@ public class ActionDice1 extends AbstractAction {
             user.getActionManager().doActions();
 
         } else {
-            squad.setSquadState(SquadState.STARTTURN1);
-            squad.addPeriod(1);
-            bot.send(template.getSquadStateMessage(user.getChatId()));
-            bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, CommandButton.NEXT_TURN.name()));
+            squad.addResource(Squad.PERIOD, 1);
+
+            if (squad.getResource(Squad.PERIOD) < 40) {
+                squad.setSquadState(SquadState.STARTTURN1);
+                bot.send(template.getSquadStateMessage(user.getChatId()));
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, CommandButton.NEXT_TURN.name()));
+            } else {
+                squad.setSquadState(SquadState.ENDGAME);
+                user.getActionManager().doActions();
+            }
         }
     }
 
     protected void convertDice1ToPathfinding(User user) {
         int red = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.RED).count();
         int white = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.WHITE).count();
-        user.getSquad().addPathfinding(white + (user.getSquad().isMap() ? 2 : 1) * red);
+        user.getSquad().addResource(Squad.PATHFINDING, white + (user.getSquad().hasResource(Squad.COMPASS) ? 2 : 1) * red);
         user.getDicesCup().setUsedDiceCurrentValue(1);
     }
 
     protected void executeSpecialPlaces(Squad squad) {
         switch (squad.getPlace().getType()) {
             case TOWN -> {
-                squad.setPathfinding(0);
+                squad.setResource(Squad.PATHFINDING, 0);
                 squad.setSquadState(SquadState.TOWN);
             }
             case EVENT -> squad.setSquadState(SquadState.EVENT);

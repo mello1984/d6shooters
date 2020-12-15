@@ -50,7 +50,7 @@ public class TownShop {
         }
 
         List<String> line3 = getSpecialItemButtons(squad);
-        if (canGamingPoker && (squad.getGold() > 0 || squad.getAmmo() > 0 || squad.getFood() > 0)) line3.add(POKER);
+        if (canGamingPoker && (squad.getResource(Squad.GOLD) > 0 || squad.getResource(Squad.AMMO) > 0 || squad.getResource(Squad.FOOD) > 0)) line3.add(POKER);
         line3.add(REJECT);
 
         List<List<String>> buttons = new ArrayList<>();
@@ -61,21 +61,21 @@ public class TownShop {
     }
 
     protected List<String> getStandardItemButtons(Squad squad) {
-        int gold = squad.getGold();
+        int gold = squad.getResource(Squad.GOLD);
         List<String> goods = new ArrayList<>();
-        if (items.contains(Item.FOOD1) && gold >= Item.FOOD1.getValue() && squad.getFood() < 12)
+        if (items.contains(Item.FOOD1) && gold >= Item.FOOD1.getValue() && squad.getResource(Squad.FOOD) < 12)
             goods.add(Item.FOOD1.getText());
-        if (items.contains(Item.FOOD2) && gold >= Item.FOOD2.getValue() && squad.getFood() < 10)
+        if (items.contains(Item.FOOD2) && gold >= Item.FOOD2.getValue() && squad.getResource(Squad.FOOD) < 10)
             goods.add(Item.FOOD2.getText());
-        if (items.contains(Item.AMMO1) && gold >= Item.AMMO1.getValue() && squad.getAmmo() < 5)
+        if (items.contains(Item.AMMO1) && gold >= Item.AMMO1.getValue() && squad.getResource(Squad.AMMO) < 5)
             goods.add(Item.AMMO1.getText());
-        if (items.contains(Item.AMMO2) && gold >= Item.AMMO2.getValue() && squad.getAmmo() < 4)
+        if (items.contains(Item.AMMO2) && gold >= Item.AMMO2.getValue() && squad.getResource(Squad.AMMO) < 4)
             goods.add(Item.AMMO2.getText());
-        if (items.contains(Item.HIRE1) && gold >= Item.HIRE1.getValue() && squad.getShooters() < 12)
+        if (items.contains(Item.HIRE1) && gold >= Item.HIRE1.getValue() && squad.getResource(Squad.SHOOTER) < 12)
             goods.add(Item.HIRE1.getText());
-        if (items.contains(Item.HIRE2) && gold >= Item.HIRE2.getValue() && squad.getShooters() < 11)
+        if (items.contains(Item.HIRE2) && gold >= Item.HIRE2.getValue() && squad.getResource(Squad.SHOOTER) < 11)
             goods.add(Item.HIRE2.getText());
-        if (items.contains(Item.HIRE3) && gold >= Item.HIRE3.getValue() && squad.getShooters() < 10)
+        if (items.contains(Item.HIRE3) && gold >= Item.HIRE3.getValue() && squad.getResource(Squad.SHOOTER) < 10)
             goods.add(Item.HIRE3.getText());
         return goods;
     }
@@ -83,16 +83,12 @@ public class TownShop {
     protected List<String> getSpecialItemButtons(Squad squad) {
         log.debug("SpecialItem: " + specialItem);
         List<String> resultList = switch (specialItem) {
-            case COMPASS -> setSpecialItem(squad.getGold(), squad.isCompass(), Item.COMPASS);
-            case HUNTER -> setSpecialItem(squad.getGold(), squad.isHunter(), Item.HUNTER);
-            case MAP -> setSpecialItem(squad.getGold(), squad.isMap(), Item.MAP);
-            case BINOCULAR -> setSpecialItem(squad.getGold(), squad.isBinocular(), Item.BINOCULAR);
-            case PILL -> setSpecialItem(squad.getGold(), squad.isPill(), Item.PILL);
+            case COMPASS, HUNTER, MAP, BINOCULAR, PILL -> setSpecialItemButton(squad);
             case BOMB1 -> {
                 List<String> list = new ArrayList<>();
-                if (squad.getBomb() < 3 && squad.getGold() >= Item.BOMB1.value) list.add(Item.BOMB1.getText());
-                if (squad.getBomb() < 2 && squad.getGold() >= Item.BOMB2.value) list.add(Item.BOMB2.getText());
-                if (squad.getBomb() == 0 && squad.getGold() >= Item.BOMB3.value) list.add(Item.BOMB3.getText());
+                if (squad.getResource(Squad.BOMB) < 3 && squad.getResource(Squad.GOLD) >= Item.BOMB1.value) list.add(Item.BOMB1.getText());
+                if (squad.getResource(Squad.BOMB) < 2 && squad.getResource(Squad.GOLD) >= Item.BOMB2.value) list.add(Item.BOMB2.getText());
+                if (squad.getResource(Squad.BOMB) == 0 && squad.getResource(Squad.GOLD) >= Item.BOMB3.value) list.add(Item.BOMB3.getText());
                 yield list;
             }
             default -> new ArrayList<>();
@@ -100,58 +96,40 @@ public class TownShop {
         log.debug("SpecialItem Button: " + resultList);
         return resultList;
     }
-//    // Надо переписать на ранее установленный specialItem
-//    protected List<String> getSpecialItemButtons(Squad squad) {
-//        return switch (DicesCup.getD6Int()) {
-//            case 1 -> setSpecialItem(squad.getGold(), squad.isCompass(), Item.COMPASS);
-//            case 2 -> setSpecialItem(squad.getGold(), squad.isHunter(), Item.HUNTER);
-//            case 3 -> setSpecialItem(squad.getGold(), squad.isMap(), Item.MAP);
-//            case 4 -> setSpecialItem(squad.getGold(), squad.isBinocular(), Item.BINOCULAR);
-//            case 5 -> setSpecialItem(squad.getGold(), squad.isPill(), Item.PILL);
-//            case 6 -> {
-//                List<String> list = new ArrayList<>();
-//                if (squad.getBomb() < 3 && squad.getGold() >= Item.BOMB1.value) list.add(Item.BOMB1.getText());
-//                if (squad.getBomb() < 2 && squad.getGold() >= Item.BOMB2.value) list.add(Item.BOMB2.getText());
-//                if (squad.getBomb() == 0 && squad.getGold() >= Item.BOMB3.value) list.add(Item.BOMB3.getText());
-//                yield list;
-//            }
-//            default -> new ArrayList<>();
-//        };
-//    }
 
-    protected List<String> setSpecialItem(int gold, boolean squadHasItem, Item item) {
+    protected List<String> setSpecialItemButton(Squad squad) {
         List<String> list = new ArrayList<>();
-        if (!squadHasItem && gold >= item.value) list.add(item.getText());
+        if (!squad.hasResource(specialItem.getResource()) && squad.getResource(Squad.GOLD) >= specialItem.value) list.add(specialItem.getText());
         return list;
     }
-
 
     @AllArgsConstructor
     @Getter
     public enum Item {
-        FOOD1(2, 1, 1, Icon.FOOD),
-        FOOD2(5, 2, 1, Icon.FOOD),
-        AMMO1(2, 1, 2, Icon.AMMO),
-        AMMO2(5, 2, 2, Icon.AMMO),
-        HIRE1(1, 1, 3, Icon.GUNFIGHTER),
-        HIRE2(2, 2, 3, Icon.GUNFIGHTER),
-        HIRE3(3, 3, 3, Icon.GUNFIGHTER),
+        FOOD1(2, 1, 1, Icon.FOOD, Squad.FOOD),
+        FOOD2(5, 2, 1, Icon.FOOD, Squad.FOOD),
+        AMMO1(2, 1, 2, Icon.AMMO, Squad.AMMO),
+        AMMO2(5, 2, 2, Icon.AMMO, Squad.AMMO),
+        HIRE1(1, 1, 3, Icon.GUNFIGHTER, Squad.SHOOTER),
+        HIRE2(2, 2, 3, Icon.GUNFIGHTER, Squad.SHOOTER),
+        HIRE3(3, 3, 3, Icon.GUNFIGHTER, Squad.SHOOTER),
 
-        COMPASS(1, 2, 4, Icon.COMPASS),
-        HUNTER(1, 3, 5, Icon.HUNTER),
-        MAP(1, 3, 6, Icon.MAP),
-        BINOCULAR(1, 2, 7, Icon.BINOCULAR),
-        PILL(1, 2, 8, Icon.PILL),
-        BOMB1(1, 1, 9, Icon.BOMB),
-        BOMB2(2, 2, 9, Icon.BOMB),
-        BOMB3(3, 3, 9, Icon.BOMB),
+        COMPASS(1, 2, 4, Icon.COMPASS, Squad.COMPASS),
+        HUNTER(1, 3, 5, Icon.HUNTER, Squad.HUNTER),
+        MAP(1, 3, 6, Icon.MAP, Squad.MAP),
+        BINOCULAR(1, 2, 7, Icon.BINOCULAR, Squad.BINOCULAR),
+        PILL(1, 2, 8, Icon.PILL, Squad.PILL),
+        BOMB1(1, 1, 9, Icon.BOMB, Squad.BOMB),
+        BOMB2(2, 2, 9, Icon.BOMB, Squad.BOMB),
+        BOMB3(3, 3, 9, Icon.BOMB, Squad.BOMB),
 
-        EMPTY(0, 0, 10, Icon.WHITESQUARE);
+        EMPTY(0, 0, 10, Icon.WHITESQUARE, "");
 
         private final int count;
         private final int value;
         private final int group;
         private final Icon icon;
+        private final String resource;
 
         public String getText() {
             return count > 1 ? String.format("%d%s за %d%s", count, icon.get(), value, Icon.MONEYBAG.get())

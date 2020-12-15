@@ -14,13 +14,9 @@ public class TeamStateHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        if (CommandButton.getAction(message.getText()) == CommandButton.BAND) processMessage(message);
-        else nextHandler.handle(message);
-    }
-
-    @Override
-    public void processMessage(Message message) {
         User user = Main.users.userMap.get(message.getChatId());
-        bot.send(template.getSquadStateMessage(user.getChatId()));
+        SendMessage sendMessage = template.getSquadStateMessage(user.getChatId());
+        bot.send(sendMessage);
     }
 }
+

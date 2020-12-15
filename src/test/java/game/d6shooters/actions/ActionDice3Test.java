@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.mocks.MockActionManager;
 import game.d6shooters.mocks.MockBot;
@@ -41,11 +42,11 @@ class ActionDice3Test {
         dicesCup.setDiceList(diceList);
         action.action(user);
         assertAll(
-                () -> assertEquals(3, user.getSquad().getGold()),
+                () -> assertEquals(3, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3)),
                 () -> assertEquals(SquadState.CHECKHEAT, user.getSquad().getSquadState())
         );
-    }
+            }
 
     @Test
     void actionDice3Test2() {
@@ -58,10 +59,11 @@ class ActionDice3Test {
         dicesCup.setDiceList(diceList);
         action.action(user);
         assertAll(
-                () -> assertEquals(4, user.getSquad().getGold()),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3)),
                 () -> assertEquals(SquadState.CHECKHEAT, user.getSquad().getSquadState())
         );
+        user.getSquad().getResource(Squad.GOLD);
     }
 
     @Test
@@ -77,7 +79,7 @@ class ActionDice3Test {
         dicesCup.setDiceList(diceList);
         action.action(user);
         assertAll(
-                () -> assertEquals(4, user.getSquad().getGold()),
+                () -> assertEquals(4, user.getSquad().getResource(Squad.GOLD)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(3)),
                 () -> assertEquals(SquadState.CHECKHEAT, user.getSquad().getSquadState())
         );
@@ -94,7 +96,7 @@ class ActionDice3Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setMap(false);
+        user.getSquad().setResource(Squad.MAP,0);
         assertEquals(2, action.getFoundGold(user));
     }
 
@@ -109,7 +111,7 @@ class ActionDice3Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setMap(true);
+        user.getSquad().setResource(Squad.MAP,1);
         assertEquals(3, action.getFoundGold(user));
     }
 
@@ -123,7 +125,7 @@ class ActionDice3Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setMap(false);
+        user.getSquad().setResource(Squad.MAP,0);
         assertEquals(1, action.getFoundGold(user));
     }
 
@@ -137,7 +139,7 @@ class ActionDice3Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setMap(true);
+        user.getSquad().setResource(Squad.MAP,1);
         assertEquals(2, action.getFoundGold(user));
     }
 }

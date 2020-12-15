@@ -2,6 +2,7 @@ package game.d6shooters.actions;
 
 import game.d6shooters.bot.Bot;
 import game.d6shooters.game.Squad;
+import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 
 public class ActionFeeding extends AbstractAction {
@@ -14,14 +15,14 @@ public class ActionFeeding extends AbstractAction {
     @Override
     public void action(User user) {
         Squad squad = user.getSquad();
-        if (squad.getPeriod() % 5 == 0 && squad.getPeriod() < 40 && squad.getPeriod() > 0) {
-            if (squad.getFood() >= squad.getShooters()) {
-                squad.addFood(-squad.getShooters());
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(TEXT1, squad.getPeriod(), squad.getShooters())));
+        if (squad.getResource(Squad.PERIOD) % 5 == 0 && squad.getResource(Squad.PERIOD) < 40 && squad.getResource(Squad.PERIOD) > 0) {
+            if (!squad.hasResource(Squad.FOOD)) squad.setSquadState(SquadState.ENDGAME);
+            else if (squad.getResource(Squad.FOOD) >= squad.getResource(Squad.SHOOTER)) {
+                squad.addResource(Squad.FOOD, -squad.getResource(Squad.SHOOTER));
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(TEXT1, squad.getResource(Squad.PERIOD), squad.getResource(Squad.SHOOTER))));
             } else {
-                squad.setShooters(squad.getFood());
-                squad.setFood(0);
-                //END GAME
+                squad.setResource(Squad.SHOOTER, squad.getResource(Squad.FOOD));
+                squad.setResource(Squad.FOOD, 0);
             }
         }
     }

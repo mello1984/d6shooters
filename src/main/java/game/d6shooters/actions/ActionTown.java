@@ -31,19 +31,12 @@ public class ActionTown extends AbstractAction {
         if (message.getText().equals(TownShop.REJECT)) squad.setSquadState(SquadState.MOVE);
 
         TownShop.Item item = TownShop.Item.getGood(message.getText());
-        if (squad.getGold() >= item.getValue()) {
+        if (squad.getResource(Squad.GOLD) >= item.getValue()) {
             switch (item) {
-                case FOOD1, FOOD2 -> squad.addFood(item.getCount());
-                case AMMO1, AMMO2 -> squad.addAmmo(item.getCount());
-                case HIRE1, HIRE2, HIRE3 -> squad.addShooters(item.getCount());
-                case COMPASS -> squad.setCompass(true);
-                case HUNTER -> squad.setHunter(true);
-                case MAP -> squad.setMap(true);
-                case BINOCULAR -> squad.setBinocular(true);
-                case PILL -> squad.setPill(true);
-                case BOMB1, BOMB2, BOMB3 -> squad.addBomb(item.getCount());
+                case FOOD1, FOOD2, AMMO1, AMMO2, HIRE1, HIRE2, HIRE3, BOMB1, BOMB2, BOMB3 -> squad.addResource(item.getResource(), item.getCount());
+                case COMPASS, HUNTER, MAP, BINOCULAR, PILL -> squad.addResource(item.getResource(), 1);
             }
-            squad.addGold(-item.getValue());
+            squad.addResource(Squad.GOLD, -item.getValue());
             user.getSquad().getPlace().getTownShop().getItems().removeIf(i -> i.getGroup() == item.getGroup());
             if (item != TownShop.Item.EMPTY) {
                 bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(TEXT2, item.getIcon().get())));

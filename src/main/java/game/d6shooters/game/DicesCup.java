@@ -19,6 +19,7 @@ public class DicesCup {
         put(6, Icon.DICE6.get());
     }};
     protected List<Dice> diceList = new ArrayList<>();
+    private static final int MAX_VALUE = 8;
 
     public DicesCup() {
         diceList.add(new Dice(Dice.DiceType.WHITE));
@@ -46,28 +47,25 @@ public class DicesCup {
         return diceList;
     }
 
-    public boolean checkString(String string) {
-        String str = string.replaceAll("[/D]*", "");
-        if (str.length() > 8 || str.length() == 0) return false; //Поправить константу 8
-        return string.equals("0") || str.chars()
+    public boolean checkString(String string, boolean withBinocular) {
+        if (string.equals("0")) return true;
+        String str = string.replaceAll("[^1-" + getMaxValue() + "]*", "");
+        if (str.length() == 0) return false;
+
+        int closedDices = (int) str.chars()
                 .map(c -> Character.digit(c, 10))
                 .distinct()
-                .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanRerolled());
+                .mapToObj(i -> diceList.get(i - 1))
+                .filter(d -> d.getValue() >= 5 && d.getType()== Dice.DiceType.RED)
+                .count();
+
+        return !withBinocular ? closedDices == 0 : closedDices <= 1;
     }
 
-//    public boolean checkString(String string, boolean executeBinocle) {
-//        String str = string.replaceAll("[/D]*", "");
-//        if (str.length() > 8 || str.length() == 0) return false;
-//
-//        if (!executeBinocle) return string.equals("0") || str.chars()
-//                .map(c -> Character.digit(c, 10))
-//                .distinct()
-//                .allMatch(i -> i > 0 && i <= 8 && diceList.get(i - 1).isCanRerolled());
-//
-//        int count = str.replaceAll("[012345]*","").length();
-//
-//
-//    }
+    protected int getMaxValue() {
+        return MAX_VALUE;
+    }
+
 
     public int getCountActiveDiceCurrentValue(int value) {
         return (int) diceList.stream()

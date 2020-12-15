@@ -15,12 +15,6 @@ public class StartGameHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        if (!Main.users.userMap.containsKey(message.getChatId())) processMessage(message);
-        else nextHandler.handle(message);
-    }
-
-    @Override
-    public void processMessage(Message message) {
         long chatId = message.getChatId();
         User user = new User(chatId, message.getFrom().getUserName());
         Main.users.userMap.put(chatId, user);

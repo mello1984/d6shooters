@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.game.Squad;
 import game.d6shooters.mocks.MockBot;
 import game.d6shooters.mocks.MockTemplate;
 import game.d6shooters.game.Dice;
@@ -36,7 +37,7 @@ class ActionDice2Test {
         dicesCup.setDiceList(diceList);
         action.action(user);
         assertAll(
-                () -> assertEquals(7, user.getSquad().getFood()),
+                () -> assertEquals(7, user.getSquad().getResource(Squad.FOOD)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(2))
         );
     }
@@ -49,7 +50,7 @@ class ActionDice2Test {
         dicesCup.setDiceList(diceList);
         action.action(user);
         assertAll(
-                () -> assertEquals(6, user.getSquad().getFood()),
+                () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(2))
         );
     }
@@ -64,7 +65,7 @@ class ActionDice2Test {
         dicesCup.setDiceList(diceList);
         action.action(user);
         assertAll(
-                () -> assertEquals(7, user.getSquad().getFood()),
+                () -> assertEquals(7, user.getSquad().getResource(Squad.FOOD)),
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(2))
         );
     }
@@ -80,7 +81,7 @@ class ActionDice2Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setHunter(false);
+        user.getSquad().setResource(Squad.HUNTER,0);
 
         int result = action.getFoundFood(user);
         assertAll(
@@ -100,7 +101,7 @@ class ActionDice2Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setHunter(true);
+        user.getSquad().setResource(Squad.HUNTER,1);
 
         int result = action.getFoundFood(user);
         assertAll(
@@ -120,7 +121,7 @@ class ActionDice2Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setHunter(false);
+        user.getSquad().setResource(Squad.HUNTER,0);
 
         int result = action.getFoundFood(user);
         assertAll(
@@ -142,7 +143,7 @@ class ActionDice2Test {
             add(new Dice(Dice.DiceType.RED, 3));
         }};
         dicesCup.setDiceList(diceList);
-        user.getSquad().setHunter(true);
+        user.getSquad().setResource(Squad.HUNTER,1);
 
         int result = action.getFoundFood(user);
         assertAll(

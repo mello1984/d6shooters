@@ -8,6 +8,7 @@ import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+
 public class RestartHandler extends AbstractHandler {
     private static final String TEXT1 = "Вы уверены, что хотите сделать рестарт игры?";
     private static final String TEXT2 = "Проводится рестарт игры";
@@ -18,13 +19,6 @@ public class RestartHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        if (CommandButton.getAction(message.getText()) == CommandButton.RESTART || CommandButton.getAction(message.getText()) == CommandButton.RESTART2)
-            processMessage(message);
-        else nextHandler.handle(message);
-    }
-
-    @Override
-    public void processMessage(Message message) {
         User user = Main.users.userMap.get(message.getChatId());
         long chatId = user.getChatId();
 

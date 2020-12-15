@@ -25,7 +25,7 @@ public class MessageReceiver implements Runnable {
         try {
             while (true) {
                 Message message = bot.receiveQueue.take();
-                handlerManager.getStartHandler(message)
+                handlerManager.chooseHandler(message)
                         .handle(message);
                 log.debug(String.format("Message received from: %d, : %s", message.getChatId(), message.getText()));
                 Thread.sleep(SLEEP_TIME);

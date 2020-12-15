@@ -3,6 +3,7 @@ package game.d6shooters.actions;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.Icon;
 import game.d6shooters.game.DicesCup;
+import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
@@ -45,7 +46,7 @@ public class ActionEvent extends AbstractAction {
     }
 
     protected void startEvent2(User user) {
-        if (user.getSquad().getAmmo() > 0) {
+        if (user.getSquad().getResource(Squad.AMMO) > 0) {
             user.getSquad().setSquadState(SquadState.EVENT2);
             bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, Action.HUNT.get(), Action.NONE.get()));
         } else toMoveAction(user);
@@ -54,10 +55,10 @@ public class ActionEvent extends AbstractAction {
     protected void startEvent3(User user) {
         user.getSquad().setSquadState(SquadState.EVENT3);
         List<String> buttons = new ArrayList<>();
-        if (user.getSquad().getGold() > 0) buttons.add(Action.BUYFOOD.get());
-        if (user.getSquad().getGold() > 0) buttons.add(Action.BUYAMMO.get());
-        if (user.getSquad().getFood() >= 2) buttons.add(Action.SELLFOOD.get());
-        if (user.getSquad().getAmmo() >= 2) buttons.add(Action.SELLAMMO.get());
+        if (user.getSquad().getResource(Squad.GOLD) > 0) buttons.add(Action.BUYFOOD.get());
+        if (user.getSquad().getResource(Squad.GOLD) > 0) buttons.add(Action.BUYAMMO.get());
+        if (user.getSquad().getResource(Squad.FOOD) >= 2) buttons.add(Action.SELLFOOD.get());
+        if (user.getSquad().getResource(Squad.AMMO) >= 2) buttons.add(Action.SELLAMMO.get());
         buttons.add(Action.NONE.get());
         bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT3, buttons.toArray(new String[0])));
     }
@@ -71,10 +72,11 @@ public class ActionEvent extends AbstractAction {
     protected void startEvent6(User user) {
         List<String> buttons = new ArrayList<>();
         user.getSquad().setSquadState(SquadState.EVENT6);
-        if (user.getSquad().getFood() >= 2) buttons.add(Action.LOSE2FOOD.get());
-        if (user.getSquad().getGold() >= 2) buttons.add(Action.LOSE2GOLD.get());
-        if (user.getSquad().getGold() > 0 && user.getSquad().getFood() > 0)
+        if (user.getSquad().getResource(Squad.FOOD) >= 2) buttons.add(Action.LOSE2FOOD.get());
+        if (user.getSquad().getResource(Squad.GOLD) >= 2) buttons.add(Action.LOSE2GOLD.get());
+        if (user.getSquad().getResource(Squad.GOLD) > 0 && user.getSquad().getResource(Squad.FOOD) > 0)
             buttons.add(Action.LOSEFOODANDGOLD.get());
+        if (user.getSquad().hasResource(Squad.PILL)) buttons.add(Action.LOSE_PILL.get());
         buttons.add(Action.LOSE2GUN.get());
         bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT4, buttons.toArray(new String[0])));
     }
@@ -110,6 +112,7 @@ public class ActionEvent extends AbstractAction {
                     case LOSE2GOLD -> modify(user, 0, 0, -2, 0, 0, 0);
                     case LOSEFOODANDGOLD -> modify(user, 0, -1, -1, 0, 0, 0);
                     case LOSE2GUN -> modify(user, 0, 0, 0, -2, 0, 0);
+                    case LOSE_PILL -> user.getSquad().setResource(Squad.PILL, 0);
                     default -> {
                         bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT5));
                         return;
@@ -121,20 +124,23 @@ public class ActionEvent extends AbstractAction {
     }
 
     protected void modify(User user, int ammo, int food, int gold, int gunfighter, int pathfinding, int period) {
-        user.getSquad().addPeriod(period);
-        user.getSquad().addPathfinding(pathfinding);
-        user.getSquad().addShooters(gunfighter);
+        user.getSquad().addResource(Squad.PERIOD,period);
+        user.getSquad().addResource(Squad.PATHFINDING,pathfinding);
+        user.getSquad().addResource(Squad.SHOOTER,gunfighter);
         boolean error = false;
-        if (ammo >= 0 || user.getSquad().getAmmo() >= -ammo) user.getSquad().addAmmo(ammo);
+        if (ammo >= 0 || user.getSquad().getResource(Squad.AMMO) >= -ammo)
+            user.getSquad().addResource(Squad.AMMO, ammo);
         else error = true;
-        if (food >= 0 || user.getSquad().getFood() >= -food) user.getSquad().addFood(food);
+        if (food >= 0 || user.getSquad().getResource(Squad.FOOD) >= -food)
+            user.getSquad().addResource(Squad.FOOD, food);
         else error = true;
-        if (gold >= 0 || user.getSquad().getGold() >= -gold) user.getSquad().addGold(gold);
+        if (gold >= 0 || user.getSquad().getResource(Squad.GOLD) >= -gold)
+            user.getSquad().addResource(Squad.GOLD, gold);
         else error = true;
 
         if (error) {
             bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT6));
-            user.getSquad().addShooters(-user.getSquad().getShooters());
+            user.getSquad().addResource(Squad.SHOOTER,-user.getSquad().getResource(Squad.SHOOTER));
         }
     }
 
@@ -149,6 +155,7 @@ public class ActionEvent extends AbstractAction {
         LOSE2GOLD(String.format("-2%s", Icon.MONEYBAG.get())),
         LOSE2FOOD(String.format("-2%s", Icon.FOOD.get())),
         LOSEFOODANDGOLD(String.format("-1%s, -1%s", Icon.FOOD.get(), Icon.MONEYBAG.get())),
+        LOSE_PILL(String.format("-%s", Icon.PILL.get())),
         NONE("Ехать дальше"),
         EMPTY("");
 
