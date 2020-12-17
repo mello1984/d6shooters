@@ -1,7 +1,6 @@
-package game.d6shooters.bot.handler;
+package game.d6shooters.handler;
 
 import game.d6shooters.bot.Bot;
-import game.d6shooters.bot.CommandButton;
 import game.d6shooters.bot.SendMessageTemplate;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

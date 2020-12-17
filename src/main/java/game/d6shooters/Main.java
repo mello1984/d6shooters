@@ -13,8 +13,8 @@ public class Main {
         ApiContextInitializer.init();
         Bot bot = new Bot();
         bot.botConnect();
-        MessageSender messageSender = new MessageSender(bot);
 
+        MessageSender messageSender = new MessageSender(bot);
         Thread sender = new Thread(messageSender);
         sender.setDaemon(true);
         sender.setName("MsgSender");

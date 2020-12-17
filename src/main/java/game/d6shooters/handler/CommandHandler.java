@@ -1,8 +1,8 @@
-package game.d6shooters.bot.handler;
+package game.d6shooters.handler;
 
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
-import game.d6shooters.bot.CommandButton;
+import game.d6shooters.source.Button;
 import game.d6shooters.bot.SendMessageFormat;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
@@ -25,11 +25,10 @@ public class CommandHandler extends AbstractHandler {
         Squad squad = user.getSquad();
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), "Выберите дополнительную команду");
 
-        List<String> buttons = new ArrayList<>(Arrays.asList(CommandButton.HELP.get(), CommandButton.RESTART.get(), CommandButton.BACK.get()));
-//        boolean canActivateEvent = squad.isCanActivateEvent() && squad.getSquadState() == SquadState.STARTTURN && squad.getSquadState().getStep() == 1;
+        List<String> buttons = new ArrayList<>(Arrays.asList(Button.HELP.get(), Button.RESTART.get(), Button.BACK.get()));
         boolean canActivateEvent = squad.isCanActivateEvent() && squad.getSquadState() == SquadState.STARTTURN1;
         if (canActivateEvent) {
-            buttons.add(0, CommandButton.EVENT.get());
+            buttons.add(0, Button.EVENT.get());
             squad.setCanActivateEvent(false);
         }
 

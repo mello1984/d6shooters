@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.source.Button;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
@@ -44,7 +45,7 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest1() {
-        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
+        action.processMessage(user, new MockMessage(Button.LOSE2FOOD.get()));
         assertAll(
                 () -> assertEquals(4, user.getSquad().getResource(Squad.FOOD)),
                 () -> assertEquals(12, user.getSquad().getResource(Squad.SHOOTER)),
@@ -54,8 +55,8 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest2() {
-        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
-        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
+        action.processMessage(user, new MockMessage(Button.LOSE2FOOD.get()));
+        action.processMessage(user, new MockMessage(Button.LOSE2FOOD.get()));
         assertAll(
                 () -> assertEquals(2, user.getSquad().getResource(Squad.FOOD)),
                 () -> assertEquals(12, user.getSquad().getResource(Squad.SHOOTER)),
@@ -65,7 +66,7 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest3() {
-        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
+        action.processMessage(user, new MockMessage(Button.LOSE1GUNFIGHTER.get()));
         assertAll(
                 () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
                 () -> assertEquals(11, user.getSquad().getResource(Squad.SHOOTER)),
@@ -75,8 +76,8 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest4() {
-        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
-        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
+        action.processMessage(user, new MockMessage(Button.LOSE1GUNFIGHTER.get()));
+        action.processMessage(user, new MockMessage(Button.LOSE1GUNFIGHTER.get()));
         assertAll(
                 () -> assertEquals(6, user.getSquad().getResource(Squad.FOOD)),
                 () -> assertEquals(10, user.getSquad().getResource(Squad.SHOOTER)),
@@ -86,8 +87,8 @@ class ActionDice5Test {
 
     @Test
     void actionDice5ProcessMessageTest5() {
-        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE2FOOD.get()));
-        action.processMessage(user, new MockMessage(ActionDice5.Button.LOSE1GUNFIGHTER.get()));
+        action.processMessage(user, new MockMessage(Button.LOSE2FOOD.get()));
+        action.processMessage(user, new MockMessage(Button.LOSE1GUNFIGHTER.get()));
         assertAll(
                 () -> assertEquals(4, user.getSquad().getResource(Squad.FOOD)),
                 () -> assertEquals(11, user.getSquad().getResource(Squad.SHOOTER)),

@@ -1,8 +1,8 @@
-package game.d6shooters.bot.handler;
+package game.d6shooters.handler;
 
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
-import game.d6shooters.bot.CommandButton;
+import game.d6shooters.source.Button;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -17,7 +17,7 @@ public class HandlerManager {
     public Handler chooseHandler(Message message) {
         if (!Main.users.userMap.containsKey(message.getChatId())) return new StartGameHandler(bot);
 
-        CommandButton command = CommandButton.getAction(message.getText());
+        Button command = Button.getButton(message.getText());
         return switch (command) {
             case BAND -> new TeamStateHandler(bot);
             case COMMAND -> new CommandHandler(bot);

@@ -8,19 +8,19 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ActionManager {
-    ActionDice1 actionDice1;
-    ActionDice2 actionDice2;
-    ActionDice3 actionDice3;
-    ActionDice4 actionDice4;
-    ActionDice5 actionDice5;
-    ActionDice6 actionDice6;
-    ActionFeeding actionFeeding;
-    ActionEvent actionEvent;
-    ActionEndGame actionEndGame;
-    ActionTown actionTown;
-    ActionStartTurn actionStartTurn;
-    ActionPoker actionPoker;
-    protected final User user;
+    Action actionDice1;
+    Action actionDice2;
+    Action actionDice3;
+    Action actionDice4;
+    Action actionDice5;
+    Action actionDice6;
+    Action actionFeeding;
+    Action actionEvent;
+    Action actionEndGame;
+    Action actionTown;
+    Action actionStartTurn;
+    Action actionPoker;
+    User user;
 
     public ActionManager(User user, Bot bot) {
         this.user = user;

@@ -20,8 +20,8 @@ public class DataBase {
         Optional<Connection> optional = Optional.empty();
         while (optional.isEmpty()) {
             try {
-//                URI dbUri = new URI(System.getenv("telegrambotJDBC_DATABASE_URL"));
-                URI dbUri = new URI(System.getenv(""));
+                URI dbUri = new URI(System.getenv("telegrambotJDBC_DATABASE_URL"));
+//                URI dbUri = new URI(System.getenv(""));
                 String username = dbUri.getUserInfo().split(":")[0];
                 String password = dbUri.getUserInfo().split(":")[1];
                 String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";

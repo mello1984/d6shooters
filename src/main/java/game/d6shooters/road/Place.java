@@ -5,7 +5,7 @@ import game.d6shooters.users.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Getter
 @ToString
@@ -30,6 +30,6 @@ public class Place {
     }
 
     public static Place getNew(Squad squad) {
-        return new Place(squad, RoadMap.Road.MAINROAD, 78);
+        return new Place(squad, RoadMap.Road.MAINROAD, 0);
     }
 }

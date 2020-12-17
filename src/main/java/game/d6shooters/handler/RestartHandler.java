@@ -1,8 +1,8 @@
-package game.d6shooters.bot.handler;
+package game.d6shooters.handler;
 
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
-import game.d6shooters.bot.CommandButton;
+import game.d6shooters.source.Button;
 import game.d6shooters.bot.SendMessageFormat;
 import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,10 +22,10 @@ public class RestartHandler extends AbstractHandler {
         User user = Main.users.userMap.get(message.getChatId());
         long chatId = user.getChatId();
 
-        switch (CommandButton.getAction(message.getText())) {
+        switch (Button.getButton(message.getText())) {
             case RESTART -> {
                 SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), TEXT1);
-                SendMessageFormat.setButtons(sendMessage, CommandButton.RESTART2.get(), CommandButton.BACK.get());
+                SendMessageFormat.setButtons(sendMessage, Button.RESTART2.get(), Button.BACK.get());
                 bot.send(sendMessage);
             }
             case RESTART2 -> restartGame(chatId);

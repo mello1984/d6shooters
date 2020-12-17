@@ -1,6 +1,6 @@
 package game.d6shooters.game;
 
-import game.d6shooters.bot.Icon;
+import game.d6shooters.source.Icon;
 import lombok.Getter;
 import lombok.Setter;
 

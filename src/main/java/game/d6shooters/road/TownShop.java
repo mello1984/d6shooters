@@ -1,6 +1,6 @@
 package game.d6shooters.road;
 
-import game.d6shooters.bot.Icon;
+import game.d6shooters.source.Icon;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.users.User;

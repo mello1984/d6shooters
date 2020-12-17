@@ -10,6 +10,7 @@ import game.d6shooters.mocks.MockMessage;
 import game.d6shooters.mocks.MockTemplate;
 import game.d6shooters.road.Place;
 import game.d6shooters.road.RoadMap;
+import game.d6shooters.source.Button;
 import game.d6shooters.users.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ class ActionDice1Test {
     @Test
     void actionDice1ProcessMessageTest1() {
         user.getSquad().setPlace(new Place(user.getSquad(), RoadMap.Road.MAINROAD, 43));
-        action.processMessage(user, new MockMessage(ActionDice1.BRANCH));
+        action.processMessage(user, new MockMessage(Button.BRANCH_ROAD.get()));
         Place expected = new Place(user.getSquad(), RoadMap.Road.LONROK, 0);
         assertAll(
                 () -> assertEquals(expected, user.getSquad().getPlace())
@@ -51,7 +52,7 @@ class ActionDice1Test {
     @Test
     void actionDice1ProcessMessageTest2() {
         user.getSquad().setPlace(new Place(user.getSquad(), RoadMap.Road.MAINROAD, 43));
-        action.processMessage(user, new MockMessage(ActionDice1.MAIN));
+        action.processMessage(user, new MockMessage(Button.MAIN_ROAD.get()));
         Place expected = new Place(user.getSquad(), RoadMap.Road.MAINROAD, 44);
         assertAll(
                 () -> assertEquals(expected, user.getSquad().getPlace())
@@ -61,7 +62,7 @@ class ActionDice1Test {
     @Test
     void actionDice1ProcessMessageTest3() {
         user.getSquad().setPlace(new Place(user.getSquad(), RoadMap.Road.MAINROAD, 67));
-        action.processMessage(user, new MockMessage(ActionDice1.BRANCH));
+        action.processMessage(user, new MockMessage(Button.BRANCH_ROAD.get()));
         Place expected = new Place(user.getSquad(), RoadMap.Road.BAKSKIN, 0);
         assertAll(
                 () -> assertEquals(expected, user.getSquad().getPlace())
@@ -71,7 +72,7 @@ class ActionDice1Test {
     @Test
     void actionDice1ProcessMessageTest4() {
         user.getSquad().setPlace(new Place(user.getSquad(), RoadMap.Road.MAINROAD, 67));
-        action.processMessage(user, new MockMessage(ActionDice1.MAIN));
+        action.processMessage(user, new MockMessage(Button.MAIN_ROAD.get()));
         Place expected = new Place(user.getSquad(), RoadMap.Road.MAINROAD, 68);
         assertAll(
                 () -> assertEquals(expected, user.getSquad().getPlace())

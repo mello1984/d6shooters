@@ -1,7 +1,7 @@
 package game.d6shooters.bot.service;
 
 import game.d6shooters.bot.Bot;
-import game.d6shooters.bot.handler.HandlerManager;
+import game.d6shooters.handler.HandlerManager;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;

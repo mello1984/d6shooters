@@ -4,6 +4,8 @@ import game.d6shooters.bot.Bot;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
+import game.d6shooters.source.Button;
+import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -19,18 +21,6 @@ public class ActionDice6 extends AbstractAction {
     public ActionDice6(Bot bot) {
         super(bot);
     }
-
-    private static final String TEXT1 = "В перестрелке потеряли %d стрелков.";
-    private static final String TEXT2 = "Удача на нашей стороне, в перестрелке никого не потеряли.";
-    private static final String TEXT3 = "Пытаемся оторваться от погони, бросок бандитов: [%s], убито: %d";
-    private static final String TEXT4 = "Бросок бандитов: [%s], бросок стрелков: [%s], боеприпасы: %d, вооружение: %d, итог: [%d:%d] %s";
-    private static final String TEXT5 = "бандит убит";
-    private static final String TEXT6 = "погиб стрелок";
-    private static final String TEXT7 = "Охотник покинул ваш отряд";
-    private static final String TEXT8 = "В перестрелке потеряли %d стрелков, можно использовать медикаменты, чтобы их спасти.";
-    private static final String TEXT9 = "Использовать медикаменты";
-    private static final String TEXT10 = "Не использовать медикаменты";
-
     @Override
     public void action(User user) {
         int dice6count = user.getDicesCup().getCountActiveDiceCurrentValue(6);
@@ -40,17 +30,17 @@ public class ActionDice6 extends AbstractAction {
 
                 if (user.getSquad().hasResource(Squad.PILL)) {
                     user.getSquad().setResource(Squad.KILLED_SHOOTERS, killedShooters);
-                    bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(TEXT8, killedShooters), TEXT9, TEXT10));
+                    bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT8, killedShooters), Button.TEXT9.get(), Button.TEXT10.get()));
                     return;
                 }
 
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(TEXT1, killedShooters)));
+                bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT1, killedShooters)));
                 user.getSquad().addResource(Squad.SHOOTER, -killedShooters);
-            } else bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2));
+            } else bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT2)));
         }
 
         if (user.getSquad().getResource(Squad.SHOOTER) <= 1) {
-            bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT7));
+            bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.DICE6TEXT7)));
             user.getSquad().setResource(Squad.HUNTER, 0);
         }
 
@@ -66,7 +56,7 @@ public class ActionDice6 extends AbstractAction {
                 .peek(band::add)
                 .map(d -> d >= 3 ? 1 : 0).sum();
         killedShooters = Math.min(killedShooters, user.getSquad().getResource(Squad.SHOOTER));
-        bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(TEXT3,
+        bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(Text.getText(Text.DICE6TEXT3),
                 band.stream().map(String::valueOf).collect(Collectors.joining(", ")), killedShooters)));
         return killedShooters;
     }
@@ -102,19 +92,20 @@ public class ActionDice6 extends AbstractAction {
             result = squadStrength > bandStrength;
         } while (bandStrength == squadStrength);
 
-        bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(TEXT4,
+        bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(Text.getText(Text.DICE6TEXT4),
                 band.stream().map(String::valueOf).collect(Collectors.joining(", ")),
                 squad.stream().map(String::valueOf).collect(Collectors.joining(", ")),
                 user.getSquad().getResource(Squad.AMMO),
                 user.getSquad().getResource(Squad.BOMB),
                 bandStrength,
                 squadStrength,
-                result ? TEXT5 : TEXT6)));
+                result ? Text.getText(Text.DICE6TEXT5) : Text.getText(Text.DICE6TEXT6))));
         return result;
     }
 
     public void processMessage(User user, Message message) {
-        switch (message.getText()) {
+        Button button = Button.getButton(message.getText());
+        switch (button) {
             case TEXT9 -> {
                 user.getSquad().setResource(Squad.PILL, 0);
                 user.getSquad().setSquadState(SquadState.MOVE);
@@ -125,7 +116,7 @@ public class ActionDice6 extends AbstractAction {
                 user.getSquad().setSquadState(SquadState.MOVE);
                 user.getActionManager().doActions();
             }
-            default -> bot.send(template.getSendMessageWithButtons(user.getChatId(), "Команда не распознана"));
+            default -> bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
         }
 
     }

@@ -3,12 +3,14 @@ package game.d6shooters.bot;
 import game.d6shooters.Main;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
+import game.d6shooters.source.Button;
+import game.d6shooters.source.Icon;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.*;
 
 public class SendMessageTemplate {
-    private static final List<String> standardButtons = Arrays.asList(CommandButton.BAND.get(), CommandButton.COMMAND.get());
+    private static final List<String> standardButtons = Arrays.asList(Button.BAND.get(), Button.COMMAND.get());
     private static SendMessageTemplate sendMessageTemplate = null;
 
 

@@ -3,6 +3,8 @@ package game.d6shooters.actions;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
+import game.d6shooters.source.Button;
+import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -11,12 +13,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class ActionDice4 extends AbstractAction {
-    protected static final String REJECT = "Ничего";
-    protected static final String HIDE = "Прятаться";
-    protected static final String GUNFIGHT = "Отстреливаться";
-    protected static final String SHELTER = "Укрываться от жары";
-    protected static final String PATHFINDING = "Искать путь";
-
     public ActionDice4(Bot bot) {
         super(bot);
     }
@@ -26,7 +22,7 @@ public class ActionDice4 extends AbstractAction {
         String[] buttons = getListButtons(user);
         if (buttons.length > 0) {
             bot.send(template.getSendMessageWithButtons(user.getChatId(),
-                    "Необходимо распределить " + user.getDicesCup().getCountActiveDiceCurrentValue(4) + " '4', будьте внимательны",
+                    Text.getText(Text.ALLOCATE4, user.getDicesCup().getCountActiveDiceCurrentValue(4)),
                     getListButtons(user)));
         }
         if (buttons.length == 0) {
@@ -42,11 +38,11 @@ public class ActionDice4 extends AbstractAction {
         int dice6count = user.getDicesCup().getCountActiveDiceCurrentValue(6);
 
         if (dice4count > 0) {
-            if (dice6count > 0) buttons.add(HIDE);
-            if (dice6count > 0) buttons.add(GUNFIGHT);
-            if (dice5count > 0) buttons.add(SHELTER);
-            if (dice4count >= 2) buttons.add(PATHFINDING);
-            buttons.add(REJECT);
+            if (dice6count > 0) buttons.add(Button.HIDE.get());
+            if (dice6count > 0) buttons.add(Button.GUNFIGHT.get());
+            if (dice5count > 0) buttons.add(Button.SHELTER.get());
+            if (dice4count >= 2) buttons.add(Button.PATHFINDING.get());
+            buttons.add(Button.REJECT.get());
         }
         return buttons.toArray(new String[0]);
     }
@@ -58,31 +54,28 @@ public class ActionDice4 extends AbstractAction {
     }
 
     protected void allocateDices(User user, String text) {
-        switch (text) {
-            case HIDE:
+        Button button = Button.getButton(text);
+        switch (button) {
+            case HIDE -> {
                 useDice(user, 4);
                 useDice(user, 6);
                 if (user.getDicesCup().getCountActiveDiceCurrentValue(6) > 0) useDice(user, 6);
-                user.getSquad().addResource(Squad.PERIOD,1);
-                break;
-            case SHELTER:
+                user.getSquad().addResource(Squad.PERIOD, 1);
+            }
+            case SHELTER -> {
                 useDice(user, 4);
                 useDice(user, 5);
-                break;
-            case GUNFIGHT:
+            }
+            case GUNFIGHT -> {
                 useDice(user, 4);
-                user.getSquad().addResource(Squad.GUNFIGHT,1);
-                break;
-            case PATHFINDING:
+                user.getSquad().addResource(Squad.GUNFIGHT, 1);
+            }
+            case PATHFINDING -> {
                 useDice(user, 4);
                 useDice(user, 4);
-                user.getSquad().addResource(Squad.PATHFINDING,1);
-                break;
-            case REJECT:
-                user.getDicesCup().setUsedDiceCurrentValue(4);
-                break;
-            default:
-                break;
+                user.getSquad().addResource(Squad.PATHFINDING, 1);
+            }
+            case REJECT -> user.getDicesCup().setUsedDiceCurrentValue(4);
         }
     }
 

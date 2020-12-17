@@ -10,21 +10,11 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public abstract class AbstractAction implements Action {
     SendMessageTemplate template = new SendMessageTemplate();
     Bot bot;
-    Action next;
 
     public AbstractAction(Bot bot) {
         this.bot = bot;
     }
 
-    public AbstractAction(Bot bot, Action next) {
-        this.bot = bot;
-        this.next = next;
-    }
-
-    public Action setNext(Action next) {
-        this.next = next;
-        return this;
-    }
 
     @Override
     public void action(User user) {
