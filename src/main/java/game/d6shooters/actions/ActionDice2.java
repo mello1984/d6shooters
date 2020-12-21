@@ -6,20 +6,19 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
 
-public class ActionDice2 extends AbstractAction {
-
-    public ActionDice2(Bot bot) {
-        super(bot);
-    }
+@NoArgsConstructor
+public class ActionDice2 extends AbstractAction implements Serializable {
 
     @Override
     public void action(User user) {
         int foundFood = getFoundFood(user);
         if (foundFood > 0) {
-            user.getSquad().addResource(Squad.FOOD,foundFood);
+            user.getSquad().addResource(Squad.FOOD, foundFood);
             bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(Text.getText(Text.DICE2HUNT), foundFood)));
         }
     }

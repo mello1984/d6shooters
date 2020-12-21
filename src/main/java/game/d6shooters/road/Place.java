@@ -5,12 +5,14 @@ import game.d6shooters.users.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+import java.io.Serializable;
+
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Getter
 @ToString
 @EqualsAndHashCode
-public class Place {
+public class Place implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Squad squad;

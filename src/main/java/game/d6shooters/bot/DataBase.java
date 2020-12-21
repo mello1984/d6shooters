@@ -1,5 +1,7 @@
 package game.d6shooters.bot;
 
+import lombok.Getter;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
@@ -10,10 +12,11 @@ import java.util.logging.Logger;
 public class DataBase {
     private static final Logger logger = Logger.getLogger(DataBase.class.getName());
     private static DataBase instance = null;
-    private Connection conn;
+    @Getter
+    private Connection connection;
 
     private DataBase() {
-        conn = setConnection();
+        connection = setConnection();
     }
 
     private Connection setConnection() {
@@ -40,37 +43,37 @@ public class DataBase {
     }
 
     public void closeConnection() {
-        if (conn == null) return;
+        if (connection == null) return;
         try {
-            conn.close();
-            conn = null;
+            connection.close();
+            connection = null;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
     public boolean execute(String sql) throws SQLException {
-        if (conn == null)
+        if (connection == null)
             throw new SQLException("Connection null!");
-        Statement statement = conn.createStatement();
+        Statement statement = connection.createStatement();
         boolean res = statement.execute(sql);
         statement.close();
         return res;
     }
 
     public int executeUpdate(String sql) throws SQLException {
-        if (conn == null)
+        if (connection == null)
             throw new SQLException("Connection null!");
-        Statement statement = conn.createStatement();
+        Statement statement = connection.createStatement();
         int res = statement.executeUpdate(sql);
         statement.close();
         return res;
     }
 
     public ResultSet executeQuery(String sql) throws SQLException {
-        if (conn == null)
+        if (connection == null)
             throw new SQLException("Connection null!");
-        Statement statement = conn.createStatement();
+        Statement statement = connection.createStatement();
         ResultSet res = statement.executeQuery(sql);
         statement.close();
         return res;

@@ -6,12 +6,13 @@ import game.d6shooters.road.RoadMap;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Squad {
+public class Squad implements Serializable {
     private static final int MAX_AMMO = 5;
     private static final int MAX_FOOD = 12;
     private static final int MAX_SHOOTERS = 12;

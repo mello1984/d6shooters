@@ -11,13 +11,14 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log4j2
-public class TownShop {
+public class TownShop implements Serializable {
     final Set<Item> items;
     Item specialItem;
     boolean canGamingPoker;

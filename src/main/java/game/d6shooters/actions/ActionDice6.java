@@ -7,20 +7,20 @@ import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Button;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Log4j2
-public class ActionDice6 extends AbstractAction {
+@NoArgsConstructor
+public class ActionDice6 extends AbstractAction implements Serializable {
 
-    public ActionDice6(Bot bot) {
-        super(bot);
-    }
     @Override
     public void action(User user) {
         int dice6count = user.getDicesCup().getCountActiveDiceCurrentValue(6);

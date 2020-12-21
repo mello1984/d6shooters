@@ -18,7 +18,7 @@ class ActionEventTest {
     MockBot mockBot = new MockBot();
     MockTemplate mockTemplate = new MockTemplate();
     MockActionManager mockActionManager = new MockActionManager(user, mockBot);
-    ActionEvent action = new ActionEvent(mockBot);
+    ActionEvent action = new ActionEvent();
 
     @BeforeEach
     void setUp() {

@@ -26,7 +26,7 @@ class ActionDice1Test {
     MockTemplate mockTemplate = new MockTemplate();
     MockActionManager mockActionManager = new MockActionManager(user, mockBot);
 
-    ActionDice1 action = new ActionDice1(mockBot);
+    ActionDice1 action = new ActionDice1();
     DicesCup dicesCup = new DicesCup();
     List<Dice> diceList = new ArrayList<>();
 

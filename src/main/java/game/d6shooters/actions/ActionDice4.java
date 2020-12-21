@@ -6,16 +6,15 @@ import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Button;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
-public class ActionDice4 extends AbstractAction {
-    public ActionDice4(Bot bot) {
-        super(bot);
-    }
+@NoArgsConstructor
+public class ActionDice4 extends AbstractAction implements Serializable {
 
     @Override
     public void action(User user) {

@@ -19,7 +19,7 @@ public class RestartHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        User user = Main.users.userMap.get(message.getChatId());
+        User user = Main.users.getUserMap().get(message.getChatId());
         long chatId = user.getChatId();
 
         switch (Button.getButton(message.getText())) {
@@ -33,7 +33,7 @@ public class RestartHandler extends AbstractHandler {
     }
 
     public void restartGame(long chatId) {
-        Main.users.userMap.remove(chatId);
+        Main.users.getUserMap().remove(chatId);
         SendMessage sendMessage = template.getSendMessageNoButtons(chatId, TEXT2);
         SendMessageFormat.setButtons(sendMessage, "Начать новую игру");
         bot.send(sendMessage);

@@ -8,19 +8,18 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+@NoArgsConstructor
+public class ActionPoker extends AbstractAction implements Serializable {
 
-public class ActionPoker extends AbstractAction {
-
-    public ActionPoker(Bot bot) {
-        super(bot);
-    }
 
     @Override //action - only SquadState.POKER1
     public void action(User user) {

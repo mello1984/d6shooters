@@ -6,17 +6,18 @@ import game.d6shooters.game.SquadState;
 import game.d6shooters.road.Place;
 import game.d6shooters.road.TownShop;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.io.Serializable;
+
 @Log4j2
-public class ActionTown extends AbstractAction {
+@NoArgsConstructor
+public class ActionTown extends AbstractAction implements Serializable {
     private static final String TEXT1 = "Вы сейчас в городе %s";
     private static final String TEXT2 = "Вы успешно приобрели %s";
 
-    public ActionTown(Bot bot) {
-        super(bot);
-    }
 
     @Override
     public void action(User user) {

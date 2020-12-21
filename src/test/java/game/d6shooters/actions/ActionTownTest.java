@@ -19,11 +19,11 @@ class ActionTownTest {
     MockBot mockBot = new MockBot();
     MockTemplate mockTemplate = new MockTemplate();
     MockActionManager mockActionManager = new MockActionManager(user, mockBot);
-    ActionTown action = new ActionTown(mockBot);
+    ActionTown action = new ActionTown();
 
     @BeforeEach
     void setUp() {
-        Main.users.userMap.put(user.getChatId(), user);
+        Main.users.getUserMap().put(user.getChatId(), user);
         action.template = mockTemplate;
         user.setActionManager(mockActionManager);
         user.getSquad().setSquadState(SquadState.TOWN);

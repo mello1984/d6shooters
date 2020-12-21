@@ -5,14 +5,15 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.io.Serializable;
+
 @Log4j2
-public class ActionStartTurn extends AbstractAction {
-    public ActionStartTurn(Bot bot) {
-        super(bot);
-    }
+@NoArgsConstructor
+public class ActionStartTurn extends AbstractAction implements Serializable {
 
     public void processMessage(User user, Message message) {
         user.getSquad().setResource(Squad.GUNFIGHT, 0);

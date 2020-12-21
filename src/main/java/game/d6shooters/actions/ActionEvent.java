@@ -7,17 +7,17 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.io.Serializable;
 import java.util.*;
 
 
 @Log4j2
-public class ActionEvent extends AbstractAction {
-    public ActionEvent(Bot bot) {
-        super(bot);
-    }
+@NoArgsConstructor
+public class ActionEvent extends AbstractAction implements Serializable {
 
     @Override
     public void action(User user) {

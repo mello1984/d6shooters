@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.source.Button;
 import game.d6shooters.game.Dice;
@@ -8,15 +9,15 @@ import game.d6shooters.game.SquadState;
 import game.d6shooters.road.RoadNode;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-@Log4j2
-public class ActionDice1 extends AbstractAction {
+import java.io.Serializable;
 
-    public ActionDice1(Bot bot) {
-        super(bot);
-    }
+@Log4j2
+@NoArgsConstructor
+public class ActionDice1 extends AbstractAction implements Serializable  {
 
     @Override
     public void action(User user) {
@@ -44,6 +45,7 @@ public class ActionDice1 extends AbstractAction {
                 squad.setSquadState(SquadState.STARTTURN1);
                 bot.send(template.getSquadStateMessage(user.getChatId()));
                 bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.END_TURN), Button.NEXT_TURN.get()));
+                Main.users.saveUserToUserMap(user);
             } else {
                 squad.setSquadState(SquadState.ENDGAME);
                 user.getActionManager().doActions();

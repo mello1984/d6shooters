@@ -3,11 +3,15 @@ package game.d6shooters.actions;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.users.User;
 import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ActionManager {
+import java.io.Serializable;
+
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class ActionManager implements Serializable {
     Action actionDice1;
     Action actionDice2;
     Action actionDice3;
@@ -22,21 +26,22 @@ public class ActionManager {
     Action actionPoker;
     User user;
 
-    public ActionManager(User user, Bot bot) {
+    public ActionManager(User user) {
         this.user = user;
-        actionDice1 = new ActionDice1(bot);
-        actionDice2 = new ActionDice2(bot);
-        actionDice3 = new ActionDice3(bot);
-        actionDice4 = new ActionDice4(bot);
-        actionDice5 = new ActionDice5(bot);
-        actionDice6 = new ActionDice6(bot);
-        actionFeeding = new ActionFeeding(bot);
-        actionEvent = new ActionEvent(bot);
-        actionEndGame = new ActionEndGame(bot);
-        actionTown = new ActionTown(bot);
-        actionStartTurn = new ActionStartTurn(bot);
-        actionPoker = new ActionPoker(bot);
+        actionDice1 = new ActionDice1();
+        actionDice2 = new ActionDice2();
+        actionDice3 = new ActionDice3();
+        actionDice4 = new ActionDice4();
+        actionDice5 = new ActionDice5();
+        actionDice6 = new ActionDice6();
+        actionFeeding = new ActionFeeding();
+        actionEvent = new ActionEvent();
+        actionEndGame = new ActionEndGame();
+        actionTown = new ActionTown();
+        actionStartTurn = new ActionStartTurn();
+        actionPoker = new ActionPoker();
     }
+
 
     public void doActions() {
         switch (user.getSquad().getSquadState()) {

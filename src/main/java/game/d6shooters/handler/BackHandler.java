@@ -12,7 +12,7 @@ public class BackHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        User user = Main.users.userMap.get(message.getChatId());
+        User user = Main.users.getUserMap().get(message.getChatId());
         bot.send(template.getSquadStateMessage(user.getChatId()));
     }
 }

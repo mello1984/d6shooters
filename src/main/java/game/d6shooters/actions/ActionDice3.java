@@ -5,13 +5,14 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.Serializable;
+
 @Log4j2
-public class ActionDice3 extends AbstractAction {
-    public ActionDice3(Bot bot) {
-        super(bot);
-    }
+@NoArgsConstructor
+public class ActionDice3 extends AbstractAction implements Serializable {
 
     @Override
     public void action(User user) {

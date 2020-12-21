@@ -15,7 +15,7 @@ public class HandlerManager {
     }
 
     public Handler chooseHandler(Message message) {
-        if (!Main.users.userMap.containsKey(message.getChatId())) return new StartGameHandler(bot);
+        if (!Main.users.getUserMap().containsKey(message.getChatId())) return new StartGameHandler(bot);
 
         Button command = Button.getButton(message.getText());
         return switch (command) {
@@ -25,6 +25,7 @@ public class HandlerManager {
             case HELP -> new HelpHandler(bot);
             case RESTART, RESTART2 -> new RestartHandler(bot);
             case BACK -> new BackHandler(bot);
+            case SCORES_MY, SCORES_HIGH -> new ScoresHandler(bot);
             default -> new ActionManagerHandler(bot);
         };
     }

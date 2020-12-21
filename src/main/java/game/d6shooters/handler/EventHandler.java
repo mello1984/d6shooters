@@ -16,7 +16,7 @@ public class EventHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        User user = Main.users.userMap.get(message.getChatId());
+        User user = Main.users.getUserMap().get(message.getChatId());
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), TEXT1);
         bot.send(sendMessage);
         user.getSquad().setSquadState(SquadState.EVENT);

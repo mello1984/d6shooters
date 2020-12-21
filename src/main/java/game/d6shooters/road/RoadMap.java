@@ -5,6 +5,8 @@ import game.d6shooters.game.Squad;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
-public class RoadMap {
+public class RoadMap implements Serializable {
     public final Map<Road, List<RoadNode>> map = new HashMap<>();
     private final List<RoadNode> mainRoad = getRoad(80);
     private final List<RoadNode> lonrockRoad = getRoad(5);

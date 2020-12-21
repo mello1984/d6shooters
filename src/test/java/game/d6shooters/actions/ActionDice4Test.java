@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ActionDice4Test {
     User user = new User(0, "name");
-    ActionDice4 action = new ActionDice4(null);
+    ActionDice4 action = new ActionDice4();
 
     @BeforeEach
     void setUp() {

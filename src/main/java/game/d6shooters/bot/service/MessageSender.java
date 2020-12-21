@@ -39,6 +39,12 @@ public class MessageSender implements Runnable {
             log.info(String.format("Message sent to: %s", message.getChatId()));
         } catch (TelegramApiException e) {
             log.error(String.format("Exception of sending message to: %s", message.getChatId()), e);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+            send(message);
         }
     }
 }

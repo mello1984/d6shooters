@@ -4,11 +4,12 @@ import game.d6shooters.source.Icon;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
 @Setter
-public class DicesCup {
+public class DicesCup implements Serializable {
     private static final Random random = new Random();
     protected static final Map<Integer, String> dices = new HashMap<>() {{
         put(1, Icon.DICE1.get());

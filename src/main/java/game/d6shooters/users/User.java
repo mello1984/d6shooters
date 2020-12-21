@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,15 +18,14 @@ import java.util.Objects;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class User implements Serializable {
     final long chatId;
     String userName;
     Squad squad;
-    transient DicesCup dicesCup;
-    transient PokerDices pokerDices;
-    transient ActionManager actionManager;
-    transient List<List<String>> buttons;
-    transient List<Integer> games;
+    DicesCup dicesCup;
+     PokerDices pokerDices;
+     ActionManager actionManager;
+    List<List<String>> buttons;
 
     public User(long chatId, String userName) {
         this.chatId = chatId;
@@ -32,7 +33,6 @@ public class User {
         squad = new Squad();
         dicesCup = new DicesCup();
         buttons = new ArrayList<>();
-        games = new ArrayList<>();
     }
 
     @Override

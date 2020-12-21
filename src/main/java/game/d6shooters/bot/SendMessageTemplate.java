@@ -22,7 +22,7 @@ public class SendMessageTemplate {
 
     public SendMessage getSendMessageWithButtons(Long chatId, String text, List<List<String>> buttons) {
         buttons.removeAll(standardButtons);
-        Main.users.userMap.get(chatId).setButtons(new ArrayList<>(buttons));
+        Main.users.getUserMap().get(chatId).setButtons(new ArrayList<>(buttons));
         buttons.add(standardButtons);
 
         SendMessage sendMessage = SendMessageFormat
@@ -49,13 +49,13 @@ public class SendMessageTemplate {
     }
 
     public SendMessage getSquadStateMessage(Long chatId) {
-        Squad squad = Main.users.userMap.get(chatId).getSquad();
+        Squad squad = Main.users.getUserMap().get(chatId).getSquad();
         String text = Icon.GUNFIGHTER.get() + " Отряд: " + squad.getResource(Squad.SHOOTER) + "\n" +
                 Icon.FOOD.get() + " Еда: " + squad.getResource(Squad.FOOD) + "\n" +
                 Icon.AMMO.get() + " Боеприпасы: " + squad.getResource(Squad.AMMO) + "\n" +
                 Icon.MONEYBAG.get() + " Золото: " + squad.getResource(Squad.GOLD) + "\n" +
                 Icon.FOOTPRINTS.get() + " Пройдено: " + squad.getResource(Squad.PATH) + "\n" +
                 Icon.CLOCK.get() + " Прошло дней: " + squad.getResource(Squad.PERIOD);
-        return getSendMessageWithButtons(chatId, text, Main.users.userMap.get(chatId).getButtons());
+        return getSendMessageWithButtons(chatId, text, Main.users.getUserMap().get(chatId).getButtons());
     }
 }

@@ -21,19 +21,21 @@ public class CommandHandler extends AbstractHandler {
 
     @Override
     public void handle(Message message) {
-        User user = Main.users.userMap.get(message.getChatId());
+        User user = Main.users.getUserMap().get(message.getChatId());
         Squad squad = user.getSquad();
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), "Выберите дополнительную команду");
 
-        List<String> buttons = new ArrayList<>(Arrays.asList(Button.HELP.get(), Button.RESTART.get(), Button.BACK.get()));
+        List<String> buttons1 = new ArrayList<>(Arrays.asList(Button.HELP.get(), Button.RESTART.get()));
         boolean canActivateEvent = squad.isCanActivateEvent() && squad.getSquadState() == SquadState.STARTTURN1;
         if (canActivateEvent) {
-            buttons.add(0, Button.EVENT.get());
+            buttons1.add(0, Button.EVENT.get());
             squad.setCanActivateEvent(false);
         }
+        List<String> buttons2 = new ArrayList<>(Arrays.asList(Button.SCORES_MY.get(), Button.SCORES_HIGH.get(), Button.BACK.get()));
 
         List<List<String>> list = new ArrayList<>();
-        list.add(buttons);
+        list.add(buttons1);
+        list.add(buttons2);
         SendMessageFormat.setButtons(sendMessage, list);
         bot.send(sendMessage);
     }

@@ -31,6 +31,8 @@ public enum Button {
     RESTART("restart"),
     RESTART2("restart!"),
     BACK("<="),
+    SCORES_MY("my_scores"),
+    SCORES_HIGH("high_scores"),
 
     BRANCH_ROAD("Свернуть к городу"),
     MAIN_ROAD("Ехать прямо"),

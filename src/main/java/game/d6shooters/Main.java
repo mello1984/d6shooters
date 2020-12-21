@@ -8,10 +8,11 @@ import org.telegram.telegrambots.ApiContextInitializer;
 
 public class Main {
     public static final Users users = new Users();
+    public static Bot bot;
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
-        Bot bot = new Bot();
+        bot = new Bot();
         bot.botConnect();
 
         MessageSender messageSender = new MessageSender(bot);

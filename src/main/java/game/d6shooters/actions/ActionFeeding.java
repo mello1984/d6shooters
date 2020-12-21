@@ -5,11 +5,11 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 
-public class ActionFeeding extends AbstractAction {
-    public ActionFeeding(Bot bot) {
-        super(bot);
-    }
+import java.io.Serializable;
+@NoArgsConstructor
+public class ActionFeeding extends AbstractAction implements Serializable {
 
     @Override
     public void action(User user) {
