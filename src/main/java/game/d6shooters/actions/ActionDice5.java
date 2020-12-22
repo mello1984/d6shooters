@@ -1,24 +1,21 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.bot.Bot;
+import game.d6shooters.Main;
 import game.d6shooters.source.Button;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
-@NoArgsConstructor
-public class ActionDice5 extends AbstractAction implements Serializable {
+public class ActionDice5 extends AbstractAction {
 
     @Override
     public void action(User user) {
@@ -30,16 +27,16 @@ public class ActionDice5 extends AbstractAction implements Serializable {
                 if (user.getSquad().getResource(Squad.PILL) > 0) buttons.add(Button.LOSE_PILL.get());
                 List<List<String>> lists = new ArrayList<>();
                 lists.add(buttons);
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE5HEAT1, roll), lists));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE5HEAT1, roll), lists));
             } else {
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE5HEAT2, roll)));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE5HEAT2, roll)));
                 useDice(user, 5);
-                user.getActionManager().doActions();
+                Main.actionManager.doActions(user);
             }
         } else {
             user.getSquad().setSquadState(SquadState.GUNFIGHT);
             log.debug(String.format("SquadState %s -> GUNFIGHT", user.getSquad().getSquadState()));
-            user.getActionManager().doActions();
+            Main.actionManager.doActions(user);
         }
     }
 
@@ -55,6 +52,6 @@ public class ActionDice5 extends AbstractAction implements Serializable {
             }
         }
         if (!user.getSquad().hasResource(Squad.SHOOTER)) user.getSquad().setSquadState(SquadState.ENDGAME);
-        user.getActionManager().doActions();
+        Main.actionManager.doActions(user);
     }
 }

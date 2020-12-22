@@ -6,6 +6,7 @@ import game.d6shooters.game.PokerDices;
 import game.d6shooters.game.Squad;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
@@ -23,8 +24,8 @@ public class User implements Serializable {
     String userName;
     Squad squad;
     DicesCup dicesCup;
-     PokerDices pokerDices;
-     ActionManager actionManager;
+    PokerDices pokerDices;
+    //    ActionManager actionManager;
     List<List<String>> buttons;
 
     public User(long chatId, String userName) {

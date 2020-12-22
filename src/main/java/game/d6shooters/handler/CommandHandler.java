@@ -37,6 +37,6 @@ public class CommandHandler extends AbstractHandler {
         list.add(buttons1);
         list.add(buttons2);
         SendMessageFormat.setButtons(sendMessage, list);
-        bot.send(sendMessage);
+        Main.bot.send(sendMessage);
     }
 }

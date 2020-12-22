@@ -2,6 +2,7 @@ package game.d6shooters.actions;
 
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
+import game.d6shooters.bot.DataBase;
 import game.d6shooters.source.Button;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.Squad;
@@ -16,8 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.io.Serializable;
 
 @Log4j2
-@NoArgsConstructor
-public class ActionDice1 extends AbstractAction implements Serializable  {
+public class ActionDice1 extends AbstractAction {
 
     @Override
     public void action(User user) {
@@ -32,23 +32,24 @@ public class ActionDice1 extends AbstractAction implements Serializable  {
                 squad.setPlace(squad.getRoadMap().next(squad.getPlace(), true));
             else {
                 squad.setSquadState(SquadState.CROSSROAD);
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.CROSS_ROAD), Button.BRANCH_ROAD.get(), Button.MAIN_ROAD.get()));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.CROSS_ROAD), Button.BRANCH_ROAD.get(), Button.MAIN_ROAD.get()));
                 return;
             }
             executeSpecialPlaces(squad);
-            user.getActionManager().doActions();
+            Main.actionManager.doActions(user);
 
         } else {
             squad.addResource(Squad.PERIOD, 1);
 
             if (squad.getResource(Squad.PERIOD) < 40) {
                 squad.setSquadState(SquadState.STARTTURN1);
-                bot.send(template.getSquadStateMessage(user.getChatId()));
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.END_TURN), Button.NEXT_TURN.get()));
-                Main.users.saveUserToUserMap(user);
+                Main.bot.send(template.getSquadStateMessage(user.getChatId()));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.END_TURN), Button.NEXT_TURN.get()));
+                DataBase.getInstance().saveUserToUserMap(user);
+//                Main.users.saveUserToUserMap(user);
             } else {
                 squad.setSquadState(SquadState.ENDGAME);
-                user.getActionManager().doActions();
+                Main.actionManager.doActions(user);
             }
         }
     }
@@ -77,11 +78,11 @@ public class ActionDice1 extends AbstractAction implements Serializable  {
             case BRANCH_ROAD -> user.getSquad().setPlace(user.getSquad().getRoadMap().next(user.getSquad().getPlace(), false));
             case MAIN_ROAD -> user.getSquad().setPlace(user.getSquad().getRoadMap().next(user.getSquad().getPlace(), true));
             default -> {
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
                 return;
             }
         }
         user.getSquad().setSquadState(SquadState.MOVE);
-        user.getActionManager().doActions();
+        Main.actionManager.doActions(user);
     }
 }

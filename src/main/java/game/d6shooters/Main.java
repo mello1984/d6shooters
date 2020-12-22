@@ -1,5 +1,6 @@
 package game.d6shooters;
 
+import game.d6shooters.actions.ActionManager;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.service.MessageReceiver;
 import game.d6shooters.bot.service.MessageSender;
@@ -9,6 +10,7 @@ import org.telegram.telegrambots.ApiContextInitializer;
 public class Main {
     public static final Users users = new Users();
     public static Bot bot;
+    public static ActionManager actionManager = new ActionManager();
 
     public static void main(String[] args) {
         ApiContextInitializer.init();

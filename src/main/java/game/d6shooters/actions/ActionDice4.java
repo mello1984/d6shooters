@@ -1,32 +1,28 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.bot.Bot;
+import game.d6shooters.Main;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Button;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
-import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
-@NoArgsConstructor
-public class ActionDice4 extends AbstractAction implements Serializable {
+public class ActionDice4 extends AbstractAction {
 
     @Override
     public void action(User user) {
         String[] buttons = getListButtons(user);
         if (buttons.length > 0) {
-            bot.send(template.getSendMessageWithButtons(user.getChatId(),
+           Main.bot.send(template.getSendMessageWithButtons(user.getChatId(),
                     Text.getText(Text.ALLOCATE4, user.getDicesCup().getCountActiveDiceCurrentValue(4)),
                     getListButtons(user)));
         }
         if (buttons.length == 0) {
             user.getSquad().setSquadState(SquadState.OTHER);
-            user.getActionManager().doActions();
+            Main.actionManager.doActions(user);
         }
     }
 
@@ -48,8 +44,8 @@ public class ActionDice4 extends AbstractAction implements Serializable {
 
     public void processMessage(User user, Message message) {
         allocateDices(user, message.getText());
-        bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
-        user.getActionManager().doActions();
+        Main.bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
+        Main.actionManager.doActions(user);
     }
 
     protected void allocateDices(User user, String text) {

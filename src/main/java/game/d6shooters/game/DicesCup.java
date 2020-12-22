@@ -19,8 +19,9 @@ public class DicesCup implements Serializable {
         put(5, Icon.DICE5.get());
         put(6, Icon.DICE6.get());
     }};
-    protected List<Dice> diceList = new ArrayList<>();
     private static final int MAX_VALUE = 8;
+    protected List<Dice> diceList = new ArrayList<>();
+
 
     public DicesCup() {
         diceList.add(new Dice(Dice.DiceType.WHITE));

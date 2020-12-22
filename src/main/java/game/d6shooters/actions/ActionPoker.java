@@ -1,6 +1,6 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.bot.Bot;
+import game.d6shooters.Main;
 import game.d6shooters.source.Button;
 import game.d6shooters.source.Icon;
 import game.d6shooters.game.PokerDices;
@@ -8,18 +8,14 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
-import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-@NoArgsConstructor
-public class ActionPoker extends AbstractAction implements Serializable {
-
+public class ActionPoker extends AbstractAction {
 
     @Override //action - only SquadState.POKER1
     public void action(User user) {
@@ -39,7 +35,7 @@ public class ActionPoker extends AbstractAction implements Serializable {
         }
         buttons.add(Collections.singletonList(Button.NO_GAME.get()));
 
-        bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.POKER_TEXT1), buttons));
+        Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.POKER_TEXT1), buttons));
         user.getSquad().setSquadState(SquadState.POKER2);
     }
 
@@ -51,7 +47,7 @@ public class ActionPoker extends AbstractAction implements Serializable {
                 Button button = Button.getButton(message.getText());
                 if (button == Button.NO_GAME) {
                     user.getSquad().setSquadState(SquadState.TOWN);
-                    user.getActionManager().doActions();
+                    Main.actionManager.doActions(user);
                     return;
                 }
 
@@ -64,32 +60,32 @@ public class ActionPoker extends AbstractAction implements Serializable {
 
                 user.setPokerDices(new PokerDices());
                 user.getPokerDices().getFirstTurnDices();
-                bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.POKER_TEXT2)));
-                bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getPokerDices().toString()));
-                bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.POKER_TEXT3)));
+                Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.POKER_TEXT2)));
+                Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getPokerDices().toString()));
+                Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.POKER_TEXT3)));
                 user.getSquad().setSquadState(SquadState.POKER3);
             }
             case POKER3 -> {
                 if (!user.getPokerDices().checkString(message.getText(), false)) {
-                    bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
+                    Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
                     return;
                 }
 
                 user.getSquad().setSquadState(SquadState.POKER4);
                 if (!message.getText().equals("0")) {
                     user.getPokerDices().getRerolledDices(message.getText());
-                    bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getPokerDices().toString()));
-                    bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.POKER_TEXT3)));
+                    Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getPokerDices().toString()));
+                    Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.POKER_TEXT3)));
                 } else processMessage(user, message);
             }
             case POKER4 -> {
                 if (!user.getPokerDices().checkString(message.getText(), false)) {
-                    bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
+                    Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
                     return;
                 }
 
                 if (!message.getText().equals("0")) user.getPokerDices().getRerolledDices(message.getText());
-                bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getPokerDices().toString()));
+                Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), user.getPokerDices().toString()));
                 executeResultGame(user);
             }
         }
@@ -110,11 +106,11 @@ public class ActionPoker extends AbstractAction implements Serializable {
 
         user.getSquad().setSquadState(SquadState.TOWN);
         user.getSquad().getPlace().getTownShop().setCanGamingPoker(false);
-        user.getActionManager().doActions();
+        Main.actionManager.doActions(user);
     }
 
     protected void setResultGame(User user, String text, int resultMultiplier) {
-        bot.send(template.getSendMessageNoButtons(user.getChatId(), text));
+        Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), text));
         user.getSquad().setPokerBetValue(resultMultiplier * user.getSquad().getPokerBetValue());
     }
 }

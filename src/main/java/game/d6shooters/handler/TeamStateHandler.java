@@ -15,7 +15,7 @@ public class TeamStateHandler extends AbstractHandler {
     public void handle(Message message) {
         User user = Main.users.getUserMap().get(message.getChatId());
         SendMessage sendMessage = template.getSquadStateMessage(user.getChatId());
-        bot.send(sendMessage);
+        Main.bot.send(sendMessage);
     }
 }
 

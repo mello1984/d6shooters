@@ -20,8 +20,8 @@ public class StartGameHandler extends AbstractHandler {
         Main.users.getUserMap().put(chatId, user);
         user.getSquad().setSquadState(SquadState.STARTTURN1);
 //        user.setActionManager(new ActionManager(user, bot));
-        user.setActionManager(new ActionManager(user));
+//        user.setActionManager(new ActionManager(user));
         String text = "Вы успешно начали игру\n" + template.getSquadStateMessage(chatId).getText();
-        bot.send(template.getSendMessageWithButtons(chatId, text, Button.NEXT_TURN.name()));
+        Main.bot.send(template.getSendMessageWithButtons(chatId, text, Button.NEXT_TURN.name()));
     }
 }

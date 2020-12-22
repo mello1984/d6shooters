@@ -1,29 +1,24 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.Main;
-import game.d6shooters.bot.Bot;
 import game.d6shooters.handler.RestartHandler;
 import game.d6shooters.game.Squad;
 import game.d6shooters.road.RoadNode;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
-import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-@NoArgsConstructor
-public class ActionEndGame extends AbstractAction implements Serializable {
-
+public class ActionEndGame extends AbstractAction {
 
     @Override
     public void action(User user) {
         if (user.getSquad().getPlace().getType() == RoadNode.Type.RINO) {
             int score = getScores(user);
-            bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.END_GAME_WIN, score)));
+            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.END_GAME_WIN, score)));
             Main.users.saveWinner(score, user);
-        } else bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.END_GAME_LOSE)));
+        } else Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.END_GAME_LOSE)));
 
-        bot.send(template.getSquadStateMessage(user.getChatId()));
-        new RestartHandler(bot).restartGame(user.getChatId());
+        Main.bot.send(template.getSquadStateMessage(user.getChatId()));
+        new RestartHandler(Main.bot).restartGame(user.getChatId());
     }
 
     private int getScores(User user) {

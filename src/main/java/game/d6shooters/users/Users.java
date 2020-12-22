@@ -67,7 +67,8 @@ public class Users {
     }
 
     public void saveUsersToUserMap() {
-        userMap.values().forEach(this::saveUserToUserMap);
+        DataBase dataBase = DataBase.getInstance();
+        userMap.values().forEach(dataBase::saveUserToUserMap);
     }
 
     public void saveUserToUserMap(User user) {
@@ -89,6 +90,7 @@ public class Users {
             e.printStackTrace();
         }
     }
+
     private Map<Long, User> loadUserMap() {
         Map<Long, User> map = new HashMap<>();
         String query = "SELECT * FROM users";

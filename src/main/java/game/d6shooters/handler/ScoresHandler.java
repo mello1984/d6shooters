@@ -29,7 +29,7 @@ public class ScoresHandler extends AbstractHandler {
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), "");
         sendMessage.setText(button == Button.SCORES_MY ? getMyWins(user) : getAllWins());
         SendMessageFormat.setButtons(sendMessage, user.getButtons());
-        bot.send(sendMessage);
+        Main.bot.send(sendMessage);
     }
 
     public String getMyWins(User user) {

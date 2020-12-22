@@ -17,13 +17,13 @@ class ActionEventTest {
     User user = new User(0, "name");
     MockBot mockBot = new MockBot();
     MockTemplate mockTemplate = new MockTemplate();
-    MockActionManager mockActionManager = new MockActionManager(user, mockBot);
+    MockActionManager mockActionManager = new MockActionManager();
     ActionEvent action = new ActionEvent();
 
     @BeforeEach
     void setUp() {
         action.template = mockTemplate;
-        user.setActionManager(mockActionManager);
+        //        user.setActionManager(mockActionManager);
         user.getSquad().setResource(Squad.AMMO,3);
         user.getSquad().setResource(Squad.SHOOTER,10);
     }

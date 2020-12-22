@@ -6,12 +6,6 @@ import game.d6shooters.users.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 public class MockActionManager extends ActionManager {
-    public MockActionManager(User user, Bot bot) {
-        super(user);
-
-    }
-
-    @Override
     public void doActions() {
 //        System.out.println("MockActionManager.doActions(). " + user.getChatId());
     }

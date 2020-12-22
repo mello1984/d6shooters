@@ -20,7 +20,7 @@ class ActionDice3Test {
     User user = new User(0, "name");
     MockBot mockBot = new MockBot();
     MockTemplate mockTemplate = new MockTemplate();
-    MockActionManager mockActionManager = new MockActionManager(user, mockBot);
+    MockActionManager mockActionManager = new MockActionManager();
 
     ActionDice3 action = new ActionDice3();
     DicesCup dicesCup = new DicesCup();
@@ -30,7 +30,7 @@ class ActionDice3Test {
     void setUp() {
         action.template = mockTemplate;
         user.setDicesCup(dicesCup);
-        user.setActionManager(mockActionManager);
+        //        user.setActionManager(mockActionManager);
     }
 
     @Test

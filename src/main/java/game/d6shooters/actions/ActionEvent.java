@@ -1,28 +1,25 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.bot.Bot;
+import game.d6shooters.Main;
 import game.d6shooters.source.Button;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.io.Serializable;
 import java.util.*;
 
 
 @Log4j2
-@NoArgsConstructor
-public class ActionEvent extends AbstractAction implements Serializable {
+public class ActionEvent extends AbstractAction {
 
     @Override
     public void action(User user) {
         int roll = DicesCup.getD6Int();
-        bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT1, roll)));
+        Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT1, roll)));
         switch (roll) {
             case 1 -> startEvent1(user);
             case 2 -> startEvent2(user);
@@ -41,7 +38,7 @@ public class ActionEvent extends AbstractAction implements Serializable {
     protected void startEvent2(User user) {
         if (user.getSquad().getResource(Squad.AMMO) > 0) {
             user.getSquad().setSquadState(SquadState.EVENT2);
-            bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT2), Button.HUNT.get(), Button.NONE.get()));
+            Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT2), Button.HUNT.get(), Button.NONE.get()));
         } else toMoveAction(user);
     }
 
@@ -53,12 +50,12 @@ public class ActionEvent extends AbstractAction implements Serializable {
         if (user.getSquad().getResource(Squad.FOOD) >= 2) buttons.add(Button.SELLFOOD.get());
         if (user.getSquad().getResource(Squad.AMMO) >= 2) buttons.add(Button.SELLAMMO.get());
         buttons.add(Button.NONE.get());
-        bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT3), buttons.toArray(new String[0])));
+        Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT3), buttons.toArray(new String[0])));
     }
 
     protected void startEvent5(User user) {
         modify(user, 0, -1, 0, 0, 0, 1);
-        bot.send(template.getSendMessageWithButtons(user.getChatId(), Button.STRAY.get()));
+        Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Button.STRAY.get()));
         toMoveAction(user);
     }
 
@@ -71,19 +68,19 @@ public class ActionEvent extends AbstractAction implements Serializable {
             buttons.add(Button.LOSEFOODANDGOLD.get());
         if (user.getSquad().hasResource(Squad.PILL)) buttons.add(Button.LOSE_PILL.get());
         buttons.add(Button.LOSE2GUN.get());
-        bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT4), buttons.toArray(new String[0])));
+        Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT4), buttons.toArray(new String[0])));
     }
 
     protected void toMoveAction(User user) {
         user.getSquad().setSquadState(SquadState.MOVE);
-        user.getActionManager().doActions();
+        Main.actionManager.doActions(user);
     }
 
     public void processMessage(User user, Message message) {
         Button action = Button.getButton(message.getText());
 
         if (action == Button.EMPTY) {
-            bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
+            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
             return;
         }
 
@@ -107,7 +104,7 @@ public class ActionEvent extends AbstractAction implements Serializable {
                     case LOSE2GUN -> modify(user, 0, 0, 0, -2, 0, 0);
                     case LOSE_PILL -> user.getSquad().setResource(Squad.PILL, 0);
                     default -> {
-                        bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
+                        Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
                         return;
                     }
                 }
@@ -132,7 +129,7 @@ public class ActionEvent extends AbstractAction implements Serializable {
         else error = true;
 
         if (error) {
-            bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT5)));
+            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT5)));
             user.getSquad().addResource(Squad.SHOOTER, -user.getSquad().getResource(Squad.SHOOTER));
         }
     }

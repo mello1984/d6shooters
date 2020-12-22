@@ -1,7 +1,11 @@
 package game.d6shooters.bot;
 
+import game.d6shooters.users.User;
 import lombok.Getter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
@@ -83,4 +87,28 @@ public class DataBase {
         if (instance == null) instance = new DataBase();
         return instance;
     }
+
+
+    public boolean saveUserToUserMap(User user) {
+        String query = "INSERT INTO users (user_id, user_data) VALUES (?, ?) ON CONFLICT (user_id) DO UPDATE SET user_data=EXCLUDED.user_data";
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            oos.writeObject(user);
+            oos.flush();
+            byte[] userBytes = baos.toByteArray();
+
+            statement.setLong(1, user.getChatId());
+            statement.setBytes(2, userBytes);
+            statement.executeUpdate();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
 }
+
+

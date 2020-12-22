@@ -1,25 +1,22 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.bot.Bot;
+import game.d6shooters.Main;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Button;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Log4j2
-@NoArgsConstructor
-public class ActionDice6 extends AbstractAction implements Serializable {
+public class ActionDice6 extends AbstractAction {
 
     @Override
     public void action(User user) {
@@ -30,24 +27,24 @@ public class ActionDice6 extends AbstractAction implements Serializable {
 
                 if (user.getSquad().hasResource(Squad.PILL)) {
                     user.getSquad().setResource(Squad.KILLED_SHOOTERS, killedShooters);
-                    bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT8, killedShooters), Button.TEXT9.get(), Button.TEXT10.get()));
+                    Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT8, killedShooters), Button.TEXT9.get(), Button.TEXT10.get()));
                     return;
                 }
 
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT1, killedShooters)));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT1, killedShooters)));
                 user.getSquad().addResource(Squad.SHOOTER, -killedShooters);
-            } else bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT2)));
+            } else Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT2)));
         }
 
         if (user.getSquad().getResource(Squad.SHOOTER) <= 1) {
-            bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.DICE6TEXT7)));
+            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.DICE6TEXT7)));
             user.getSquad().setResource(Squad.HUNTER, 0);
         }
 
         if (!user.getSquad().hasResource(Squad.SHOOTER)) user.getSquad().setSquadState(SquadState.ENDGAME);
         else user.getSquad().setSquadState(SquadState.MOVE);
         log.debug(String.format("SquadState %s -> MOVE", user.getSquad().getSquadState()));
-        user.getActionManager().doActions();
+        Main.actionManager.doActions(user);
     }
 
     protected int getKilledShootersNoShootout(User user) {
@@ -56,7 +53,7 @@ public class ActionDice6 extends AbstractAction implements Serializable {
                 .peek(band::add)
                 .map(d -> d >= 3 ? 1 : 0).sum();
         killedShooters = Math.min(killedShooters, user.getSquad().getResource(Squad.SHOOTER));
-        bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(Text.getText(Text.DICE6TEXT3),
+        Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(Text.getText(Text.DICE6TEXT3),
                 band.stream().map(String::valueOf).collect(Collectors.joining(", ")), killedShooters)));
         return killedShooters;
     }
@@ -92,7 +89,7 @@ public class ActionDice6 extends AbstractAction implements Serializable {
             result = squadStrength > bandStrength;
         } while (bandStrength == squadStrength);
 
-        bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(Text.getText(Text.DICE6TEXT4),
+        Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), String.format(Text.getText(Text.DICE6TEXT4),
                 band.stream().map(String::valueOf).collect(Collectors.joining(", ")),
                 squad.stream().map(String::valueOf).collect(Collectors.joining(", ")),
                 user.getSquad().getResource(Squad.AMMO),
@@ -109,14 +106,14 @@ public class ActionDice6 extends AbstractAction implements Serializable {
             case TEXT9 -> {
                 user.getSquad().setResource(Squad.PILL, 0);
                 user.getSquad().setSquadState(SquadState.MOVE);
-                user.getActionManager().doActions();
+                Main.actionManager.doActions(user);
             }
             case TEXT10 -> {
                 user.getSquad().addResource(Squad.SHOOTER, user.getSquad().getResource(Squad.KILLED_SHOOTERS));
                 user.getSquad().setSquadState(SquadState.MOVE);
-                user.getActionManager().doActions();
+                Main.actionManager.doActions(user);
             }
-            default -> bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
+            default -> Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
         }
 
     }

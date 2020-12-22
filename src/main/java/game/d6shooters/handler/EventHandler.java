@@ -18,8 +18,8 @@ public class EventHandler extends AbstractHandler {
     public void handle(Message message) {
         User user = Main.users.getUserMap().get(message.getChatId());
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), TEXT1);
-        bot.send(sendMessage);
+        Main.bot.send(sendMessage);
         user.getSquad().setSquadState(SquadState.EVENT);
-        user.getActionManager().doActions();
+        Main.actionManager.doActions(user);
     }
 }

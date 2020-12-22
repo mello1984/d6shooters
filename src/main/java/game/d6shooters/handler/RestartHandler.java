@@ -26,7 +26,7 @@ public class RestartHandler extends AbstractHandler {
             case RESTART -> {
                 SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), TEXT1);
                 SendMessageFormat.setButtons(sendMessage, Button.RESTART2.get(), Button.BACK.get());
-                bot.send(sendMessage);
+                Main.bot.send(sendMessage);
             }
             case RESTART2 -> restartGame(chatId);
         }
@@ -36,6 +36,6 @@ public class RestartHandler extends AbstractHandler {
         Main.users.getUserMap().remove(chatId);
         SendMessage sendMessage = template.getSendMessageNoButtons(chatId, TEXT2);
         SendMessageFormat.setButtons(sendMessage, "Начать новую игру");
-        bot.send(sendMessage);
+        Main.bot.send(sendMessage);
     }
 }

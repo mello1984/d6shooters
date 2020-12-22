@@ -17,7 +17,7 @@ public class HelpHandler extends AbstractHandler {
         User user = Main.users.getUserMap().get(message.getChatId());
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), "HELP TEXT");
         SendMessageFormat.setButtons(sendMessage,user.getButtons());
-        bot.send(sendMessage);
+        Main.bot.send(sendMessage);
     }
 }
 
