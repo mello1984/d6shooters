@@ -2,6 +2,7 @@ package game.d6shooters.handler;
 
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
+import game.d6shooters.bot.DataBase;
 import game.d6shooters.bot.SendMessageFormat;
 import game.d6shooters.source.Button;
 import game.d6shooters.users.User;
@@ -33,7 +34,7 @@ public class ScoresHandler extends AbstractHandler {
     }
 
     public String getMyWins(User user) {
-        ArrayList<Integer> list = Main.users.getUserResults(user);
+        ArrayList<Integer> list = DataBase.getInstance().getUserResults(user);
         if (list.size() == 0) return "Победы не найдены";
 
         StringBuilder builder = new StringBuilder("Мои победы:\n1. " + list.get(0));
@@ -45,7 +46,7 @@ public class ScoresHandler extends AbstractHandler {
 
     protected String getAllWins() {
         final int TOP_COUNT = 25;
-        ArrayListValuedHashMap<Integer, Long> map = Main.users.getTopResults(TOP_COUNT);
+        ArrayListValuedHashMap<Integer, Long> map = DataBase.getInstance().getTopResults(TOP_COUNT);
         StringBuilder builder = new StringBuilder();
 
         int num = 1;

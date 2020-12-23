@@ -1,15 +1,16 @@
 package game.d6shooters.bot;
 
+import game.d6shooters.Main;
+import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 import lombok.Getter;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +19,16 @@ public class DataBase {
     private static DataBase instance = null;
     @Getter
     private Connection connection;
+
+    private static final String USERS_TABLE = "users";
+    private static final String USER_ID = "user_id";
+    private static final String USER_DATA = "user_data";
+    private static final String WINNERS_TABLE = "winners";
+    private static final String SCORE = "score";
+    private static final String STRINGS_TABLE = "strings";
+    private static final String KEY = "key";
+    private static final String VALUE = "value";
+
 
     private DataBase() {
         connection = setConnection();
@@ -28,7 +39,6 @@ public class DataBase {
         while (optional.isEmpty()) {
             try {
                 URI dbUri = new URI(System.getenv("telegrambotJDBC_DATABASE_URL"));
-//                URI dbUri = new URI(System.getenv(""));
                 String username = dbUri.getUserInfo().split(":")[0];
                 String password = dbUri.getUserInfo().split(":")[1];
                 String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
@@ -90,7 +100,7 @@ public class DataBase {
 
 
     public boolean saveUserToUserMap(User user) {
-        String query = "INSERT INTO users (user_id, user_data) VALUES (?, ?) ON CONFLICT (user_id) DO UPDATE SET user_data=EXCLUDED.user_data";
+        String query = String.format("INSERT INTO %1$s (%2$s, %3$s) VALUES (?, ?) ON CONFLICT (%2$s) DO UPDATE SET %3$s=EXCLUDED.%3$s", USERS_TABLE, USER_ID, USER_DATA);
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
              ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             PreparedStatement statement = connection.prepareStatement(query);
@@ -108,7 +118,90 @@ public class DataBase {
         return true;
     }
 
+    public void saveUsersToUserMap() {
+        Main.users.getUserMap().values().forEach(this::saveUserToUserMap);
+    }
 
+    public Map<Long, User> loadUserMap() {
+        Map<Long, User> map = new HashMap<>();
+        String query = String.format("SELECT * FROM %s", USERS_TABLE);
+        try {
+            ResultSet resultSet = executeQuery(query);
+            while (resultSet.next()) {
+                Long chatId = resultSet.getLong(USER_ID);
+                byte[] userBytes = resultSet.getBytes(USER_DATA);
+
+                try (ByteArrayInputStream bais = new ByteArrayInputStream(userBytes);
+                     ObjectInputStream ois = new ObjectInputStream(bais)) {
+                    User user = (User) ois.readObject();
+                    map.put(chatId, user);
+                } catch (IOException | ClassNotFoundException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return map;
+    }
+
+    public void saveWinner(int score, User user) {
+        String query = String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", WINNERS_TABLE, SCORE, USER_ID);
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, score);
+            statement.setLong(2, user.getChatId());
+            statement.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public ArrayList<Integer> getUserResults(User user) {
+        ArrayList<Integer> list = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s WHERE %s= %d ORDER BY %s DESC", WINNERS_TABLE, USER_ID, user.getChatId(), SCORE);
+        try {
+            ResultSet resultSet = executeQuery(query);
+            while (resultSet.next()) {
+                list.add(resultSet.getInt(SCORE));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return list;
+    }
+
+    public ArrayListValuedHashMap<Integer, Long> getTopResults(int max) {
+        ArrayListValuedHashMap<Integer, Long> map = new ArrayListValuedHashMap<>();
+        String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d", WINNERS_TABLE, SCORE, max);
+        try {
+            ResultSet resultSet = executeQuery(query);
+            while (resultSet.next()) {
+                Integer score = resultSet.getInt(SCORE);
+                Long userId = resultSet.getLong(USER_ID);
+                map.put(score, userId);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return map;
+    }
+
+    public Map<Text, List<String>> loadTextMap() {
+        Map<Text, List<String>> map = new HashMap<>();
+
+        try {
+            String query = String.format("SELECT * FROM %s", STRINGS_TABLE);
+            ResultSet resultSet = executeQuery(query);
+            while (resultSet.next()) {
+                Text key = Text.valueOf(resultSet.getString(KEY));
+                String text = resultSet.getString(VALUE);
+                if (map.containsKey(key)) map.get(key).add(text);
+                else map.put(key, new ArrayList<>(Collections.singletonList(text)));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return map;
+    }
 }
-
-

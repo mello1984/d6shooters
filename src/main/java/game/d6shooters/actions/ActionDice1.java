@@ -46,7 +46,6 @@ public class ActionDice1 extends AbstractAction {
                 Main.bot.send(template.getSquadStateMessage(user.getChatId()));
                 Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.END_TURN), Button.NEXT_TURN.get()));
                 DataBase.getInstance().saveUserToUserMap(user);
-//                Main.users.saveUserToUserMap(user);
             } else {
                 squad.setSquadState(SquadState.ENDGAME);
                 Main.actionManager.doActions(user);

@@ -2,8 +2,6 @@ package game.d6shooters.source;
 
 import game.d6shooters.bot.DataBase;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
 public enum Text {
@@ -25,22 +23,7 @@ public enum Text {
     ;
 
     private static final Random random = new Random();
-    private static final Map<Text, List<String>> map = new HashMap<>();
-
-    static {
-        DataBase dataBase = DataBase.getInstance();
-        try {
-            ResultSet resultSet = dataBase.executeQuery("SELECT * FROM strings");
-            while (resultSet.next()) {
-                Text key = Text.valueOf(resultSet.getString("key"));
-                String text = resultSet.getString("value");
-                if (map.containsKey(key)) map.get(key).add(text);
-                else map.put(key, new ArrayList<>(Collections.singletonList(text)));
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
+    private static final Map<Text, List<String>> map = DataBase.getInstance().loadTextMap();
 
     public static String getText(Text key) {
         List<String> list = map.get(key);
@@ -59,10 +42,4 @@ public enum Text {
         return s.length > 0 ? String.format(text, s) : text;
     }
 
-    public static List<String> getList(Text key) {
-        return map.get(key);
-    }
 }
-
-//        map.put(Key.DICE2HUNT, Arrays.asList("На охоте добыли %d провизии", "Подстрелили бизона, приготовили %d пайков"));
-//        map.put(Key.DICE3GOLD, Arrays.asList("На рудниках добыли %d золота"));

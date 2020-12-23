@@ -1,6 +1,7 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.Main;
+import game.d6shooters.bot.DataBase;
 import game.d6shooters.handler.RestartHandler;
 import game.d6shooters.game.Squad;
 import game.d6shooters.road.RoadNode;
@@ -14,7 +15,7 @@ public class ActionEndGame extends AbstractAction {
         if (user.getSquad().getPlace().getType() == RoadNode.Type.RINO) {
             int score = getScores(user);
             Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.END_GAME_WIN, score)));
-            Main.users.saveWinner(score, user);
+            DataBase.getInstance().saveWinner(score, user);
         } else Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.END_GAME_LOSE)));
 
         Main.bot.send(template.getSquadStateMessage(user.getChatId()));

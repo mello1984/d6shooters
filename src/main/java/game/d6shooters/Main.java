@@ -5,6 +5,9 @@ import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.service.MessageReceiver;
 import game.d6shooters.bot.service.MessageSender;
 import game.d6shooters.users.Users;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.ApiContextInitializer;
 
 public class Main {
