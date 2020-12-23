@@ -50,12 +50,29 @@ public class SendMessageTemplate {
 
     public SendMessage getSquadStateMessage(Long chatId) {
         Squad squad = Main.users.getUserMap().get(chatId).getSquad();
-        String text = Icon.GUNFIGHTER.get() + " Отряд: " + squad.getResource(Squad.SHOOTER) + "\n" +
-                Icon.FOOD.get() + " Еда: " + squad.getResource(Squad.FOOD) + "\n" +
-                Icon.AMMO.get() + " Боеприпасы: " + squad.getResource(Squad.AMMO) + "\n" +
-                Icon.MONEYBAG.get() + " Золото: " + squad.getResource(Squad.GOLD) + "\n" +
-                Icon.FOOTPRINTS.get() + " Пройдено: " + squad.getResource(Squad.PATH) + "\n" +
-                Icon.CLOCK.get() + " Прошло дней: " + squad.getResource(Squad.PERIOD);
+
+        String mainResources = getMainResourceString(Icon.GUNFIGHTER, "Отряд", Squad.SHOOTER, squad) +
+                getMainResourceString(Icon.FOOD, "Еда", Squad.FOOD, squad) +
+                getMainResourceString(Icon.AMMO, "Боеприпасы", Squad.AMMO, squad) +
+                getMainResourceString(Icon.MONEYBAG, "Золото", Squad.GOLD, squad) +
+                getMainResourceString(Icon.FOOTPRINTS, "Пройдено", Squad.PATH, squad) +
+                getMainResourceString(Icon.CLOCK, "Прошло дней", Squad.PERIOD, squad);
+
+        String specialItem = (squad.hasResource(Squad.COMPASS) ? Icon.COMPASS.get() : "") +
+                (squad.hasResource(Squad.HUNTER) ? Icon.HUNTER.get() : "") +
+                (squad.hasResource(Squad.MAP) ? Icon.MAP.get() : "") +
+                (squad.hasResource(Squad.BINOCULAR) ? Icon.BINOCULAR.get() : "") +
+                (squad.hasResource(Squad.PILL) ? Icon.PILL.get() : "") +
+                (squad.hasResource(Squad.BOMB) ? squad.getResource(Squad.BOMB) + " " + Icon.BOMB.get() : "");
+        specialItem = specialItem.length() > 0 ? "Особенные вещи: " + specialItem : "Особенных вещей нет";
+
+        String text = mainResources + specialItem;
+
+
         return getSendMessageWithButtons(chatId, text, Main.users.getUserMap().get(chatId).getButtons());
+    }
+
+    private String getMainResourceString(Icon icon, String text, String resource, Squad squad) {
+        return String.format("%s %s: %s \n", icon.get(), text, squad.getResource(resource));
     }
 }

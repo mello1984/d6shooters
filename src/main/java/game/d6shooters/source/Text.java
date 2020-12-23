@@ -1,6 +1,9 @@
 package game.d6shooters.source;
 
 import game.d6shooters.bot.DataBase;
+import org.apache.commons.collections4.ListValuedMap;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import java.util.*;
 
@@ -18,12 +21,15 @@ public enum Text {
     POKER_TEXT1, POKER_TEXT2, POKER_TEXT3, POKER_LOSE, POKER_WIN, POKER_DRAW,
     REROLL_DICES,
     ALLOCATE4,
+    START_GAME,
+
+    HELP_ABOUT, HELP_DICES, HELP_EVENTS, HELP_TOWN, HELP_END_GAME, HELP_MAIN,
 
 
     ;
 
     private static final Random random = new Random();
-    private static final Map<Text, List<String>> map = DataBase.getInstance().loadTextMap();
+    private static ListValuedMap<Text, String> map = DataBase.getInstance().loadTextMap();
 
     public static String getText(Text key) {
         List<String> list = map.get(key);
@@ -31,15 +37,17 @@ public enum Text {
     }
 
     public static String getText(Text key, Integer... i) {
-        List<String> list = map.get(key);
-        String text = list.get(random.nextInt(list.size()));
+        String text = getText(key);
         return i.length > 0 ? String.format(text, i) : text;
     }
 
     public static String getText(Text key, String... s) {
-        List<String> list = map.get(key);
-        String text = list.get(random.nextInt(list.size()));
+        String text = getText(key);
         return s.length > 0 ? String.format(text, s) : text;
+    }
+
+    public static void reloadTextConstants() {
+        map = DataBase.getInstance().loadTextMap();
     }
 
 }

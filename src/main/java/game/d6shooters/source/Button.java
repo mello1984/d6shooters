@@ -26,7 +26,14 @@ public enum Button {
     NEXT_TURN("next turn"),
     BAND(Icon.GUNFIGHTER.get() + Icon.GUNFIGHTER.get() + Icon.GUNFIGHTER.get() + " band"),
     COMMAND("=>"),
-    HELP("help"),
+    HELP_ABOUT("help"),
+    HELP_DICES("/help_dices_action"),
+    HELP_EVENTS("/help_events"),
+    HELP_TOWN("/help_town"),
+    HELP_END_GAME("/help_end_game"),
+    HELP_MAIN("/help_main"),
+
+
     EVENT("activate event"),
     RESTART("restart"),
     RESTART2("restart!"),
@@ -47,6 +54,7 @@ public enum Button {
     TEXT10("Не использовать медикаменты"),
 
     NO_GAME("Отказаться играть"),
+    RELOAD_STRINGS("/reload_string_constants"),
 
 //    HUNT2(setText(2, Icon.FOOD, -1, Icon.AMMO)),
 //    BUYFOOD2(setText(2, Icon.FOOD, -1, Icon.MONEYBAG)),

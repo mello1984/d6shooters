@@ -25,7 +25,7 @@ public class CommandHandler extends AbstractHandler {
         Squad squad = user.getSquad();
         SendMessage sendMessage = template.getSendMessageNoButtons(user.getChatId(), "Выберите дополнительную команду");
 
-        List<String> buttons1 = new ArrayList<>(Arrays.asList(Button.HELP.get(), Button.RESTART.get()));
+        List<String> buttons1 = new ArrayList<>(Arrays.asList(Button.HELP_ABOUT.get(), Button.RESTART.get()));
         boolean canActivateEvent = squad.isCanActivateEvent() && squad.getSquadState() == SquadState.STARTTURN1;
         if (canActivateEvent) {
             buttons1.add(0, Button.EVENT.get());

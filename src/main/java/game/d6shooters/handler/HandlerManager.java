@@ -22,10 +22,12 @@ public class HandlerManager {
             case BAND -> new TeamStateHandler(bot);
             case COMMAND -> new CommandHandler(bot);
             case EVENT -> new EventHandler(bot);
-            case HELP -> new HelpHandler(bot);
+            case HELP_ABOUT, HELP_DICES, HELP_END_GAME, HELP_EVENTS, HELP_MAIN, HELP_TOWN -> new HelpHandler(bot);
             case RESTART, RESTART2 -> new RestartHandler(bot);
             case BACK -> new BackHandler(bot);
             case SCORES_MY, SCORES_HIGH -> new ScoresHandler(bot);
+            case RELOAD_STRINGS -> new ReloadStringsHandler(bot);
+
             default -> new ActionManagerHandler(bot);
         };
     }

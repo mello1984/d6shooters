@@ -6,6 +6,8 @@ import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 
+//TODO: питание, если день зачеркнули с помощью действия
+
 public class ActionFeeding extends AbstractAction {
 
     @Override

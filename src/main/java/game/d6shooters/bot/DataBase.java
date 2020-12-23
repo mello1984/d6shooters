@@ -4,6 +4,8 @@ import game.d6shooters.Main;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 import lombok.Getter;
+import org.apache.commons.collections4.ListValuedMap;
+import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import java.io.*;
@@ -187,17 +189,15 @@ public class DataBase {
         return map;
     }
 
-    public Map<Text, List<String>> loadTextMap() {
-        Map<Text, List<String>> map = new HashMap<>();
-
+    public ListValuedMap<Text, String> loadTextMap() {
+        ListValuedMap<Text, String> map = new ArrayListValuedHashMap<>();
         try {
             String query = String.format("SELECT * FROM %s", STRINGS_TABLE);
             ResultSet resultSet = executeQuery(query);
             while (resultSet.next()) {
                 Text key = Text.valueOf(resultSet.getString(KEY));
                 String text = resultSet.getString(VALUE);
-                if (map.containsKey(key)) map.get(key).add(text);
-                else map.put(key, new ArrayList<>(Collections.singletonList(text)));
+                map.put(key, text);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
