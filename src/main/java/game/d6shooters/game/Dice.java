@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.util.Random;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Dice implements Comparable<Dice> {
+public class Dice implements Comparable<Dice>, Serializable {
     private static final Random random = new Random();
     final DiceType type;
     int value;

@@ -5,12 +5,14 @@ import game.d6shooters.users.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
+
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Getter
 @ToString
 @EqualsAndHashCode
-public class Place {
+public class Place implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Squad squad;
@@ -30,6 +32,6 @@ public class Place {
     }
 
     public static Place getNew(Squad squad) {
-        return new Place(squad, RoadMap.Road.MAINROAD, 78);
+        return new Place(squad, RoadMap.Road.MAINROAD, 0);
     }
 }

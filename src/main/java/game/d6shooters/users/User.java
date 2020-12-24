@@ -1,15 +1,14 @@
 package game.d6shooters.users;
 
-import game.d6shooters.actions.ActionManager;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.PokerDices;
 import game.d6shooters.game.Squad;
-import game.d6shooters.road.TownShop;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,14 +16,12 @@ import java.util.Objects;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class User implements Serializable {
     final long chatId;
     String userName;
     Squad squad;
     DicesCup dicesCup;
     PokerDices pokerDices;
-    ActionManager actionManager;
-    TownShop shop;
     List<List<String>> buttons;
 
     public User(long chatId, String userName) {
@@ -32,7 +29,6 @@ public class User {
         this.userName = userName;
         squad = new Squad();
         dicesCup = new DicesCup();
-        shop = new TownShop();
         buttons = new ArrayList<>();
     }
 

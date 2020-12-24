@@ -1,4 +1,4 @@
-package game.d6shooters.bot;
+package game.d6shooters.source;
 
 import com.vdurmont.emoji.EmojiParser;
 
@@ -29,7 +29,7 @@ public enum Icon {
 
     ;
 
-    private String value;
+    private final String value;
 
     Icon(String value) {
         this.value = value;

@@ -1,27 +1,18 @@
 package game.d6shooters.actions;
 
-import game.d6shooters.bot.Bot;
+import game.d6shooters.Main;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
+import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Log4j2
 public class ActionStartTurn extends AbstractAction {
-    private static final String TEXT1 = "Введите номера кубиков для переброски или 0";
-    private static final String TEXT2 = "Некорректные данные, введите номера кубиков для переброски или 0";
-
-    public ActionStartTurn(Bot bot) {
-        super(bot);
-    }
-
-    @Override
-    public void action(User user) {
-    } // Always used processMessage method
 
     public void processMessage(User user, Message message) {
-        user.getSquad().setResource(Squad.GUNFIGHT,0);
+        user.getSquad().setResource(Squad.GUNFIGHT, 0);
         user.getSquad().setResource(Squad.PATHFINDING, 0);
         log.debug(user.getSquad());
         switch (user.getSquad().getSquadState()) {
@@ -32,9 +23,16 @@ public class ActionStartTurn extends AbstractAction {
     }
 
     private void step1(User user) {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>EXECUTING STEP1<<<<<<<<<<<<<<<<<<<");
+        System.out.println(user.getChatId());
+        System.out.println(user.getDicesCup());
+        System.out.println(Main.bot);
+        System.out.println(template);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>EXECUTING STEP1<<<<<<<<<<<<<<<<<<<");
+
         user.getDicesCup().getFirstTurnDices();
-        bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
-        bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT1));
+        Main.bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
+        Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.REROLL_DICES)));
         user.getSquad().setSquadState(SquadState.STARTTURN2);
     }
 
@@ -43,8 +41,8 @@ public class ActionStartTurn extends AbstractAction {
         if (message.getText().equals("0")) nextSquadState(user);
         else {
             user.getDicesCup().getRerolledDices(message.getText());
-            bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
-            bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT1));
+            Main.bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
+            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.REROLL_DICES)));
             user.getSquad().setSquadState(SquadState.STARTTURN3);
         }
     }
@@ -53,14 +51,14 @@ public class ActionStartTurn extends AbstractAction {
         if (!checkText(user, message.getText())) return;
         if (!message.getText().equals("0")) {
             user.getDicesCup().getRerolledDices(message.getText());
-            bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
+            Main.bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
         }
         nextSquadState(user);
     }
 
     private boolean checkText(User user, String text) {
         if (!user.getDicesCup().checkString(text, false)) {
-            bot.send(template.getSendMessageNoButtons(user.getChatId(), TEXT2));
+            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
             return false;
         }
         return true;
@@ -68,6 +66,6 @@ public class ActionStartTurn extends AbstractAction {
 
     private void nextSquadState(User user) {
         user.getSquad().setSquadState(SquadState.ALLOCATE);
-        user.getActionManager().doActions();
+        Main.actionManager.doActions(user);
     }
 }

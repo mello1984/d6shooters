@@ -1,26 +1,35 @@
 package game.d6shooters;
 
+import game.d6shooters.actions.ActionManager;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.service.MessageReceiver;
 import game.d6shooters.bot.service.MessageSender;
+import game.d6shooters.handler.HandlerManager;
 import game.d6shooters.users.Users;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.ApiContextInitializer;
+
 
 public class Main {
     public static final Users users = new Users();
+    public static Bot bot;
+    public static ActionManager actionManager = new ActionManager();
+    public static HandlerManager handlerManager = new HandlerManager();
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
-        Bot bot = new Bot();
+        bot = new Bot();
         bot.botConnect();
-        MessageSender messageSender = new MessageSender(bot);
 
+        MessageSender messageSender = new MessageSender();
         Thread sender = new Thread(messageSender);
         sender.setDaemon(true);
         sender.setName("MsgSender");
         sender.start();
 
-        MessageReceiver messageReceiver = new MessageReceiver(bot);
+        MessageReceiver messageReceiver = new MessageReceiver();
         Thread receiver = new Thread(messageReceiver);
         receiver.setDaemon(true);
         receiver.setName("MsgReciever");

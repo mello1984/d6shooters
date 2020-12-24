@@ -1,6 +1,6 @@
 package game.d6shooters.road;
 
-import game.d6shooters.bot.Icon;
+import game.d6shooters.source.Icon;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.users.User;
@@ -11,13 +11,14 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log4j2
-public class TownShop {
+public class TownShop implements Serializable {
     final Set<Item> items;
     Item specialItem;
     boolean canGamingPoker;

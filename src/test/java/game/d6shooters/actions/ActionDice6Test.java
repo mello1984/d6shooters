@@ -16,14 +16,14 @@ class ActionDice6Test {
     User user = new User(0, "name");
     MockBot mockBot = new MockBot();
     MockTemplate mockTemplate = new MockTemplate();
-    MockActionManager mockActionManager = new MockActionManager(user, mockBot);
-    ActionDice6 action = new ActionDice6(mockBot);
+    MockActionManager mockActionManager = new MockActionManager();
+    ActionDice6 action = new ActionDice6();
 
     @BeforeEach
     void setUp() {
-        Main.users.userMap.put(user.getChatId(), user);
+        Main.users.getUserMap().put(user.getChatId(), user);
         action.template = mockTemplate;
-        user.setActionManager(mockActionManager);
+        //        user.setActionManager(mockActionManager);
         user.getSquad().setSquadState(SquadState.TOWN);
         user.getSquad().setResource(Squad.AMMO, 3);
         user.getSquad().setResource(Squad.SHOOTER, 8);

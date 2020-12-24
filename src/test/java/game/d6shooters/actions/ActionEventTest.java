@@ -1,5 +1,6 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.source.Button;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.mocks.MockActionManager;
@@ -16,13 +17,13 @@ class ActionEventTest {
     User user = new User(0, "name");
     MockBot mockBot = new MockBot();
     MockTemplate mockTemplate = new MockTemplate();
-    MockActionManager mockActionManager = new MockActionManager(user, mockBot);
-    ActionEvent action = new ActionEvent(mockBot);
+    MockActionManager mockActionManager = new MockActionManager();
+    ActionEvent action = new ActionEvent();
 
     @BeforeEach
     void setUp() {
         action.template = mockTemplate;
-        user.setActionManager(mockActionManager);
+        //        user.setActionManager(mockActionManager);
         user.getSquad().setResource(Squad.AMMO,3);
         user.getSquad().setResource(Squad.SHOOTER,10);
     }
@@ -176,7 +177,7 @@ class ActionEventTest {
     @Test
     void processMessageTest1() {
         user.getSquad().setSquadState(SquadState.EVENT2);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.EMPTY.get());
+        MockMessage mockMessage = new MockMessage(Button.EMPTY.get());
         action.processMessage(user, mockMessage);
         assertEquals(SquadState.EVENT2, user.getSquad().getSquadState());
     }
@@ -192,7 +193,7 @@ class ActionEventTest {
     @Test
     void processMessageTest3() {
         user.getSquad().setSquadState(SquadState.EVENT2);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.HUNT.get());
+        MockMessage mockMessage = new MockMessage(Button.HUNT.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -208,7 +209,7 @@ class ActionEventTest {
     @Test
     void processMessageTest4() {
         user.getSquad().setSquadState(SquadState.EVENT3);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.BUYFOOD.get());
+        MockMessage mockMessage = new MockMessage(Button.BUYFOOD.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -224,7 +225,7 @@ class ActionEventTest {
     @Test
     void processMessageTest5() {
         user.getSquad().setSquadState(SquadState.EVENT3);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.BUYAMMO.get());
+        MockMessage mockMessage = new MockMessage(Button.BUYAMMO.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -240,7 +241,7 @@ class ActionEventTest {
     @Test
     void processMessageTest6() {
         user.getSquad().setSquadState(SquadState.EVENT3);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.SELLFOOD.get());
+        MockMessage mockMessage = new MockMessage(Button.SELLFOOD.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -256,7 +257,7 @@ class ActionEventTest {
     @Test
     void processMessageTest7() {
         user.getSquad().setSquadState(SquadState.EVENT3);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.SELLAMMO.get());
+        MockMessage mockMessage = new MockMessage(Button.SELLAMMO.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -272,7 +273,7 @@ class ActionEventTest {
     @Test
     void processMessageTest8() {
         user.getSquad().setSquadState(SquadState.EVENT3);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.HUNT.get());
+        MockMessage mockMessage = new MockMessage(Button.HUNT.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -288,7 +289,7 @@ class ActionEventTest {
     @Test
     void processMessageTest9() {
         user.getSquad().setSquadState(SquadState.EVENT6);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.LOSE2FOOD.get());
+        MockMessage mockMessage = new MockMessage(Button.LOSE2FOOD.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -304,7 +305,7 @@ class ActionEventTest {
     @Test
     void processMessageTest10() {
         user.getSquad().setSquadState(SquadState.EVENT6);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.LOSE2GUN.get());
+        MockMessage mockMessage = new MockMessage(Button.LOSE2GUN.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -320,7 +321,7 @@ class ActionEventTest {
     @Test
     void processMessageTest11() {
         user.getSquad().setSquadState(SquadState.EVENT6);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.LOSEFOODANDGOLD.get());
+        MockMessage mockMessage = new MockMessage(Button.LOSEFOODANDGOLD.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -336,7 +337,7 @@ class ActionEventTest {
     @Test
     void processMessageTest12() {
         user.getSquad().setSquadState(SquadState.EVENT6);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.LOSE2GUN.get());
+        MockMessage mockMessage = new MockMessage(Button.LOSE2GUN.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.MOVE, user.getSquad().getSquadState()),
@@ -352,7 +353,7 @@ class ActionEventTest {
     @Test
     void processMessageTest13() {
         user.getSquad().setSquadState(SquadState.EVENT6);
-        MockMessage mockMessage = new MockMessage(ActionEvent.Action.HUNT.get());
+        MockMessage mockMessage = new MockMessage(Button.HUNT.get());
         action.processMessage(user, mockMessage);
         assertAll(
                 () -> assertEquals(SquadState.EVENT6, user.getSquad().getSquadState()),

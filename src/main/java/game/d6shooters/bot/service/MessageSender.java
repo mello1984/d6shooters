@@ -1,5 +1,6 @@
 package game.d6shooters.bot.service;
 
+import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -11,11 +12,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MessageSender implements Runnable {
     static int SLEEP_TIME = 30;
-    Bot bot;
+    Bot bot = Main.bot;
 
-    public MessageSender(Bot bot) {
-        this.bot = bot;
-    }
+
 
     @Override
     public void run() {
@@ -39,6 +38,12 @@ public class MessageSender implements Runnable {
             log.info(String.format("Message sent to: %s", message.getChatId()));
         } catch (TelegramApiException e) {
             log.error(String.format("Exception of sending message to: %s", message.getChatId()), e);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+            send(message);
         }
     }
 }

@@ -3,12 +3,14 @@ package game.d6shooters.bot;
 import game.d6shooters.Main;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
+import game.d6shooters.source.Button;
+import game.d6shooters.source.Icon;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.*;
 
 public class SendMessageTemplate {
-    private static final List<String> standardButtons = Arrays.asList(CommandButton.BAND.get(), CommandButton.COMMAND.get());
+    private static final List<String> standardButtons = Arrays.asList(Button.BAND.get(), Button.COMMAND.get());
     private static SendMessageTemplate sendMessageTemplate = null;
 
 
@@ -20,7 +22,7 @@ public class SendMessageTemplate {
 
     public SendMessage getSendMessageWithButtons(Long chatId, String text, List<List<String>> buttons) {
         buttons.removeAll(standardButtons);
-        Main.users.userMap.get(chatId).setButtons(new ArrayList<>(buttons));
+        Main.users.getUserMap().get(chatId).setButtons(new ArrayList<>(buttons));
         buttons.add(standardButtons);
 
         SendMessage sendMessage = SendMessageFormat
@@ -47,13 +49,30 @@ public class SendMessageTemplate {
     }
 
     public SendMessage getSquadStateMessage(Long chatId) {
-        Squad squad = Main.users.userMap.get(chatId).getSquad();
-        String text = Icon.GUNFIGHTER.get() + " Отряд: " + squad.getResource(Squad.SHOOTER) + "\n" +
-                Icon.FOOD.get() + " Еда: " + squad.getResource(Squad.FOOD) + "\n" +
-                Icon.AMMO.get() + " Боеприпасы: " + squad.getResource(Squad.AMMO) + "\n" +
-                Icon.MONEYBAG.get() + " Золото: " + squad.getResource(Squad.GOLD) + "\n" +
-                Icon.FOOTPRINTS.get() + " Пройдено: " + squad.getResource(Squad.PATH) + "\n" +
-                Icon.CLOCK.get() + " Прошло дней: " + squad.getResource(Squad.PERIOD);
-        return getSendMessageWithButtons(chatId, text, Main.users.userMap.get(chatId).getButtons());
+        Squad squad = Main.users.getUserMap().get(chatId).getSquad();
+
+        String mainResources = getMainResourceString(Icon.GUNFIGHTER, "Отряд", Squad.SHOOTER, squad) +
+                getMainResourceString(Icon.FOOD, "Еда", Squad.FOOD, squad) +
+                getMainResourceString(Icon.AMMO, "Боеприпасы", Squad.AMMO, squad) +
+                getMainResourceString(Icon.MONEYBAG, "Золото", Squad.GOLD, squad) +
+                getMainResourceString(Icon.FOOTPRINTS, "Пройдено", Squad.PATH, squad) +
+                getMainResourceString(Icon.CLOCK, "Прошло дней", Squad.PERIOD, squad);
+
+        String specialItem = (squad.hasResource(Squad.COMPASS) ? Icon.COMPASS.get() : "") +
+                (squad.hasResource(Squad.HUNTER) ? Icon.HUNTER.get() : "") +
+                (squad.hasResource(Squad.MAP) ? Icon.MAP.get() : "") +
+                (squad.hasResource(Squad.BINOCULAR) ? Icon.BINOCULAR.get() : "") +
+                (squad.hasResource(Squad.PILL) ? Icon.PILL.get() : "") +
+                (squad.hasResource(Squad.BOMB) ? squad.getResource(Squad.BOMB) + " " + Icon.BOMB.get() : "");
+        specialItem = specialItem.length() > 0 ? "Особенные вещи: " + specialItem : "Особенных вещей нет";
+
+        String text = mainResources + specialItem;
+
+
+        return getSendMessageWithButtons(chatId, text, Main.users.getUserMap().get(chatId).getButtons());
+    }
+
+    private String getMainResourceString(Icon icon, String text, String resource, Squad squad) {
+        return String.format("%s %s: %s \n", icon.get(), text, squad.getResource(resource));
     }
 }

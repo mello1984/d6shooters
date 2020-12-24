@@ -1,26 +1,23 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
-import game.d6shooters.bot.CommandButton;
+import game.d6shooters.bot.DataBase;
+import game.d6shooters.source.Button;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.road.RoadNode;
+import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.io.Serializable;
+
 @Log4j2
 public class ActionDice1 extends AbstractAction {
-    protected final static String BRANCH = "Свернуть к городу";
-    protected final static String MAIN = "Ехать прямо";
-    private final static String TEXT1 = "Перекресток, выберите направление";
-    private final static String TEXT2 = "Ход завершен";
-    private final static String TEXT3 = "Некорректная команда, выберите направление";
-
-    public ActionDice1(Bot bot) {
-        super(bot);
-    }
 
     @Override
     public void action(User user) {
@@ -35,22 +32,25 @@ public class ActionDice1 extends AbstractAction {
                 squad.setPlace(squad.getRoadMap().next(squad.getPlace(), true));
             else {
                 squad.setSquadState(SquadState.CROSSROAD);
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT1, BRANCH, MAIN));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.CROSS_ROAD), Button.BRANCH_ROAD.get(), Button.MAIN_ROAD.get()));
                 return;
             }
             executeSpecialPlaces(squad);
-            user.getActionManager().doActions();
+            Main.actionManager.doActions(user);
 
         } else {
             squad.addResource(Squad.PERIOD, 1);
+            Main.actionManager.checkFeeding(user);
+
 
             if (squad.getResource(Squad.PERIOD) < 40) {
                 squad.setSquadState(SquadState.STARTTURN1);
-                bot.send(template.getSquadStateMessage(user.getChatId()));
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT2, CommandButton.NEXT_TURN.name()));
+                Main.bot.send(template.getSquadStateMessage(user.getChatId()));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.END_TURN), Button.NEXT_TURN.get()));
+                DataBase.getInstance().saveUserToUserMap(user);
             } else {
                 squad.setSquadState(SquadState.ENDGAME);
-                user.getActionManager().doActions();
+                Main.actionManager.doActions(user);
             }
         }
     }
@@ -73,16 +73,18 @@ public class ActionDice1 extends AbstractAction {
         }
     }
 
+    @Override
     public void processMessage(User user, Message message) {
-        switch (message.getText()) {
-            case BRANCH -> user.getSquad().setPlace(user.getSquad().getRoadMap().next(user.getSquad().getPlace(), false));
-            case MAIN -> user.getSquad().setPlace(user.getSquad().getRoadMap().next(user.getSquad().getPlace(), true));
+        Button button = Button.getButton(message.getText());
+        switch (button) {
+            case BRANCH_ROAD -> user.getSquad().setPlace(user.getSquad().getRoadMap().next(user.getSquad().getPlace(), false));
+            case MAIN_ROAD -> user.getSquad().setPlace(user.getSquad().getRoadMap().next(user.getSquad().getPlace(), true));
             default -> {
-                bot.send(template.getSendMessageWithButtons(user.getChatId(), TEXT3, BRANCH, MAIN));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
                 return;
             }
         }
         user.getSquad().setSquadState(SquadState.MOVE);
-        user.getActionManager().doActions();
+        Main.actionManager.doActions(user);
     }
 }

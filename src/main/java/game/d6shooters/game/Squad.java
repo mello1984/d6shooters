@@ -1,17 +1,18 @@
 package game.d6shooters.game;
 
-import game.d6shooters.bot.Icon;
+import game.d6shooters.source.Icon;
 import game.d6shooters.road.Place;
 import game.d6shooters.road.RoadMap;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Squad {
+public class Squad implements Serializable {
     private static final int MAX_AMMO = 5;
     private static final int MAX_FOOD = 12;
     private static final int MAX_SHOOTERS = 12;
@@ -32,8 +33,8 @@ public class Squad {
     public static final String PILL = "pill";
     public static final String BOMB = "bomb";
     public static final String KILLED_SHOOTERS = "killed_shooters";
-    private Map<String, Integer> resources = new HashMap<>();
 
+    Map<String, Integer> resources = new HashMap<>();
     SquadState squadState;
     RoadMap roadMap = new RoadMap(this);
     Place place = Place.getNew(this);

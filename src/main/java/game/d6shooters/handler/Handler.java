@@ -1,4 +1,4 @@
-package game.d6shooters.bot.handler;
+package game.d6shooters.handler;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 

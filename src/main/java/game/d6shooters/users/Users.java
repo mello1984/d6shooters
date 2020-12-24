@@ -1,10 +1,11 @@
 package game.d6shooters.users;
 
-import java.util.HashMap;
-import java.util.Map;
+import game.d6shooters.bot.DataBase;
+import lombok.Getter;
 
+import java.util.*;
+
+@Getter
 public class Users {
-    public Map<Long, User> userMap = new HashMap<>();
-
-
+    private final Map<Long, User> userMap = DataBase.getInstance().loadUserMap(); //userId, User
 }

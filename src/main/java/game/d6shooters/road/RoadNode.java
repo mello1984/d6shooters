@@ -6,11 +6,13 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoadNode {
+public class RoadNode implements Serializable {
     Type type;
     RoadMap.Road nextRoad;
     int nextRoadNumberNode;

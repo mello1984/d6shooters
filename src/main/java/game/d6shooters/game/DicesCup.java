@@ -1,14 +1,15 @@
 package game.d6shooters.game;
 
-import game.d6shooters.bot.Icon;
+import game.d6shooters.source.Icon;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
 @Setter
-public class DicesCup {
+public class DicesCup implements Serializable {
     private static final Random random = new Random();
     protected static final Map<Integer, String> dices = new HashMap<>() {{
         put(1, Icon.DICE1.get());
@@ -18,8 +19,9 @@ public class DicesCup {
         put(5, Icon.DICE5.get());
         put(6, Icon.DICE6.get());
     }};
-    protected List<Dice> diceList = new ArrayList<>();
     private static final int MAX_VALUE = 8;
+    protected List<Dice> diceList = new ArrayList<>();
+
 
     public DicesCup() {
         diceList.add(new Dice(Dice.DiceType.WHITE));
