@@ -1,5 +1,6 @@
 package game.d6shooters.bot.service;
 
+import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.handler.HandlerManager;
 import lombok.AccessLevel;
@@ -11,21 +12,20 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MessageReceiver implements Runnable {
     static final int SLEEP_TIME = 30;
-    Bot bot;
-    HandlerManager handlerManager;
+    //    HandlerManager handlerManager;
+    Bot bot = Main.bot;
 
-    public MessageReceiver(Bot bot) {
-        this.bot = bot;
-        handlerManager = new HandlerManager(bot);
-    }
+//    public MessageReceiver() {
+//        handlerManager = new HandlerManager();
+//    }
 
     @Override
     public void run() {
-        log.info("START MessageReceiver, bot: " + bot);
+        log.info("START MessageReceiver");
         try {
             while (true) {
                 Message message = bot.receiveQueue.take();
-                handlerManager.chooseHandler(message)
+                Main.handlerManager.chooseHandler(message)
                         .handle(message);
                 log.debug(String.format("Message received from: %d, : %s", message.getChatId(), message.getText()));
                 Thread.sleep(SLEEP_TIME);

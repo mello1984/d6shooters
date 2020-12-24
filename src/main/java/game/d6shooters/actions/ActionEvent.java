@@ -114,7 +114,10 @@ public class ActionEvent extends AbstractAction {
     }
 
     protected void modify(User user, int ammo, int food, int gold, int gunfighter, int pathfinding, int period) {
-        user.getSquad().addResource(Squad.PERIOD, period);
+        if (period > 0) {
+            user.getSquad().addResource(Squad.PERIOD, period);
+            Main.actionManager.checkFeeding(user);
+        }
         user.getSquad().addResource(Squad.PATHFINDING, pathfinding);
         user.getSquad().addResource(Squad.SHOOTER, gunfighter);
         boolean error = false;

@@ -40,6 +40,8 @@ public class ActionDice1 extends AbstractAction {
 
         } else {
             squad.addResource(Squad.PERIOD, 1);
+            Main.actionManager.checkFeeding(user);
+
 
             if (squad.getResource(Squad.PERIOD) < 40) {
                 squad.setSquadState(SquadState.STARTTURN1);
@@ -71,6 +73,7 @@ public class ActionDice1 extends AbstractAction {
         }
     }
 
+    @Override
     public void processMessage(User user, Message message) {
         Button button = Button.getButton(message.getText());
         switch (button) {

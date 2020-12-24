@@ -35,11 +35,11 @@ public class ActionDice5 extends AbstractAction {
             }
         } else {
             user.getSquad().setSquadState(SquadState.GUNFIGHT);
-            log.debug(String.format("SquadState %s -> GUNFIGHT", user.getSquad().getSquadState()));
             Main.actionManager.doActions(user);
         }
     }
 
+    @Override
     public void processMessage(User user, Message message) {
         Button button = Button.getButton(message.getText());
         if (button != Button.EMPTY) useDice(user, 5);

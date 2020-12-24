@@ -4,6 +4,7 @@ import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.DataBase;
 import game.d6shooters.bot.SendMessageFormat;
+import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.source.Button;
 import game.d6shooters.users.User;
 import org.apache.commons.collections4.MultiValuedMap;
@@ -16,10 +17,8 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class ScoresHandler extends AbstractHandler {
-    public ScoresHandler(Bot bot) {
-        super(bot);
-    }
+public class ScoresHandler implements Handler {
+    SendMessageTemplate template = new SendMessageTemplate();
 
     @Override
     public void handle(Message message) {

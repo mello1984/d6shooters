@@ -2,6 +2,7 @@ package game.d6shooters.handler;
 
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
+import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.source.Button;
 import game.d6shooters.bot.SendMessageFormat;
 import game.d6shooters.game.Squad;
@@ -14,11 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandHandler extends AbstractHandler {
-    public CommandHandler(Bot bot) {
-        super(bot);
-    }
-
+public class CommandHandler implements Handler {
+    SendMessageTemplate template = new SendMessageTemplate();
     @Override
     public void handle(Message message) {
         User user = Main.users.getUserMap().get(message.getChatId());

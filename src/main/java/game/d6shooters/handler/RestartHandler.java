@@ -2,6 +2,7 @@ package game.d6shooters.handler;
 
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
+import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.source.Button;
 import game.d6shooters.bot.SendMessageFormat;
 import game.d6shooters.users.User;
@@ -9,13 +10,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 
-public class RestartHandler extends AbstractHandler {
-    private static final String TEXT1 = "Вы уверены, что хотите сделать рестарт игры?";
+public class RestartHandler implements Handler{
+        private static final String TEXT1 = "Вы уверены, что хотите сделать рестарт игры?";
     private static final String TEXT2 = "Проводится рестарт игры";
+    SendMessageTemplate template = new SendMessageTemplate();
 
-    public RestartHandler(Bot bot) {
-        super(bot);
-    }
 
     @Override
     public void handle(Message message) {

@@ -3,6 +3,7 @@ package game.d6shooters.actions;
 import game.d6shooters.Main;
 import game.d6shooters.users.User;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -53,5 +54,9 @@ public class ActionManager {
             case GUNFIGHT -> actionDice6.processMessage(user, message);
             case POKER2, POKER3, POKER4 -> actionPoker.processMessage(user, message);
         }
+    }
+
+    public void checkFeeding(User user){
+        ((ActionFeeding) actionFeeding).checkFeeding(user);
     }
 }

@@ -56,6 +56,7 @@ public class ActionDice4 extends AbstractAction {
                 useDice(user, 6);
                 if (user.getDicesCup().getCountActiveDiceCurrentValue(6) > 0) useDice(user, 6);
                 user.getSquad().addResource(Squad.PERIOD, 1);
+                Main.actionManager.checkFeeding(user);
             }
             case SHELTER -> {
                 useDice(user, 4);

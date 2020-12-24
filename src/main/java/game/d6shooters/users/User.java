@@ -1,16 +1,13 @@
 package game.d6shooters.users;
 
-import game.d6shooters.actions.ActionManager;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.PokerDices;
 import game.d6shooters.game.Squad;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,6 @@ public class User implements Serializable {
     Squad squad;
     DicesCup dicesCup;
     PokerDices pokerDices;
-    //    ActionManager actionManager;
     List<List<String>> buttons;
 
     public User(long chatId, String userName) {

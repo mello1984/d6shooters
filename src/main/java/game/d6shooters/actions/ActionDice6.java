@@ -21,30 +21,34 @@ public class ActionDice6 extends AbstractAction {
     @Override
     public void action(User user) {
         int dice6count = user.getDicesCup().getCountActiveDiceCurrentValue(6);
-        if (dice6count != 0) {
-            int killedShooters = user.getSquad().getResource(Squad.GUNFIGHT) == 0 ? getKilledShootersNoShootout(user) : getKilledShootersInShootout(user);
-            if (killedShooters > 0) {
+        if (dice6count > 0) {
+            int killedShooters = user.getSquad().hasResource(Squad.GUNFIGHT) ?
+                    getKilledShootersInShootout(user) :
+                    getKilledShootersNoShootout(user);
 
+            if (killedShooters > 0) {
                 if (user.getSquad().hasResource(Squad.PILL)) {
                     user.getSquad().setResource(Squad.KILLED_SHOOTERS, killedShooters);
                     Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT8, killedShooters), Button.TEXT9.get(), Button.TEXT10.get()));
                     return;
+                } else {
+                    user.getSquad().addResource(Squad.SHOOTER, -killedShooters);
+                    Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT1, killedShooters)));
                 }
-
-                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT1, killedShooters)));
-                user.getSquad().addResource(Squad.SHOOTER, -killedShooters);
             } else Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.DICE6TEXT2)));
         }
 
-        if (user.getSquad().getResource(Squad.SHOOTER) <= 1) {
-            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.DICE6TEXT7)));
-            user.getSquad().setResource(Squad.HUNTER, 0);
-        }
-
-        if (!user.getSquad().hasResource(Squad.SHOOTER)) user.getSquad().setSquadState(SquadState.ENDGAME);
-        else user.getSquad().setSquadState(SquadState.MOVE);
-        log.debug(String.format("SquadState %s -> MOVE", user.getSquad().getSquadState()));
+        removeHunterIfTooShootersLeft(user);
+        SquadState nextState = user.getSquad().hasResource(Squad.SHOOTER) ? SquadState.MOVE : SquadState.ENDGAME;
+        user.getSquad().setSquadState(nextState);
         Main.actionManager.doActions(user);
+    }
+
+    protected void removeHunterIfTooShootersLeft(User user) {
+        if (user.getSquad().getResource(Squad.SHOOTER) <= 1) {
+            user.getSquad().setResource(Squad.HUNTER, 0);
+            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.DICE6TEXT7)));
+        }
     }
 
     protected int getKilledShootersNoShootout(User user) {
@@ -100,6 +104,7 @@ public class ActionDice6 extends AbstractAction {
         return result;
     }
 
+    @Override
     public void processMessage(User user, Message message) {
         Button button = Button.getButton(message.getText());
         switch (button) {
@@ -109,12 +114,11 @@ public class ActionDice6 extends AbstractAction {
                 Main.actionManager.doActions(user);
             }
             case TEXT10 -> {
-                user.getSquad().addResource(Squad.SHOOTER, user.getSquad().getResource(Squad.KILLED_SHOOTERS));
+                user.getSquad().addResource(Squad.SHOOTER, -user.getSquad().getResource(Squad.KILLED_SHOOTERS));
                 user.getSquad().setSquadState(SquadState.MOVE);
                 Main.actionManager.doActions(user);
             }
             default -> Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.UNKNOWN_COMMAND)));
         }
-
     }
 }

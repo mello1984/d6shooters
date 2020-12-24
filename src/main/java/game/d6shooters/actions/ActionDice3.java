@@ -19,7 +19,6 @@ public class ActionDice3 extends AbstractAction {
         }
         user.getDicesCup().setUsedDiceCurrentValue(3);
         user.getSquad().setSquadState(SquadState.CHECKHEAT);
-        log.debug(String.format("SquadState %s -> CHECKHEAT", user.getSquad().getSquadState()));
         Main.actionManager.doActions(user);
     }
 
