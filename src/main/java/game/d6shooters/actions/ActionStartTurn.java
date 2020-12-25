@@ -23,13 +23,6 @@ public class ActionStartTurn extends AbstractAction {
     }
 
     private void step1(User user) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>EXECUTING STEP1<<<<<<<<<<<<<<<<<<<");
-        System.out.println(user.getChatId());
-        System.out.println(user.getDicesCup());
-        System.out.println(Main.bot);
-        System.out.println(template);
-        System.out.println(">>>>>>>>>>>>>>>>>>>>EXECUTING STEP1<<<<<<<<<<<<<<<<<<<");
-
         user.getDicesCup().getFirstTurnDices();
         Main.bot.send(template.getDicesStringMessage(user.getChatId(), user.getDicesCup()));
         Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.REROLL_DICES)));

@@ -44,7 +44,7 @@ public class DicesCup implements Serializable {
     }
 
     public List<Dice> getRerolledDices(String rerollString) {
-        rerollString = rerollString.replaceAll("[/D]*", "");
+        rerollString = rerollString.replaceAll("[^1-" + getMaxValue() + "]*", "");
         rerollString.chars().map(i -> Character.digit(i, 10)).distinct().forEach(i -> diceList.get(i - 1).nextD6(false));
         return diceList;
     }
