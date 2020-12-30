@@ -8,10 +8,14 @@ import game.d6shooters.source.Button;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+@Component
 public class StartGameHandler implements Handler {
-    SendMessageTemplate template = new SendMessageTemplate();
+    @Autowired
+    SendMessageTemplate template;
 
     @Override
     public void handle(Message message) {

@@ -7,10 +7,11 @@ import game.d6shooters.road.Place;
 import game.d6shooters.road.TownShop;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-
 @Log4j2
+@Component
 public class ActionTown extends AbstractAction {
     private static final String TEXT1 = "Вы сейчас в городе %s";
     private static final String TEXT2 = "Вы успешно приобрели %s";

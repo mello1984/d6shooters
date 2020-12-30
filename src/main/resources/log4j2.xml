@@ -23,7 +23,7 @@
 
     <Loggers>
 <!--        <Root level="INFO">-->
-        <Root level="DEBUG">
+        <Root level="INFO">
             <AppenderRef ref="STDOUT"/>
             <!--            <AppenderRef ref="rollingFile"/>-->
         </Root>

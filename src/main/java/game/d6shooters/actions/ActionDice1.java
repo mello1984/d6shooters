@@ -3,6 +3,7 @@ package game.d6shooters.actions;
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.DataBase;
+import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.source.Button;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.Squad;
@@ -12,13 +13,16 @@ import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.io.Serializable;
 
 @Log4j2
+@Component
 public class ActionDice1 extends AbstractAction {
-
     @Override
     public void action(User user) {
         Squad squad = user.getSquad();

@@ -1,12 +1,18 @@
 package game.d6shooters.game;
 
 import lombok.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PokerDices extends DicesCup {
     private static final int MAX_VALUE = 5;
+
     public PokerDices() {
         super();
         diceList.clear();

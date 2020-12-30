@@ -1,6 +1,8 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.Main;
+import game.d6shooters.bot.Bot;
+import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.mocks.MockActionManager;
@@ -11,21 +13,19 @@ import game.d6shooters.road.TownShop;
 import game.d6shooters.users.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActionTownTest {
     User user = new User(0, "name");
-    MockBot mockBot = new MockBot();
-    MockTemplate mockTemplate = new MockTemplate();
-    MockActionManager mockActionManager = new MockActionManager();
     ActionTown action = new ActionTown();
 
     @BeforeEach
     void setUp() {
-        Main.users.getUserMap().put(user.getChatId(), user);
-        action.template = mockTemplate;
-        //        user.setActionManager(mockActionManager);
+        Main.actionManager = Mockito.mock(ActionManager.class);
+        Main.bot = Mockito.mock(Bot.class);
+        action.template = Mockito.mock(SendMessageTemplate.class);
         user.getSquad().setSquadState(SquadState.TOWN);
         user.getSquad().setResource(Squad.AMMO,0);
         user.getSquad().setResource(Squad.SHOOTER,8);

@@ -6,7 +6,9 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.road.RoadNode;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ActionEndGame extends AbstractAction {
 
     @Override

@@ -22,14 +22,13 @@ public class User implements Serializable {
     Squad squad;
     DicesCup dicesCup;
     PokerDices pokerDices;
-    List<List<String>> buttons;
+    List<List<String>> buttons = new ArrayList<>();
 
     public User(long chatId, String userName) {
         this.chatId = chatId;
         this.userName = userName;
         squad = new Squad();
         dicesCup = new DicesCup();
-        buttons = new ArrayList<>();
     }
 
     @Override

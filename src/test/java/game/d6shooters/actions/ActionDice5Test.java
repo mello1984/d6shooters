@@ -1,16 +1,17 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.Main;
+import game.d6shooters.bot.Bot;
+import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.source.Button;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
-import game.d6shooters.mocks.MockActionManager;
-import game.d6shooters.mocks.MockBot;
 import game.d6shooters.mocks.MockMessage;
-import game.d6shooters.mocks.MockTemplate;
 import game.d6shooters.users.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActionDice5Test {
-
     User user = new User(0, "name");
-    MockBot mockBot = new MockBot();
-    MockTemplate mockTemplate = new MockTemplate();
-    MockActionManager mockActionManager = new MockActionManager();
-
     ActionDice5 action = new ActionDice5();
     DicesCup dicesCup = new DicesCup();
     List<Dice> diceList = new ArrayList<>();
@@ -38,9 +34,10 @@ class ActionDice5Test {
         }};
         dicesCup.setDiceList(diceList);
 
-        action.template = mockTemplate;
+        Main.actionManager = Mockito.mock(ActionManager.class);
+        Main.bot = Mockito.mock(Bot.class);
+        action.template = Mockito.mock(SendMessageTemplate.class);
         user.setDicesCup(dicesCup);
-        //        user.setActionManager(mockActionManager);
     }
 
     @Test

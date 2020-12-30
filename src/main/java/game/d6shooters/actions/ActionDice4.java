@@ -6,17 +6,20 @@ import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Button;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
 import java.util.List;
+
+@Component
 public class ActionDice4 extends AbstractAction {
 
     @Override
     public void action(User user) {
         String[] buttons = getListButtons(user);
         if (buttons.length > 0) {
-           Main.bot.send(template.getSendMessageWithButtons(user.getChatId(),
+            Main.bot.send(template.getSendMessageWithButtons(user.getChatId(),
                     Text.getText(Text.ALLOCATE4, user.getDicesCup().getCountActiveDiceCurrentValue(4)),
                     getListButtons(user)));
         }

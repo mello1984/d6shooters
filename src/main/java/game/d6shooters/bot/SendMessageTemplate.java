@@ -5,19 +5,21 @@ import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
 import game.d6shooters.source.Button;
 import game.d6shooters.source.Icon;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.*;
 
+@Component
 public class SendMessageTemplate {
     private static final List<String> standardButtons = Arrays.asList(Button.BAND.get(), Button.COMMAND.get());
-    private static SendMessageTemplate sendMessageTemplate = null;
-
-
-    public static SendMessageTemplate getInstance() {
-        if (sendMessageTemplate == null) sendMessageTemplate = new SendMessageTemplate();
-        return sendMessageTemplate;
-    }
+//    private static SendMessageTemplate sendMessageTemplate = null;
+//
+//
+//    public static SendMessageTemplate getInstance() {
+//        if (sendMessageTemplate == null) sendMessageTemplate = new SendMessageTemplate();
+//        return sendMessageTemplate;
+//    }
 
 
     public SendMessage getSendMessageWithButtons(Long chatId, String text, List<List<String>> buttons) {

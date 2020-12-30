@@ -1,5 +1,8 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.Main;
+import game.d6shooters.bot.Bot;
+import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.game.Squad;
@@ -8,6 +11,7 @@ import game.d6shooters.users.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,10 @@ class ActionDice4Test {
             add(new Dice(Dice.DiceType.WHITE, 6));
             add(new Dice(Dice.DiceType.WHITE, 6));
         }};
+
+        Main.actionManager = Mockito.mock(ActionManager.class);
+        Main.bot = Mockito.mock(Bot.class);
+        action.template = Mockito.mock(SendMessageTemplate.class);
 
         DicesCup dicesCup = new DicesCup();
         dicesCup.setDiceList(diceList);

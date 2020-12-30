@@ -7,12 +7,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.io.Serializable;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Log4j2
-public class Bot extends TelegramLongPollingBot  {
+public class Bot extends TelegramLongPollingBot {
     public final BlockingQueue<SendMessage> sendQueue = new LinkedBlockingQueue<>();
     public final BlockingQueue<Message> receiveQueue = new LinkedBlockingQueue<>();
     private static final int PAUSE = 1000;
