@@ -4,8 +4,6 @@ import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.game.Squad;
-import game.d6shooters.mocks.MockBot;
-import game.d6shooters.mocks.MockTemplate;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.DicesCup;
 import game.d6shooters.users.User;

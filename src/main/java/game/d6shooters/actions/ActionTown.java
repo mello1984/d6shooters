@@ -18,9 +18,11 @@ public class ActionTown extends AbstractAction {
 
     @Override
     public void action(User user) {
+        log.info(String.format( "Start ActionTown.action, user = %d", user.getChatId()));
         Place place = user.getSquad().getPlace();
-        log.debug(String.format("Запущен ActionTown, place: %s, townshop: %s", place, place.getTownShop()));
+        log.info(String.format("Запущен ActionTown, place: %s, townshop: %s", place, place.getTownShop()));
         Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(TEXT1, place.getTownName()), place.getTownShop().getGoods(user)));
+
     }
 
     public void processMessage(User user, Message message) {
@@ -32,7 +34,11 @@ public class ActionTown extends AbstractAction {
         if (squad.getResource(Squad.GOLD) >= item.getValue()) {
             switch (item) {
                 case FOOD1, FOOD2, AMMO1, AMMO2, HIRE1, HIRE2, HIRE3, BOMB1, BOMB2, BOMB3 -> squad.addResource(item.getResource(), item.getCount());
-                case COMPASS, HUNTER, MAP, BINOCULAR, PILL -> squad.addResource(item.getResource(), 1);
+                case COMPASS, MAP, BINOCULAR, PILL -> squad.addResource(item.getResource(), 1);
+                case HUNTER -> {
+                    squad.addResource(Squad.HUNTER, 1);
+                    squad.addResource(Squad.SHOOTER, 1);
+                }
             }
             squad.addResource(Squad.GOLD, -item.getValue());
             user.getSquad().getPlace().getTownShop().getItems().removeIf(i -> i.getGroup() == item.getGroup());

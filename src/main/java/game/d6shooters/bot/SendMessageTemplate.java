@@ -13,19 +13,11 @@ import java.util.*;
 @Component
 public class SendMessageTemplate {
     private static final List<String> standardButtons = Arrays.asList(Button.BAND.get(), Button.COMMAND.get());
-//    private static SendMessageTemplate sendMessageTemplate = null;
-//
-//
-//    public static SendMessageTemplate getInstance() {
-//        if (sendMessageTemplate == null) sendMessageTemplate = new SendMessageTemplate();
-//        return sendMessageTemplate;
-//    }
-
 
     public SendMessage getSendMessageWithButtons(Long chatId, String text, List<List<String>> buttons) {
         buttons.removeAll(standardButtons);
         Main.users.getUserMap().get(chatId).setButtons(new ArrayList<>(buttons));
-        buttons.add(standardButtons);
+         buttons.add(standardButtons); // Что-то здесь ломает систему
 
         SendMessage sendMessage = SendMessageFormat
                 .getSendMessageBaseFormat(chatId)
@@ -65,7 +57,7 @@ public class SendMessageTemplate {
                 (squad.hasResource(Squad.MAP) ? Icon.MAP.get() : "") +
                 (squad.hasResource(Squad.BINOCULAR) ? Icon.BINOCULAR.get() : "") +
                 (squad.hasResource(Squad.PILL) ? Icon.PILL.get() : "") +
-                (squad.hasResource(Squad.BOMB) ? squad.getResource(Squad.BOMB) + " " + Icon.BOMB.get() : "");
+                (squad.hasResource(Squad.BOMB) ? squad.getResource(Squad.BOMB) + "*" + Icon.BOMB.get() : "");
         specialItem = specialItem.length() > 0 ? "Особенные вещи: " + specialItem : "Особенных вещей нет";
 
         String text = mainResources + specialItem;

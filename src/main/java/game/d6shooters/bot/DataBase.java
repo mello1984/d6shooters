@@ -12,13 +12,13 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DataBase {
     private static final Logger logger = Logger.getLogger(DataBase.class.getName());
-    private static DataBase instance = null;
     @Getter
     private Connection connection;
 
@@ -27,6 +27,7 @@ public class DataBase {
     private static final String USER_DATA = "user_data";
     private static final String WINNERS_TABLE = "winners";
     private static final String SCORE = "score";
+    private static final String DAY = "day";
     private static final String STRINGS_TABLE = "strings";
     private static final String KEY = "key";
     private static final String VALUE = "value";
@@ -36,7 +37,7 @@ public class DataBase {
         connection = setConnection();
     }
 
-    private Connection setConnection() {
+    protected Connection setConnection() {
         Optional<Connection> optional = Optional.empty();
         while (optional.isEmpty()) {
             try {
@@ -96,8 +97,7 @@ public class DataBase {
     }
 
     public static DataBase getInstance() {
-        if (instance == null) instance = new DataBase();
-        return instance;
+        return DataBaseHolder.HOLDER_INSTANCE;
     }
 
 
@@ -148,11 +148,13 @@ public class DataBase {
     }
 
     public void saveWinner(int score, User user) {
-        String query = String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", WINNERS_TABLE, SCORE, USER_ID);
+        String query = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?)", WINNERS_TABLE, SCORE, USER_ID, DAY);
+        LocalDate ld = LocalDate.now();
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, score);
             statement.setLong(2, user.getChatId());
+            statement.setObject(3, ld);
             statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -203,5 +205,9 @@ public class DataBase {
             throwables.printStackTrace();
         }
         return map;
+    }
+
+    private static class DataBaseHolder{
+        static DataBase HOLDER_INSTANCE = new DataBase();
     }
 }

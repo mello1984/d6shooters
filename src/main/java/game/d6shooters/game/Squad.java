@@ -33,6 +33,8 @@ public class Squad implements Serializable {
     public static final String PILL = "pill";
     public static final String BOMB = "bomb";
     public static final String KILLED_SHOOTERS = "killed_shooters";
+    public static final String DAY_PATH = "day_path";
+    public static final String FOOD_DAY = "food_day";
 
     Map<String, Integer> resources = new HashMap<>();
     SquadState squadState;
@@ -49,13 +51,14 @@ public class Squad implements Serializable {
         resources.put(FOOD, 6);
         resources.put(PERIOD, 0);
         resources.put(PATH, 0);
+        resources.put(FOOD_DAY, 0);
         resources.put(GUNFIGHT, 0);
         resources.put(PATHFINDING, 0);
         resources.put(COMPASS, 0);
         resources.put(HUNTER, 0);
         resources.put(MAP, 0);
         resources.put(BINOCULAR, 0);
-        resources.put(PILL, 1);
+        resources.put(PILL, 0);
         resources.put(BOMB, 0);
     }
 

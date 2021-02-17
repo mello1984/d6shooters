@@ -52,7 +52,7 @@ public class RoadMap implements Serializable {
         this.squad = squad;
     }
 
-    public Place next(Place place, boolean mainRoad) {
+    public Place next(Place place, boolean toCurrentRoad) {
         int number = place.getNumber();
         RoadNode node = this.map.get(place.getRoad()).get(number);
 
@@ -62,7 +62,7 @@ public class RoadMap implements Serializable {
             case BRANCHSTART -> {
                 Place main = new Place(squad, place.getRoad(), ++number);
                 Place branch = new Place(squad, node.getNextRoad(), node.getNextRoadNumberNode());
-                yield mainRoad ? main : branch;
+                yield toCurrentRoad ? main : branch;
             }
             case RINO -> Place.getNew(squad); // RINO!!!
         };

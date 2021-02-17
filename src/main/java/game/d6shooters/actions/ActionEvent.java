@@ -20,6 +20,7 @@ public class ActionEvent extends AbstractAction {
 
     @Override
     public void action(User user) {
+        log.info(String.format( "Start ActionEvent.action, user = %d", user.getChatId()));
         int roll = DicesCup.getD6Int();
         Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT1, roll)));
         switch (roll) {

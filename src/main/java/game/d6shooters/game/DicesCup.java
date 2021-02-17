@@ -45,7 +45,10 @@ public class DicesCup implements Serializable {
 
     public List<Dice> getRerolledDices(String rerollString) {
         rerollString = rerollString.replaceAll("[^1-" + getMaxValue() + "]*", "");
-        rerollString.chars().map(i -> Character.digit(i, 10)).distinct().forEach(i -> diceList.get(i - 1).nextD6(false));
+        rerollString.chars()
+                .map(i -> Character.digit(i, 10))
+                .distinct()
+                .forEach(i -> diceList.get(i - 1).nextD6(false));
         return diceList;
     }
 
@@ -58,7 +61,8 @@ public class DicesCup implements Serializable {
                 .map(c -> Character.digit(c, 10))
                 .distinct()
                 .mapToObj(i -> diceList.get(i - 1))
-                .filter(d -> d.getValue() >= 5 && d.getType()== Dice.DiceType.RED)
+                .filter(d -> !d.isCanRerolled())
+//                .filter(d -> d.getValue() >= 5 && d.getType()== Dice.DiceType.RED)
                 .count();
 
         return !withBinocular ? closedDices == 0 : closedDices <= 1;
@@ -72,6 +76,12 @@ public class DicesCup implements Serializable {
     public int getCountActiveDiceCurrentValue(int value) {
         return (int) diceList.stream()
                 .filter(dice -> dice.getValue() == value && !dice.isUsed())
+                .count();
+    }
+
+    public int getCountActiveDiceCurrentValue(int value, Dice.DiceType diceType) {
+        return (int) diceList.stream()
+                .filter(dice -> dice.getValue() == value && !dice.isUsed() && dice.getType() == diceType)
                 .count();
     }
 

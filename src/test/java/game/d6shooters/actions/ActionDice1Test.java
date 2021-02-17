@@ -2,6 +2,7 @@ package game.d6shooters.actions;
 
 import game.d6shooters.Main;
 import game.d6shooters.bot.Bot;
+import game.d6shooters.bot.DataBase;
 import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.DicesCup;
@@ -11,9 +12,12 @@ import game.d6shooters.mocks.MockMessage;
 import game.d6shooters.road.Place;
 import game.d6shooters.road.RoadMap;
 import game.d6shooters.source.Button;
+import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import game.d6shooters.users.Users;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -88,7 +92,7 @@ class ActionDice1Test {
     @Test
     void executeSpecialPlacesTest1() {
         user.getSquad().setPlace(new Place(user.getSquad(), RoadMap.Road.MAINROAD, 79));
-        action.executeSpecialPlaces(user.getSquad());
+        action.executeSpecialPlaces(user);
         assertAll(
                 () -> assertEquals(SquadState.ENDGAME, user.getSquad().getSquadState())
         );
@@ -97,7 +101,7 @@ class ActionDice1Test {
     @Test
     void executeSpecialPlacesTest2() {
         user.getSquad().setPlace(new Place(user.getSquad(), RoadMap.Road.MAINROAD, 39));
-        action.executeSpecialPlaces(user.getSquad());
+        action.executeSpecialPlaces(user);
         assertAll(
                 () -> assertEquals(SquadState.EVENT, user.getSquad().getSquadState())
         );
@@ -106,7 +110,7 @@ class ActionDice1Test {
     @Test
     void executeSpecialPlacesTest3() {
         user.getSquad().setPlace(new Place(user.getSquad(), RoadMap.Road.MAINROAD, 14));
-        action.executeSpecialPlaces(user.getSquad());
+        action.executeSpecialPlaces(user);
         assertAll(
                 () -> assertEquals(SquadState.TOWN, user.getSquad().getSquadState()),
                 () -> assertEquals(0, user.getSquad().getResource(Squad.PATHFINDING))
@@ -152,6 +156,46 @@ class ActionDice1Test {
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(1)),
                 () -> assertEquals(4, user.getSquad().getResource(Squad.PATHFINDING))
         );
+    }
+
+    @Test
+    void applyEndMoveActionsTest1() {
+        user.getSquad().setResource(Squad.PATHFINDING, 0);
+        user.getSquad().setResource(Squad.DAY_PATH, 0);
+        user.getSquad().setSquadState(SquadState.MOVE);
+
+        DataBase dataBase = Mockito.mock(DataBase.class);
+        try (MockedStatic<Text> textMockedStatic = Mockito.mockStatic(Text.class);
+             MockedStatic<DataBase> dataBaseMockedStatic = Mockito.mockStatic(DataBase.class)) {
+            textMockedStatic.when(() -> Text.getText(Mockito.any())).thenReturn("");
+            dataBaseMockedStatic.when(DataBase::getInstance).thenReturn(dataBase);
+            action.applyEndMoveActions(user);
+            assertAll(
+                    () -> assertEquals(1, user.getSquad().getResource(Squad.PERIOD)),
+                    () -> assertEquals(SquadState.STARTTURN1, user.getSquad().getSquadState())
+            );
+        }
+    }
+
+    @Test
+    void applyEndMoveActionsTest2() {
+        user.getSquad().setResource(Squad.PATHFINDING, 0);
+        user.getSquad().setResource(Squad.DAY_PATH, 0);
+        user.getSquad().setResource(Squad.PERIOD, 39);
+        user.getSquad().setSquadState(SquadState.MOVE);
+
+        DataBase dataBase = Mockito.mock(DataBase.class);
+        try (MockedStatic<Text> textMockedStatic = Mockito.mockStatic(Text.class);
+             MockedStatic<DataBase> dataBaseMockedStatic = Mockito.mockStatic(DataBase.class)) {
+            textMockedStatic.when(() -> Text.getText(Mockito.any())).thenReturn("");
+            dataBaseMockedStatic.when(DataBase::getInstance).thenReturn(dataBase);
+
+            action.applyEndMoveActions(user);
+            assertAll(
+                    () -> assertEquals(40, user.getSquad().getResource(Squad.PERIOD)),
+                    () -> assertEquals(SquadState.ENDGAME, user.getSquad().getSquadState())
+            );
+        }
     }
 
 }

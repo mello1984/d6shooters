@@ -6,13 +6,16 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.road.RoadNode;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
+@Log4j2
 @Component
 public class ActionEndGame extends AbstractAction {
 
     @Override
     public void action(User user) {
+        log.info(String.format( "Start ActionDice5.action, user = %d", user.getChatId()));
         boolean squadInRino = user.getSquad().getPlace().getType() == RoadNode.Type.RINO;
         String text = squadInRino ? getWinTextAndSaveToWinners(user) : Text.getText(Text.END_GAME_LOSE);
         Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), text));
@@ -32,6 +35,6 @@ public class ActionEndGame extends AbstractAction {
         int scores = rino + days + gold + shooters + ammo + food;
 
         DataBase.getInstance().saveWinner(scores, user);
-        return String.format(Text.getText(Text.END_GAME_WIN), scores, rino, gold, shooters, food, ammo);
+        return String.format(Text.getText(Text.END_GAME_WIN), scores, rino, days, gold, shooters, food, ammo);
     }
 }

@@ -5,15 +5,20 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
+@Log4j2
 @Component
 public class ActionFeeding extends AbstractAction {
 
     @Override
     public void action(User user) {
+        log.info(String.format("Start ActionFeeding.action, user = %d", user.getChatId()));
         Squad squad = user.getSquad();
+
         if (needFeeding(user)) {
+            squad.setResource(Squad.FOOD_DAY, squad.getResource(Squad.PERIOD));
             if (squad.getResource(Squad.FOOD) <= 0) {
                 squad.setSquadState(SquadState.ENDGAME);
                 Main.bot.send(template.getSendMessageWithButtons(user.getChatId(),
@@ -31,12 +36,13 @@ public class ActionFeeding extends AbstractAction {
         }
     }
 
-    public void checkFeeding(User user) {
+    protected void checkFeeding(User user) {
         if (needFeeding(user)) action(user);
     }
 
-    private boolean needFeeding(User user) {
+    protected boolean needFeeding(User user) {
         Squad squad = user.getSquad();
-        return squad.getResource(Squad.PERIOD) % 5 == 0 && squad.getResource(Squad.PERIOD) < 40 && squad.getResource(Squad.PERIOD) > 0;
+        return squad.getResource(Squad.PERIOD) % 5 == 0 && squad.getResource(Squad.PERIOD) > 0
+                && squad.getResource(Squad.PERIOD) < 40 && squad.getResource(Squad.FOOD_DAY) < squad.getResource(Squad.PERIOD);
     }
 }

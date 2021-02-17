@@ -20,7 +20,7 @@ public enum Text {
     REROLL_DICES,
     ALLOCATE4,
     START_GAME,
-
+    DAY_PATH,
     HELP_ABOUT, HELP_DICES, HELP_EVENTS, HELP_TOWN, HELP_END_GAME, HELP_MAIN,
 
 
@@ -34,7 +34,7 @@ public enum Text {
         return list.get(random.nextInt(list.size()));
     }
 
-    public static String getText(Text key,  Integer... i) {
+    public static String getText(Text key, Integer... i) {
         String text = getText(key);
         return i.length > 0 ? String.format(text, (Object[]) i) : text;
     }

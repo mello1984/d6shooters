@@ -1,7 +1,6 @@
 package game.d6shooters.handler;
 
 import game.d6shooters.Main;
-import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.users.User;

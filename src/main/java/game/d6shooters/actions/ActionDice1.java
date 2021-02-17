@@ -1,9 +1,7 @@
 package game.d6shooters.actions;
 
 import game.d6shooters.Main;
-import game.d6shooters.bot.Bot;
 import game.d6shooters.bot.DataBase;
-import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.source.Button;
 import game.d6shooters.game.Dice;
 import game.d6shooters.game.Squad;
@@ -11,20 +9,17 @@ import game.d6shooters.game.SquadState;
 import game.d6shooters.road.RoadNode;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
-
-import java.io.Serializable;
 
 @Log4j2
 @Component
 public class ActionDice1 extends AbstractAction {
     @Override
     public void action(User user) {
+        log.info(String.format("Start ActionDice1.action, user = %d", user.getChatId()));
+
         Squad squad = user.getSquad();
         convertDice1ToPathfinding(user);
 
@@ -39,7 +34,7 @@ public class ActionDice1 extends AbstractAction {
                 Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.CROSS_ROAD), Button.BRANCH_ROAD.get(), Button.MAIN_ROAD.get()));
                 return;
             }
-            executeSpecialPlaces(squad);
+            executeSpecialPlaces(user);
             Main.actionManager.doActions(user);
 
         } else {
@@ -59,14 +54,17 @@ public class ActionDice1 extends AbstractAction {
         }
     }
 
-    protected void convertDice1ToPathfinding(User user) {
-        int red = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.RED).count();
-        int white = (int) user.getDicesCup().getDiceList().stream().filter(d -> d.getValue() == 1 && !d.isUsed() && d.getType() == Dice.DiceType.WHITE).count();
+    void convertDice1ToPathfinding(User user) {
+        int red = user.getDicesCup().getCountActiveDiceCurrentValue(1, Dice.DiceType.RED);
+        int white = user.getDicesCup().getCountActiveDiceCurrentValue(1, Dice.DiceType.WHITE);
         user.getSquad().addResource(Squad.PATHFINDING, white + (user.getSquad().hasResource(Squad.COMPASS) ? 2 : 1) * red);
         user.getDicesCup().setUsedDiceCurrentValue(1);
+        user.getSquad().addResource(Squad.DAY_PATH, user.getSquad().getResource(Squad.PATHFINDING));
     }
 
-    protected void executeSpecialPlaces(Squad squad) {
+
+    void executeSpecialPlaces(User user) {
+        Squad squad = user.getSquad();
         switch (squad.getPlace().getType()) {
             case TOWN -> {
                 squad.setResource(Squad.PATHFINDING, 0);
@@ -74,6 +72,25 @@ public class ActionDice1 extends AbstractAction {
             }
             case EVENT -> squad.setSquadState(SquadState.EVENT);
             case RINO -> squad.setSquadState(SquadState.ENDGAME);
+        }
+    }
+
+    void applyEndMoveActions(User user) {
+        Squad squad = user.getSquad();
+        if (!squad.hasResource(Squad.PATHFINDING)) {
+            squad.addResource(Squad.PERIOD, 1);
+//            Main.actionManager.checkFeeding(user);
+            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.DAY_PATH, squad.getResource(Squad.DAY_PATH))));
+
+            if (squad.getResource(Squad.PERIOD) < 40) {
+                squad.setSquadState(SquadState.STARTTURN1);
+                Main.bot.send(template.getSquadStateMessage(user.getChatId()));
+                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.END_TURN), Button.NEXT_TURN.get()));
+                DataBase.getInstance().saveUserToUserMap(user);
+            } else {
+                squad.setSquadState(SquadState.ENDGAME);
+                Main.actionManager.doActions(user);
+            }
         }
     }
 

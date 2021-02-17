@@ -14,10 +14,11 @@ public class ActionDice3 extends AbstractAction {
 
     @Override
     public void action(User user) {
+        log.info(String.format("Start ActionDice3.action, user = %d", user.getChatId()));
         int foundGold = getFoundGold(user);
         if (foundGold > 0) {
             user.getSquad().addResource(Squad.GOLD, foundGold);
-            Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(Text.getText(Text.DICE3GOLD), foundGold)));
+            Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), String.format(Text.getText(Text.DICE3GOLD), foundGold, user.getSquad().getResource(Squad.GOLD))));
         }
         user.getDicesCup().setUsedDiceCurrentValue(3);
         user.getSquad().setSquadState(SquadState.CHECKHEAT);
