@@ -41,7 +41,6 @@ public class ActionDice1 extends AbstractAction {
             squad.addResource(Squad.PERIOD, 1);
             Main.actionManager.checkFeeding(user);
 
-
             if (squad.getResource(Squad.PERIOD) < 40) {
                 squad.setSquadState(SquadState.STARTTURN1);
                 Main.bot.send(template.getSquadStateMessage(user.getChatId()));
@@ -75,24 +74,6 @@ public class ActionDice1 extends AbstractAction {
         }
     }
 
-    void applyEndMoveActions(User user) {
-        Squad squad = user.getSquad();
-        if (!squad.hasResource(Squad.PATHFINDING)) {
-            squad.addResource(Squad.PERIOD, 1);
-//            Main.actionManager.checkFeeding(user);
-            Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.DAY_PATH, squad.getResource(Squad.DAY_PATH))));
-
-            if (squad.getResource(Squad.PERIOD) < 40) {
-                squad.setSquadState(SquadState.STARTTURN1);
-                Main.bot.send(template.getSquadStateMessage(user.getChatId()));
-                Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.END_TURN), Button.NEXT_TURN.get()));
-                DataBase.getInstance().saveUserToUserMap(user);
-            } else {
-                squad.setSquadState(SquadState.ENDGAME);
-                Main.actionManager.doActions(user);
-            }
-        }
-    }
 
     @Override
     public void processMessage(User user, Message message) {
