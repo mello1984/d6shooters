@@ -129,7 +129,7 @@ class ActionDice1Test {
         }};
         dicesCup.setDiceList(diceList);
         user.getSquad().setResource(Squad.COMPASS, 0);
-
+        user.getSquad().setResource(Squad.DAY_PATH, 0);
         action.convertDice1ToPathfinding(user);
         assertAll(
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(1)),
@@ -150,7 +150,7 @@ class ActionDice1Test {
         }};
         dicesCup.setDiceList(diceList);
         user.getSquad().setResource(Squad.COMPASS, 1);
-
+        user.getSquad().setResource(Squad.DAY_PATH, 0);
         action.convertDice1ToPathfinding(user);
         assertAll(
                 () -> assertEquals(0, user.getDicesCup().getCountActiveDiceCurrentValue(1)),
@@ -158,44 +158,6 @@ class ActionDice1Test {
         );
     }
 
-    @Test
-    void applyEndMoveActionsTest1() {
-        user.getSquad().setResource(Squad.PATHFINDING, 0);
-        user.getSquad().setResource(Squad.DAY_PATH, 0);
-        user.getSquad().setSquadState(SquadState.MOVE);
 
-        DataBase dataBase = Mockito.mock(DataBase.class);
-        try (MockedStatic<Text> textMockedStatic = Mockito.mockStatic(Text.class);
-             MockedStatic<DataBase> dataBaseMockedStatic = Mockito.mockStatic(DataBase.class)) {
-            textMockedStatic.when(() -> Text.getText(Mockito.any())).thenReturn("");
-            dataBaseMockedStatic.when(DataBase::getInstance).thenReturn(dataBase);
-            action.applyEndMoveActions(user);
-            assertAll(
-                    () -> assertEquals(1, user.getSquad().getResource(Squad.PERIOD)),
-                    () -> assertEquals(SquadState.STARTTURN1, user.getSquad().getSquadState())
-            );
-        }
-    }
-
-    @Test
-    void applyEndMoveActionsTest2() {
-        user.getSquad().setResource(Squad.PATHFINDING, 0);
-        user.getSquad().setResource(Squad.DAY_PATH, 0);
-        user.getSquad().setResource(Squad.PERIOD, 39);
-        user.getSquad().setSquadState(SquadState.MOVE);
-
-        DataBase dataBase = Mockito.mock(DataBase.class);
-        try (MockedStatic<Text> textMockedStatic = Mockito.mockStatic(Text.class);
-             MockedStatic<DataBase> dataBaseMockedStatic = Mockito.mockStatic(DataBase.class)) {
-            textMockedStatic.when(() -> Text.getText(Mockito.any())).thenReturn("");
-            dataBaseMockedStatic.when(DataBase::getInstance).thenReturn(dataBase);
-
-            action.applyEndMoveActions(user);
-            assertAll(
-                    () -> assertEquals(40, user.getSquad().getResource(Squad.PERIOD)),
-                    () -> assertEquals(SquadState.ENDGAME, user.getSquad().getSquadState())
-            );
-        }
-    }
 
 }
