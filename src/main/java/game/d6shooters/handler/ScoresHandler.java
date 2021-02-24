@@ -9,6 +9,8 @@ import game.d6shooters.source.Button;
 import game.d6shooters.users.User;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -17,8 +19,10 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+@Component
 public class ScoresHandler implements Handler {
-    SendMessageTemplate template = new SendMessageTemplate();
+    @Autowired
+    SendMessageTemplate template;
 
     @Override
     public void handle(Message message) {

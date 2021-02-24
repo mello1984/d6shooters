@@ -8,6 +8,7 @@ import game.d6shooters.source.Button;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Log4j2
+@Component
 public class ActionDice6 extends AbstractAction {
 
     @Override
     public void action(User user) {
+        log.info(String.format( "Start ActionDice6.action, user = %d", user.getChatId()));
         int dice6count = user.getDicesCup().getCountActiveDiceCurrentValue(6);
         if (dice6count > 0) {
             int killedShooters = user.getSquad().hasResource(Squad.GUNFIGHT) ?
@@ -44,14 +47,14 @@ public class ActionDice6 extends AbstractAction {
         Main.actionManager.doActions(user);
     }
 
-    protected void removeHunterIfTooShootersLeft(User user) {
-        if (user.getSquad().getResource(Squad.SHOOTER) <= 1) {
+    void removeHunterIfTooShootersLeft(User user) {
+        if (user.getSquad().getResource(Squad.SHOOTER) <= 1 && user.getSquad().hasResource(Squad.HUNTER)) {
             user.getSquad().setResource(Squad.HUNTER, 0);
             Main.bot.send(template.getSendMessageNoButtons(user.getChatId(), Text.getText(Text.DICE6TEXT7)));
         }
     }
 
-    protected int getKilledShootersNoShootout(User user) {
+    int getKilledShootersNoShootout(User user) {
         List<Integer> band = new ArrayList<>();
         int killedShooters = IntStream.rangeClosed(1, user.getDicesCup().getCountActiveDiceCurrentValue(6)).map(i -> DicesCup.getD6Int())
                 .peek(band::add)
@@ -62,18 +65,17 @@ public class ActionDice6 extends AbstractAction {
         return killedShooters;
     }
 
-    protected int getKilledShootersInShootout(User user) {
-        int killedShooters = 0;
+
+    int getKilledShootersInShootout(User user) {
         while (user.getDicesCup().getCountActiveDiceCurrentValue(6) > 0 && user.getSquad().getResource(Squad.GUNFIGHT) > 0) {
             if (isSquadWinner(user)) {
                 useDice(user, 6);
             } else {
                 user.getSquad().addResource(Squad.GUNFIGHT, -1);
-                killedShooters++;
             }
         }
         if (user.getSquad().getResource(Squad.AMMO) > 0) user.getSquad().addResource(Squad.AMMO, -1);
-        return killedShooters;
+        return user.getDicesCup().getCountActiveDiceCurrentValue(6);
     }
 
     private boolean isSquadWinner(User user) {

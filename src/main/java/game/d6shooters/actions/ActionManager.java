@@ -3,25 +3,53 @@ package game.d6shooters.actions;
 import game.d6shooters.Main;
 import game.d6shooters.users.User;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-
+@Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ActionManager {
-    Action actionDice1 = new ActionDice1();
-    Action actionDice2 = new ActionDice2();
-    Action actionDice3 = new ActionDice3();
-    Action actionDice4 = new ActionDice4();
-    Action actionDice5 = new ActionDice5();
-    Action actionDice6 = new ActionDice6();
-    Action actionFeeding = new ActionFeeding();
-    Action actionEvent = new ActionEvent();
-    Action actionEndGame = new ActionEndGame();
-    Action actionTown = new ActionTown();
-    Action actionStartTurn = new ActionStartTurn();
-    Action actionPoker = new ActionPoker();
+    Action actionDice1;
+    Action actionDice2;
+    Action actionDice3;
+    Action actionDice4;
+    Action actionDice5;
+    Action actionDice6;
+    Action actionFeeding;
+    Action actionEvent;
+    Action actionEndGame;
+    Action actionTown;
+    Action actionStartTurn;
+    Action actionPoker;
+
+    public ActionManager(@Autowired @Qualifier("actionDice1") Action actionDice1,
+                         @Autowired @Qualifier("actionDice2") Action actionDice2,
+                         @Autowired @Qualifier("actionDice3") Action actionDice3,
+                         @Autowired @Qualifier("actionDice4") Action actionDice4,
+                         @Autowired @Qualifier("actionDice5") Action actionDice5,
+                         @Autowired @Qualifier("actionDice6") Action actionDice6,
+                         @Autowired @Qualifier("actionFeeding") Action actionFeeding,
+                         @Autowired @Qualifier("actionEvent") Action actionEvent,
+                         @Autowired @Qualifier("actionEndGame") Action actionEndGame,
+                         @Autowired @Qualifier("actionTown") Action actionTown,
+                         @Autowired @Qualifier("actionStartTurn") Action actionStartTurn,
+                         @Autowired @Qualifier("actionPoker") Action actionPoker) {
+        this.actionDice1 = actionDice1;
+        this.actionDice2 = actionDice2;
+        this.actionDice3 = actionDice3;
+        this.actionDice4 = actionDice4;
+        this.actionDice5 = actionDice5;
+        this.actionDice6 = actionDice6;
+        this.actionFeeding = actionFeeding;
+        this.actionEvent = actionEvent;
+        this.actionEndGame = actionEndGame;
+        this.actionTown = actionTown;
+        this.actionStartTurn = actionStartTurn;
+        this.actionPoker = actionPoker;
+    }
 
     public void doActions(User user) {
         switch (user.getSquad().getSquadState()) {
@@ -56,7 +84,7 @@ public class ActionManager {
         }
     }
 
-    public void checkFeeding(User user){
+    public void checkFeeding(User user) {
         ((ActionFeeding) actionFeeding).checkFeeding(user);
     }
 }

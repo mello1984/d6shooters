@@ -8,16 +8,19 @@ import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.*;
 
 
 @Log4j2
+@Component
 public class ActionEvent extends AbstractAction {
 
     @Override
     public void action(User user) {
+        log.info(String.format( "Start ActionEvent.action, user = %d", user.getChatId()));
         int roll = DicesCup.getD6Int();
         Main.bot.send(template.getSendMessageWithButtons(user.getChatId(), Text.getText(Text.EVENT_TEXT1, roll)));
         switch (roll) {

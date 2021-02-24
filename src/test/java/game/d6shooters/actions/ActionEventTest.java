@@ -1,29 +1,28 @@
 package game.d6shooters.actions;
 
+import game.d6shooters.Main;
+import game.d6shooters.bot.Bot;
+import game.d6shooters.bot.SendMessageTemplate;
 import game.d6shooters.source.Button;
 import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
-import game.d6shooters.mocks.MockActionManager;
-import game.d6shooters.mocks.MockBot;
 import game.d6shooters.mocks.MockMessage;
-import game.d6shooters.mocks.MockTemplate;
 import game.d6shooters.users.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActionEventTest {
     User user = new User(0, "name");
-    MockBot mockBot = new MockBot();
-    MockTemplate mockTemplate = new MockTemplate();
-    MockActionManager mockActionManager = new MockActionManager();
     ActionEvent action = new ActionEvent();
 
     @BeforeEach
     void setUp() {
-        action.template = mockTemplate;
-        //        user.setActionManager(mockActionManager);
+        Main.actionManager = Mockito.mock(ActionManager.class);
+        Main.bot = Mockito.mock(Bot.class);
+        action.template = Mockito.mock(SendMessageTemplate.class);
         user.getSquad().setResource(Squad.AMMO,3);
         user.getSquad().setResource(Squad.SHOOTER,10);
     }

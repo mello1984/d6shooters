@@ -8,6 +8,8 @@ import game.d6shooters.game.Squad;
 import game.d6shooters.game.SquadState;
 import game.d6shooters.source.Text;
 import game.d6shooters.users.User;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
@@ -15,10 +17,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+@Log4j2
+@Component
 public class ActionPoker extends AbstractAction {
 
     @Override //action - only SquadState.POKER1
     public void action(User user) {
+        log.info(String.format( "Start ActionPoker.action, user = %d", user.getChatId()));
         List<String> food = IntStream.range(1, user.getSquad().getResource(Squad.FOOD)).mapToObj(i -> i + Icon.FOOD.get()).collect(Collectors.toList());
         List<String> gold = IntStream.range(1, user.getSquad().getResource(Squad.GOLD)).mapToObj(i -> i + Icon.MONEYBAG.get()).collect(Collectors.toList());
         List<String> ammo = IntStream.range(1, user.getSquad().getResource(Squad.AMMO)).mapToObj(i -> i + Icon.AMMO.get()).collect(Collectors.toList());

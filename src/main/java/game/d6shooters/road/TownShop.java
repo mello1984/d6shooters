@@ -51,7 +51,8 @@ public class TownShop implements Serializable {
         }
 
         List<String> line3 = getSpecialItemButtons(squad);
-        if (canGamingPoker && (squad.getResource(Squad.GOLD) > 0 || squad.getResource(Squad.AMMO) > 0 || squad.getResource(Squad.FOOD) > 0)) line3.add(POKER);
+        if (canGamingPoker && (squad.getResource(Squad.GOLD) > 0 || squad.getResource(Squad.AMMO) > 0 || squad.getResource(Squad.FOOD) > 0))
+            line3.add(POKER);
         line3.add(REJECT);
 
         List<List<String>> buttons = new ArrayList<>();
@@ -84,12 +85,16 @@ public class TownShop implements Serializable {
     protected List<String> getSpecialItemButtons(Squad squad) {
         log.debug("SpecialItem: " + specialItem);
         List<String> resultList = switch (specialItem) {
-            case COMPASS, HUNTER, MAP, BINOCULAR, PILL -> setSpecialItemButton(squad);
+            case COMPASS, MAP, BINOCULAR, PILL -> setSpecialItemButton(squad);
+            case HUNTER -> (squad.getResource(Squad.SHOOTER) <= 11) ? setSpecialItemButton(squad) : new ArrayList<>();
             case BOMB1 -> {
                 List<String> list = new ArrayList<>();
-                if (squad.getResource(Squad.BOMB) < 3 && squad.getResource(Squad.GOLD) >= Item.BOMB1.value) list.add(Item.BOMB1.getText());
-                if (squad.getResource(Squad.BOMB) < 2 && squad.getResource(Squad.GOLD) >= Item.BOMB2.value) list.add(Item.BOMB2.getText());
-                if (squad.getResource(Squad.BOMB) == 0 && squad.getResource(Squad.GOLD) >= Item.BOMB3.value) list.add(Item.BOMB3.getText());
+                if (squad.getResource(Squad.BOMB) < 3 && squad.getResource(Squad.GOLD) >= Item.BOMB1.value)
+                    list.add(Item.BOMB1.getText());
+                if (squad.getResource(Squad.BOMB) < 2 && squad.getResource(Squad.GOLD) >= Item.BOMB2.value)
+                    list.add(Item.BOMB2.getText());
+                if (squad.getResource(Squad.BOMB) == 0 && squad.getResource(Squad.GOLD) >= Item.BOMB3.value)
+                    list.add(Item.BOMB3.getText());
                 yield list;
             }
             default -> new ArrayList<>();
@@ -100,7 +105,8 @@ public class TownShop implements Serializable {
 
     protected List<String> setSpecialItemButton(Squad squad) {
         List<String> list = new ArrayList<>();
-        if (!squad.hasResource(specialItem.getResource()) && squad.getResource(Squad.GOLD) >= specialItem.value) list.add(specialItem.getText());
+        if (!squad.hasResource(specialItem.getResource()) && squad.getResource(Squad.GOLD) >= specialItem.value)
+            list.add(specialItem.getText());
         return list;
     }
 

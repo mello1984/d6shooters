@@ -5,23 +5,22 @@ import game.d6shooters.bot.Bot;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Log4j2
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Component
 public class MessageSender implements Runnable {
     static int SLEEP_TIME = 30;
-    Bot bot = Main.bot;
-
-
 
     @Override
     public void run() {
-        log.info("START MessageSender, bot: " + bot);
+        log.info("START MessageSender, bot: " + Main.bot);
         try {
             while (true) {
-                SendMessage sendMessage = bot.sendQueue.take();
+                SendMessage sendMessage = Main.bot.sendQueue.take();
                 log.debug(String.format("Message sent to: %s, : %s", sendMessage.getChatId(), sendMessage.getText()));
                 send(sendMessage);
                 Thread.sleep(SLEEP_TIME);
@@ -34,7 +33,7 @@ public class MessageSender implements Runnable {
 
     private void send(SendMessage message) {
         try {
-            bot.execute(message);
+            Main.bot.execute(message);
             log.info(String.format("Message sent to: %s", message.getChatId()));
         } catch (TelegramApiException e) {
             log.error(String.format("Exception of sending message to: %s", message.getChatId()), e);
